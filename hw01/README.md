@@ -18,14 +18,18 @@
 
 #### Statement Handler
 Для второй фазы: она сначала вычисляет все `EvalString` внутри `Statement`, используя `Env` и формальное описание грамматики:
-* `sub('string') = string`
-* `sub("evalStr") = sub(evalStr)`
-* `sub($id) = env.get(id)`
-* `sub(symbol) = symbol`
+```
+evaluate:
+  result = ""
+  'SingleQuotes' --> result += SingleQuotes.value
+  "DoubleQuotes" --> result += evaluate(DoubleQuotes).value
+  $Id            --> result += Env.get(Id.value)
+  Symbol         --> result += Symbol.value
+```
 
 После вычислений всех `EvalString` внутри `Statement` не остается вычислений с помощью `$`.
 
-После этого `handle` в зависимости от типа `Statement`(напомним, он может быть либо `Assignment`, либо `Command`) вызывает `executeAssignment`, который просто изменяет состояние, или `executeCommand`, который берет команду из `CommandRepository` с помощью его `findCommand`, и вызывает у команды `perform`.
+После этого `handle` в зависимости от типа `Statement`(напомним, он может быть либо `Assignment`, либо `Command`) вызывает `executeAssignment`, который просто изменяет состояние, или `handleCommand`, который парсит `args[0]` по пробелам и `splitted[0]` принимает за название команды, а `splitted[1:]` и `args[1:]` за ее аргументы. Затем с помощью `CommandRepository`, а именно метода `findCommand` находит команду и вызывает `perform`.
 
 #### Command
 Представляет из себя интерфейс команды. Исполнение команды, `perform`, - это метод, принимающий список аргументов(строк), `IO` с предыдущей команды в пайплайне, и возвращающий `ExitCode` команды(`typealias` для инта).
