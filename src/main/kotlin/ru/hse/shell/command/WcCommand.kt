@@ -1,6 +1,8 @@
 package ru.hse.shell.command
 
+import org.apache.commons.io.IOUtils
 import ru.hse.shell.util.IO
+import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 
@@ -16,13 +18,13 @@ class WcCommand : Command {
 
     private fun performWithEmptyArgsList(io: IO): ExitCode {
         return try {
-            val bytes = io.inputStream.readAllBytes()
-            val lines = bytes.toString().split(System.lineSeparator().toRegex())
+            val bytes =  IOUtils.toString(io.inputStream, StandardCharsets.UTF_8)
+            val lines = bytes.split("\n")
             val numberOfRows = lines.size
-            val numberOfBytes = bytes.size
+            val numberOfBytes = bytes.length
             var numberOfWords = 0
             lines.forEach {
-                numberOfWords += it.split(" ").size
+                numberOfWords += it.split(" ").filter { word -> word.isNotEmpty() }.size
             }
             io.outputStream.write("$numberOfRows $numberOfWords $numberOfBytes total".toByteArray())
             return ExitCode.success()
@@ -42,13 +44,18 @@ class WcCommand : Command {
         for (fileName in args) {
             var numberOfRows = 0
             var numberOfWords = 0
-            val numberOfBytes = Files.size(Paths.get(fileName))
+            var numberOfBytes = 0
             try {
                 Files.lines(Paths.get(fileName)).forEach {
                     numberOfRows++
-                    numberOfWords += it.split(" ").size
+                    numberOfWords += it.split(" ").filter { word -> word.isNotEmpty() }.size
+                    numberOfBytes += it.length
                 }
+                numberOfBytes += numberOfRows - 1
                 io.outputStream.write("$numberOfRows $numberOfWords $numberOfBytes $fileName".toByteArray())
+                if (args.size > 1) {
+                    io.outputStream.write("\n".toByteArray())
+                }
                 totalNumberOfBytes += numberOfBytes
                 totalNumberOfRows += numberOfRows
                 totalNumberOfWords += numberOfWords
@@ -59,7 +66,9 @@ class WcCommand : Command {
                 }
             }
         }
-        io.outputStream.write("$totalNumberOfRows $totalNumberOfWords $totalNumberOfBytes total".toByteArray())
+        if (args.size > 1) {
+            io.outputStream.write("$totalNumberOfRows $totalNumberOfWords $totalNumberOfBytes total".toByteArray())
+        }
         return if (failHappened) ExitCode.fail() else ExitCode.success()
     }
 }
