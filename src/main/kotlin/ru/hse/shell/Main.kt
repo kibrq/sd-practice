@@ -1,3 +1,5 @@
+package ru.hse.shell
+
 fun main(args: Array<String>) {
     println("Hello World!")
 
