@@ -15,6 +15,7 @@ repositories {
 dependencies {
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.3")
     testImplementation(kotlin("test"))
+    implementation("commons-io:commons-io:2.6")
 }
 
 tasks.test {
