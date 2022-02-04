@@ -58,19 +58,19 @@ internal class ParserTest {
     }
 
     private val assignmentTestData = listOf(
-        "a=b" to listOf("a", "b"),
-        "a=bb" to listOf("a", "bb"),
-        "aa=b" to listOf("aa", "b"),
-        "a=b' \"a'" to listOf("a", "b \"a")
+        "a=b" to Pair("a", "b"),
+        "a=bb" to Pair("a", "bb"),
+        "aa=b" to Pair("aa", "b"),
+        "a=b' \"a'" to Pair("a", "b \"a")
     )
 
     @TestFactory
     fun `LHS=RHS should parsed as an assignment`() = assignmentTestData.map { (input, expected) ->
-        DynamicTest.dynamicTest("$input should be parsed as ${expected[0]} assign ${expected[1]}") {
+        DynamicTest.dynamicTest("$input should be parsed as ${expected.first} assign ${expected.second}") {
             val statement = Parser.parseToEnd(input)
             if (statement is Statement.Assignment) {
-                assertEquals(expected[0], statement.name)
-                assertEquals(expected[1], statement.value)
+                assertEquals(expected.first, statement.name)
+                assertEquals(expected.second, statement.value)
             } else {
                 assert(false) { "Parsed as not an assignment" }
             }

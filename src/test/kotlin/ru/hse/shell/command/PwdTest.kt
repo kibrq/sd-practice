@@ -18,6 +18,6 @@ internal class PwdTest {
         val command = PwdCommand()
         val result = command.perform(listOf(), io)
         assertEquals(0, result.code)
-        assertEquals(System.getProperty("user.dir"), io.outputStream.toString())
+        assertEquals(System.getProperty("user.dir") + "\n", io.outputStream.toString())
     }
 }
