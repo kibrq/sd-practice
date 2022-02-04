@@ -52,7 +52,7 @@ class WcCommand : Command {
                 numberOfBytes += numberOfRows - 1
 
                 val message = "$numberOfRows $numberOfWords $numberOfBytes $fileName"
-                StreamUtils.writeToStream(io.outputStream, message, args.size > 1)
+                StreamUtils.writeToStream(io.outputStream, message)
 
                 totalNumberOfBytes += numberOfBytes
                 totalNumberOfRows += numberOfRows
