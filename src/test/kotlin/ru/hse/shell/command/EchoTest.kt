@@ -25,7 +25,7 @@ internal class EchoTest {
             )
             val command = EchoCommand()
             val result = command.perform(input, io)
-            assertEquals(expected.second, result.exitCode)
+            assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
     }

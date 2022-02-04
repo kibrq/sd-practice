@@ -1,7 +1,7 @@
 package ru.hse.shell.util
 
 
-data class ExitCode(val exitCode: Int, val isExit: Boolean) {
+data class ExitCode(val code: Int, val isExit: Boolean) {
     companion object {
         fun success(): ExitCode {
             return ExitCode(0, false)

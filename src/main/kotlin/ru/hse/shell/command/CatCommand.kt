@@ -2,6 +2,7 @@ package ru.hse.shell.command
 
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
+import ru.hse.shell.util.StreamUtils
 import java.io.File
 
 class CatCommand : Command {
@@ -17,9 +18,7 @@ class CatCommand : Command {
             io.inputStream.transferTo(io.outputStream)
             ExitCode.success()
         } catch (e: Exception) {
-            e.message?.let {
-                io.errorStream.write(it.toByteArray())
-            }
+            StreamUtils.writeToStream(io.errorStream, e.message)
             ExitCode.fail()
         }
     }
@@ -33,15 +32,13 @@ class CatCommand : Command {
                     if (isFirst) {
                         isFirst = false
                     } else {
-                        io.outputStream.write("\n".toByteArray())
+                        StreamUtils.writeToStream(io.outputStream, "", addNewline = true)
                     }
                     it.transferTo(io.outputStream)
                 }
             } catch (e: Exception) {
                 failHappened = true
-                e.message?.let {
-                    io.errorStream.write(it.toByteArray())
-                }
+                StreamUtils.writeToStream(io.errorStream, e.message)
             }
         }
         return if (failHappened) ExitCode.fail() else ExitCode.success()

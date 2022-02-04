@@ -27,7 +27,7 @@ internal class WcTest {
             )
             val command = WcCommand()
             val result = command.perform(input, io)
-            assertEquals(expected.second, result.exitCode)
+            assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
     }
@@ -49,7 +49,7 @@ internal class WcTest {
             )
             val command = WcCommand()
             val result = command.perform(listOf(), io)
-            assertEquals(expected.second, result.exitCode)
+            assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
     }

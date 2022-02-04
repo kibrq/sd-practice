@@ -3,6 +3,7 @@ package ru.hse.shell.command
 import org.apache.commons.io.IOUtils
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
+import ru.hse.shell.util.StreamUtils
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -25,12 +26,10 @@ class WcCommand : Command {
             lines.forEach {
                 numberOfWords += it.split(" ").filter { word -> word.isNotEmpty() }.size
             }
-            io.outputStream.write("$numberOfRows $numberOfWords $numberOfBytes total".toByteArray())
+            StreamUtils.writeToStream(io.outputStream, "$numberOfRows $numberOfWords $numberOfBytes total")
             ExitCode.success()
         } catch (e: Exception) {
-            e.message?.let {
-                io.errorStream.write(it.toByteArray())
-            }
+            StreamUtils.writeToStream(io.errorStream, e.message)
             ExitCode.fail()
         }
     }
@@ -51,22 +50,21 @@ class WcCommand : Command {
                     numberOfBytes += it.length
                 }
                 numberOfBytes += numberOfRows - 1
-                io.outputStream.write("$numberOfRows $numberOfWords $numberOfBytes $fileName".toByteArray())
-                if (args.size > 1) {
-                    io.outputStream.write("\n".toByteArray())
-                }
+
+                val message = "$numberOfRows $numberOfWords $numberOfBytes $fileName"
+                StreamUtils.writeToStream(io.outputStream, message, args.size > 1)
+
                 totalNumberOfBytes += numberOfBytes
                 totalNumberOfRows += numberOfRows
                 totalNumberOfWords += numberOfWords
             } catch (e: Exception) {
                 failHappened = true
-                e.message?.let {
-                    io.errorStream.write(it.toByteArray())
-                }
+                StreamUtils.writeToStream(io.errorStream, e.message)
             }
         }
         if (args.size > 1) {
-            io.outputStream.write("$totalNumberOfRows $totalNumberOfWords $totalNumberOfBytes total".toByteArray())
+            val message = "$totalNumberOfRows $totalNumberOfWords $totalNumberOfBytes total"
+            StreamUtils.writeToStream(io.outputStream, message)
         }
         return if (failHappened) ExitCode.fail() else ExitCode.success()
     }

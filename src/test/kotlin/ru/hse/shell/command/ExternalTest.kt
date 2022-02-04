@@ -28,7 +28,7 @@ internal class ExternalTest {
             val env = Environment()
             val command = ExternalCommand(input.first, env)
             val result = command.perform(input.second, io)
-            assertEquals(expected.second, result.exitCode)
+            assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
     }
