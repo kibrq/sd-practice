@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class PwdTest {
+internal class PwdTest {
 
     @Test
     fun `pwd command test`() {

@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
-import kotlin.test.assertContentEquals
 
 internal class ParserTest {
 
@@ -21,7 +20,7 @@ internal class ParserTest {
         "a=",
         "a=a'",
         "=a",
-        "a' b'=",
+        "a' b'="
     )
 
     @TestFactory
@@ -51,7 +50,7 @@ internal class ParserTest {
         DynamicTest.dynamicTest("$input should parsed as one-word command named $expected") {
             val statement = Parser.parseToEnd(input)
             if (statement is Statement.RawCommand) {
-                assertContentEquals(expected, statement.arguments)
+                assertEquals(expected, statement.arguments)
             } else {
                 assert(false) { "Parsed as not a command" }
             }

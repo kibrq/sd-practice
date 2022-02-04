@@ -7,14 +7,14 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class WcTest {
+internal class WcTest {
     private val argsTestData = listOf(
         listOf("") to Pair("", 1),
         listOf("src/test/resources/wc.txt") to Pair("2 4 17 src/test/resources/wc.txt", 0),
         listOf("src/test/resources/wc2.txt") to Pair("5 5 9 src/test/resources/wc2.txt", 0),
         listOf("src/test/resources/wc.txt", "src/test/resources/wc2.txt") to Pair(
             "2 4 17 src/test/resources/wc.txt\n" + "5 5 9 src/test/resources/wc2.txt\n" + "7 9 26 total", 0
-        ),
+        )
     )
 
     @TestFactory
@@ -38,7 +38,6 @@ class WcTest {
         "1234 5" to Pair("1 2 6 total", 0),
         "12\n3 4\n" to Pair("3 3 7 total", 0)
     )
-
 
     @TestFactory
     fun `wc command without args test`() = noArgsTestData.map { (input, expected) ->

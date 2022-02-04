@@ -7,7 +7,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class EchoTest {
+internal class EchoTest {
 
     private val commandTestData = listOf(
         listOf("a") to Pair("a", 0),

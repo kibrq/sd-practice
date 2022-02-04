@@ -1,4 +1,4 @@
-package ru.hse.shell.command
+package ru.hse.shell.util
 
 
 data class ExitCode(val exitCode: Int, val isExit: Boolean) {
@@ -6,9 +6,11 @@ data class ExitCode(val exitCode: Int, val isExit: Boolean) {
         fun success(): ExitCode {
             return ExitCode(0, false)
         }
+
         fun exit(): ExitCode {
             return ExitCode(0, true)
         }
+
         fun fail(): ExitCode {
             return ExitCode(1, false)
         }

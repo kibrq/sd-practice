@@ -10,7 +10,6 @@ class CommandRepository {
         "echo" to EchoCommand(),
         "exit" to ExitCommand()
     )
-    private var exitFlag: Boolean = false
 
     fun getCommand(name: String, env: Environment): Command {
         return commandsMap[name] ?: ExternalCommand(name, env)

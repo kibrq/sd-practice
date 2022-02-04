@@ -1,5 +1,6 @@
 package ru.hse.shell.command
 
+import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 
 class EchoCommand : Command {
@@ -11,7 +12,7 @@ class EchoCommand : Command {
             } else {
                 io.outputStream.write(" ".toByteArray())
             }
-            io.outputStream.write((arg).toByteArray())
+            io.outputStream.write(arg.toByteArray())
         }
         return ExitCode.success()
     }

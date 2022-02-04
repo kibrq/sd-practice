@@ -8,7 +8,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class ExternalTest {
+internal class ExternalTest {
 
     private val testData = listOf(
         Pair("pwd", emptyList<String>()) to Pair(System.getProperty("user.dir") + System.lineSeparator(), 0),
@@ -32,5 +32,4 @@ class ExternalTest {
             assertEquals(expected.first, io.outputStream.toString())
         }
     }
-
 }
