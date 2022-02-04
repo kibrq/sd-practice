@@ -20,7 +20,7 @@ class ExternalCommand(private val commandName: String, private val env: Environm
             ExitCode(process.exitValue(), false)
         } catch (e: Exception) {
             e.message?.let {
-                io.outputStream.write(it.toByteArray())
+                io.errorStream.write(it.toByteArray())
             }
             ExitCode.fail()
         }

@@ -18,7 +18,7 @@ class WcTest {
     )
 
     @TestFactory
-    fun wcTestWithArgs() = argsTestData.map { (input, expected) ->
+    fun `wc command with args test`() = argsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("wc $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream("".toByteArray()),
@@ -41,7 +41,7 @@ class WcTest {
 
 
     @TestFactory
-    fun wcTestWithNoArgs() = noArgsTestData.map { (input, expected) ->
+    fun `wc command without args test`() = noArgsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("wc $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream(input.toByteArray()),

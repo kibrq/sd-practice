@@ -16,7 +16,7 @@ class EchoTest {
     )
 
     @TestFactory
-    fun echoTest() = commandTestData.map { (input, expected) ->
+    fun `echo command test`() = commandTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("echo $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream("".toByteArray()),

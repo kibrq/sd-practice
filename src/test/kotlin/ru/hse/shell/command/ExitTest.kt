@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class ExitTest {
 
     @Test
-    fun testExit() {
+    fun `exit command test`() {
         val io = IO(
             inputStream = ByteArrayInputStream("".toByteArray()),
             outputStream = ByteArrayOutputStream(),

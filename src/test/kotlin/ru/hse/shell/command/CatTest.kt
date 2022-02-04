@@ -17,7 +17,7 @@ class CatTest {
     )
 
     @TestFactory
-    fun catTestWithArgs() = argsTestData.map { (input, expected) ->
+    fun `cat command with args test`() = argsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("cat $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream("".toByteArray()),
@@ -40,7 +40,7 @@ class CatTest {
 
 
     @TestFactory
-    fun catTestWithoutArgs() = noArgsTestData.map { (input, expected) ->
+    fun `cat command without args test`() = noArgsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("cat $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream(input.toByteArray()),

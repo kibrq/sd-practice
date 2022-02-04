@@ -9,7 +9,7 @@ import kotlin.test.assertEquals
 class PwdTest {
 
     @Test
-    fun testExit() {
+    fun `pwd command test`() {
         val io = IO(
             inputStream = ByteArrayInputStream("".toByteArray()),
             outputStream = ByteArrayOutputStream(),
