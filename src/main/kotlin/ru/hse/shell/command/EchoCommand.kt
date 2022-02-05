@@ -1,18 +1,15 @@
 package ru.hse.shell.command
 
+import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
+import ru.hse.shell.util.StreamUtils
 
 class EchoCommand : Command {
     override fun perform(args: List<String>, io: IO): ExitCode {
-        var isFirst = true
-        for (arg in args) {
-            if (isFirst) {
-                isFirst = false
-            } else {
-                io.outputStream.write(" ".toByteArray())
-            }
-            io.outputStream.write((arg).toByteArray())
+        for (arg in args.dropLast(1)) {
+            StreamUtils.writeToStream(io.outputStream, "$arg ", addNewline = false)
         }
+        StreamUtils.writeToStream(io.outputStream, args.last())
         return ExitCode.success()
     }
 }

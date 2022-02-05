@@ -7,12 +7,12 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class EchoTest {
+internal class EchoTest {
 
     private val commandTestData = listOf(
-        listOf("a") to Pair("a", 0),
-        listOf("a", "b") to Pair("a b", 0),
-        listOf("a  b", "c  ", "d") to Pair("a  b c   d", 0)
+        listOf("a") to Pair("a\n", 0),
+        listOf("a", "b") to Pair("a b\n", 0),
+        listOf("a  b", "c  ", "d") to Pair("a  b c   d\n", 0)
     )
 
     @TestFactory
@@ -25,7 +25,7 @@ class EchoTest {
             )
             val command = EchoCommand()
             val result = command.perform(input, io)
-            assertEquals(expected.second, result.exitCode)
+            assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
     }

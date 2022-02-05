@@ -1,7 +1,8 @@
 package ru.hse.shell.parser
 
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
@@ -19,7 +20,7 @@ internal class ParserTest {
         "a=",
         "a=a'",
         "=a",
-        "a' b'=",
+        "a' b'="
     )
 
     @TestFactory
@@ -49,36 +50,30 @@ internal class ParserTest {
         DynamicTest.dynamicTest("$input should parsed as one-word command named $expected") {
             val statement = Parser.parseToEnd(input)
             if (statement is Statement.RawCommand) {
-                assertEquals(expected.size, statement.arguments.size)
-                for ((ex, actual) in expected.zip(statement.arguments)) {
-                    assertEquals(ex, actual)
-                }
+                assertEquals(expected, statement.arguments)
             } else {
-                assert(false) { "It isn't command" }
+                assert(false) { "Parsed as not a command" }
             }
         }
     }
 
-
     private val assignmentTestData = listOf(
-        "a=b" to listOf("a", "b"),
-        "a=bb" to listOf("a", "bb"),
-        "aa=b" to listOf("aa", "b"),
-        "a=b' \"a'" to listOf("a", "b \"a")
+        "a=b" to Pair("a", "b"),
+        "a=bb" to Pair("a", "bb"),
+        "aa=b" to Pair("aa", "b"),
+        "a=b' \"a'" to Pair("a", "b \"a")
     )
+
     @TestFactory
-    fun `LHS=RHS should parsed as an assignment`() = assignmentTestData.map {
-        (input, expected) ->
-            DynamicTest.dynamicTest("$input should be parsed as ${expected[0]} assign ${expected[1]}") {
-                val statement = Parser.parseToEnd(input)
-                if (statement is Statement.Assignment) {
-                    assertEquals(expected[0], statement.name)
-                    assertEquals(expected[1], statement.value)
-                } else {
-                    assert(false) { "It isn't assignment" }
-                }
+    fun `LHS=RHS should parsed as an assignment`() = assignmentTestData.map { (input, expected) ->
+        DynamicTest.dynamicTest("$input should be parsed as ${expected.first} assign ${expected.second}") {
+            val statement = Parser.parseToEnd(input)
+            if (statement is Statement.Assignment) {
+                assertEquals(expected.first, statement.name)
+                assertEquals(expected.second, statement.value)
+            } else {
+                assert(false) { "Parsed as not an assignment" }
             }
+        }
     }
-
-
 }

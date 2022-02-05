@@ -6,7 +6,7 @@ import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import kotlin.test.assertEquals
 
-class ExitTest {
+internal class ExitTest {
 
     @Test
     fun `exit command test`() {
@@ -18,6 +18,6 @@ class ExitTest {
         val command = ExitCommand()
         val result = command.perform(listOf(), io)
         assertEquals(true, result.isExit)
-        assertEquals(0, result.exitCode)
+        assertEquals(0, result.code)
     }
 }

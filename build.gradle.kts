@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.3")
-    testImplementation(kotlin("test"))
+    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
     implementation("commons-io:commons-io:2.6")
 }
 
@@ -27,5 +27,5 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    mainClass.set("ru.hse.shell.MainKt")
 }
