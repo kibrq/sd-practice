@@ -1,5 +1,9 @@
 # sd-practice
 
+```
+./gradlew run --console=plain
+```
+
 ## Contributors
 
 Kirill Brilliantov [kibrq](https://github.com/kibrq)

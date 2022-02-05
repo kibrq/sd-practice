@@ -10,6 +10,8 @@ import kotlin.system.exitProcess
 private const val promptString = ">> "
 
 private fun prompt(): String {
+    // Running from IntelliJ mixes stderr and stdout
+    // https://youtrack.jetbrains.com/issue/IDEA-70016
     System.err.flush()
     Thread.sleep(100)
     System.out.flush()
@@ -24,7 +26,7 @@ private fun prompt(): String {
 }
 
 
-fun main(args: Array<String>) {
+fun main() {
     val environment = Environment()
     val handler = StatementHandler()
     val io = IO(System.`in`, System.out, System.err)
