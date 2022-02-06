@@ -10,7 +10,7 @@ import kotlin.system.exitProcess
 
 private const val promptString = ">> "
 
-private fun prompt(): String {
+private fun prompt(): String? {
     // Running from IntelliJ mixes stderr and stdout
     // https://youtrack.jetbrains.com/issue/IDEA-70016
     System.err.flush()
@@ -18,10 +18,10 @@ private fun prompt(): String {
     System.out.flush()
 
     print(promptString)
-    var input = readLine()
-    while (input.isNullOrBlank()) {
+    var input = readLine() ?: return null
+    while (input.isBlank()) {
         print(promptString)
-        input = readLine()
+        input = readLine() ?: return null
     }
     return input.trim()
 }
@@ -32,7 +32,7 @@ fun main() {
     val handler = StatementHandler()
     val io = IO(InputStream.nullInputStream(), System.out, System.err)
     while (true) {
-        val input = prompt()
+        val input = prompt() ?: return
         val statement = try {
             Parser.parseToEnd(input)
         } catch (e: Exception) {
