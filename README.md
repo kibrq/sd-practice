@@ -24,7 +24,6 @@ To run only the tests and get a report use:
 ./gradlew test
 ```
 
-
 ## Contributors
 
 Kirill Brilliantov [kibrq](https://github.com/kibrq)
