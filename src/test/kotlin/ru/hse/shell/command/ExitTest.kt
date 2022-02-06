@@ -1,23 +1,16 @@
 package ru.hse.shell.command
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import ru.hse.shell.util.IO
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import kotlin.test.assertEquals
+import ru.hse.shell.TestUtils
 
 internal class ExitTest {
-
     @Test
-    fun `exit command test`() {
-        val io = IO(
-            inputStream = ByteArrayInputStream("".toByteArray()),
-            outputStream = ByteArrayOutputStream(),
-            errorStream = ByteArrayOutputStream()
-        )
+    fun `Exit command test`() {
+        val io = TestUtils.mockIO()
         val command = ExitCommand()
         val result = command.perform(listOf(), io)
-        assertEquals(true, result.isExit)
+        assertEquals(true, result.doExit)
         assertEquals(0, result.code)
     }
 }

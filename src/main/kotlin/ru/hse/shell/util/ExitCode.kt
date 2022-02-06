@@ -1,18 +1,28 @@
 package ru.hse.shell.util
 
-
-data class ExitCode(val code: Int, val isExit: Boolean) {
+/*
+ * ExitCode encapsulates an integer -- return code of a command or statement, and a flag -- do we need to exit the app.
+ */
+data class ExitCode(val code: Int, val doExit: Boolean) {
     companion object {
-        fun success(): ExitCode {
-            return ExitCode(0, false)
-        }
+        /*
+         * A successful exit code.
+         */
+        fun success() = ExitCode(0, false)
 
-        fun exit(): ExitCode {
-            return ExitCode(0, true)
-        }
+        /*
+         * An exit code telling that the app needs to be exited.
+         */
+        fun exit() = ExitCode(0, true)
 
-        fun fail(): ExitCode {
-            return ExitCode(1, false)
-        }
+        /*
+         * A fail exit code with code 1.
+         */
+        fun fail() = ExitCode(1, false)
+
+        /*
+         * Returns succeeded exit code or failed exit code based on the given boolean.
+         */
+        fun finish(succeed: Boolean) = if (succeed) success() else fail()
     }
 }

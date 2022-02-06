@@ -5,31 +5,36 @@ import ru.hse.shell.handler.StatementHandler
 import ru.hse.shell.parser.Parser
 import ru.hse.shell.util.Environment
 import ru.hse.shell.util.IO
+import java.io.InputStream
 import kotlin.system.exitProcess
 
 private const val promptString = ">> "
 
-private fun prompt(): String {
+private fun prompt(): String? {
+    // Running from IntelliJ mixes stderr and stdout
+    // https://youtrack.jetbrains.com/issue/IDEA-70016
     System.err.flush()
     Thread.sleep(100)
     System.out.flush()
 
     print(promptString)
-    var input = readLine()
-    while (input.isNullOrBlank()) {
+    var input = readLine() ?: return null
+    while (input.isBlank()) {
         print(promptString)
-        input = readLine()
+        input = readLine() ?: return null
     }
     return input.trim()
 }
 
-
-fun main(args: Array<String>) {
+/*
+ * CLI shell application.
+ */
+fun main() {
     val environment = Environment()
     val handler = StatementHandler()
-    val io = IO(System.`in`, System.out, System.err)
+    val io = IO(InputStream.nullInputStream(), System.out, System.err)
     while (true) {
-        val input = prompt()
+        val input = prompt() ?: return
         val statement = try {
             Parser.parseToEnd(input)
         } catch (e: Exception) {
@@ -37,7 +42,7 @@ fun main(args: Array<String>) {
             continue
         }
         val exitCode = handler.handle(statement, environment, io)
-        if (exitCode.isExit) {
+        if (exitCode.doExit) {
             exitProcess(exitCode.code)
         }
     }

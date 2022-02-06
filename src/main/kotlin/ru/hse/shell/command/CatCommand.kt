@@ -5,7 +5,13 @@ import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 import java.io.File
 
+/*
+ * Bash's 'cat' analogue: displays the content of the files, listed in the arguments.
+ */
 class CatCommand : Command {
+    /*
+     * Execute the 'cat' command with given arguments and IO and return an ExitCode.
+     */
     override fun perform(args: List<String>, io: IO): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)
@@ -24,23 +30,17 @@ class CatCommand : Command {
     }
 
     private fun performWithArgs(args: List<String>, io: IO): ExitCode {
-        var failHappened = false
-        var isFirst = true
+        var succeed = true
         for (fileName in args) {
             try {
                 File(fileName).inputStream().buffered().use {
-                    if (isFirst) {
-                        isFirst = false
-                    } else {
-                        StreamUtils.writeToStream(io.outputStream, "", addNewline = true)
-                    }
                     it.transferTo(io.outputStream)
                 }
             } catch (e: Exception) {
-                failHappened = true
+                succeed = false
                 StreamUtils.writeToStream(io.errorStream, e.message)
             }
         }
-        return if (failHappened) ExitCode.fail() else ExitCode.success()
+        return ExitCode.finish(succeed)
     }
 }

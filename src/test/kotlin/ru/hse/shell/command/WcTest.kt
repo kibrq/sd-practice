@@ -1,11 +1,12 @@
 package ru.hse.shell.command
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import ru.hse.shell.TestUtils
 import ru.hse.shell.util.IO
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import kotlin.test.assertEquals
 
 internal class WcTest {
     private val argsTestData = listOf(
@@ -18,13 +19,9 @@ internal class WcTest {
     )
 
     @TestFactory
-    fun `wc command with args test`() = argsTestData.map { (input, expected) ->
+    fun `Wc command with args test`() = argsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("wc $input should return $expected") {
-            val io = IO(
-                inputStream = ByteArrayInputStream("".toByteArray()),
-                outputStream = ByteArrayOutputStream(),
-                errorStream = ByteArrayOutputStream()
-            )
+            val io = TestUtils.mockIO()
             val command = WcCommand()
             val result = command.perform(input, io)
             assertEquals(expected.second, result.code)
@@ -34,13 +31,13 @@ internal class WcTest {
 
 
     private val noArgsTestData = listOf(
-        "" to Pair("1 0 0 total\n", 0),
+        "" to Pair("0 0 0 total\n", 0),
         "1234 5" to Pair("1 2 6 total\n", 0),
-        "12\n3 4\n" to Pair("3 3 7 total\n", 0)
+        "12\n3\t4\n" to Pair("2 3 7 total\n", 0)
     )
 
     @TestFactory
-    fun `wc command without args test`() = noArgsTestData.map { (input, expected) ->
+    fun `Wc command without args test`() = noArgsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("wc $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream(input.toByteArray()),

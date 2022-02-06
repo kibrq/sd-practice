@@ -8,7 +8,6 @@ import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
 
 internal class ParserTest {
-
     private val failCommandTestData = listOf(
         "a'",
         "a\"",
