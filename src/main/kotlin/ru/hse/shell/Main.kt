@@ -5,6 +5,7 @@ import ru.hse.shell.handler.StatementHandler
 import ru.hse.shell.parser.Parser
 import ru.hse.shell.util.Environment
 import ru.hse.shell.util.IO
+import java.io.InputStream
 import kotlin.system.exitProcess
 
 private const val promptString = ">> "
@@ -29,7 +30,7 @@ private fun prompt(): String {
 fun main() {
     val environment = Environment()
     val handler = StatementHandler()
-    val io = IO(System.`in`, System.out, System.err)
+    val io = IO(InputStream.nullInputStream(), System.out, System.err)
     while (true) {
         val input = prompt()
         val statement = try {
