@@ -10,7 +10,7 @@ internal class ExitTest {
         val io = TestUtils.mockIO()
         val command = ExitCommand()
         val result = command.perform(listOf(), io)
-        assertEquals(true, result.isExit)
+        assertEquals(true, result.doExit)
         assertEquals(0, result.code)
     }
 }

@@ -26,7 +26,9 @@ private fun prompt(): String? {
     return input.trim()
 }
 
-
+/*
+ * CLI shell application.
+ */
 fun main() {
     val environment = Environment()
     val handler = StatementHandler()
@@ -40,7 +42,7 @@ fun main() {
             continue
         }
         val exitCode = handler.handle(statement, environment, io)
-        if (exitCode.isExit) {
+        if (exitCode.doExit) {
             exitProcess(exitCode.code)
         }
     }
