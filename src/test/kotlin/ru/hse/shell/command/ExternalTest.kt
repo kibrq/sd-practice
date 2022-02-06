@@ -1,15 +1,12 @@
 package ru.hse.shell.command
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import ru.hse.shell.TestUtils
 import ru.hse.shell.util.Environment
-import ru.hse.shell.util.IO
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import kotlin.test.assertEquals
 
 internal class ExternalTest {
-
     private val testData = listOf(
         Pair("pwd", emptyList<String>()) to Pair(System.getProperty("user.dir") + System.lineSeparator(), 0),
         Pair("echo", listOf("3", "3")) to Pair("3 3\n", 0),
@@ -18,13 +15,9 @@ internal class ExternalTest {
     )
 
     @TestFactory
-    fun `external command test`() = testData.map { (input, expected) ->
+    fun `External command test`() = testData.map { (input, expected) ->
         DynamicTest.dynamicTest("$input should return $expected") {
-            val io = IO(
-                inputStream = ByteArrayInputStream("".toByteArray()),
-                outputStream = ByteArrayOutputStream(),
-                errorStream = ByteArrayOutputStream()
-            )
+            val io = TestUtils.mockIO()
             val env = Environment()
             val command = ExternalCommand(input.first, env)
             val result = command.perform(input.second, io)

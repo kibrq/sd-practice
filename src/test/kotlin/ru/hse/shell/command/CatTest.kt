@@ -1,14 +1,14 @@
 package ru.hse.shell.command
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import ru.hse.shell.TestUtils
 import ru.hse.shell.util.IO
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
-import kotlin.test.assertEquals
 
 internal class CatTest {
-
     private val argsTestData = listOf(
         listOf("") to Pair("", 1),
         listOf("src/test/resources/cat.txt") to Pair("qwerty", 0),
@@ -17,13 +17,9 @@ internal class CatTest {
     )
 
     @TestFactory
-    fun `cat command with args test`() = argsTestData.map { (input, expected) ->
+    fun `Cat command with args test`() = argsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("cat $input should return $expected") {
-            val io = IO(
-                inputStream = ByteArrayInputStream("".toByteArray()),
-                outputStream = ByteArrayOutputStream(),
-                errorStream = ByteArrayOutputStream()
-            )
+            val io = TestUtils.mockIO()
             val command = CatCommand()
             val result = command.perform(input, io)
             assertEquals(expected.second, result.code)
@@ -38,7 +34,7 @@ internal class CatTest {
     )
 
     @TestFactory
-    fun `cat command without args test`() = noArgsTestData.map { (input, expected) ->
+    fun `Cat command without args test`() = noArgsTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("cat $input should return $expected") {
             val io = IO(
                 inputStream = ByteArrayInputStream(input.toByteArray()),

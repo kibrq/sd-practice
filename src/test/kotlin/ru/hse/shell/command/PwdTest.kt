@@ -1,20 +1,13 @@
 package ru.hse.shell.command
 
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import ru.hse.shell.util.IO
-import java.io.ByteArrayInputStream
-import java.io.ByteArrayOutputStream
-import kotlin.test.assertEquals
+import ru.hse.shell.TestUtils
 
 internal class PwdTest {
-
     @Test
-    fun `pwd command test`() {
-        val io = IO(
-            inputStream = ByteArrayInputStream("".toByteArray()),
-            outputStream = ByteArrayOutputStream(),
-            errorStream = ByteArrayOutputStream()
-        )
+    fun `Pwd command test`() {
+        val io = TestUtils.mockIO()
         val command = PwdCommand()
         val result = command.perform(listOf(), io)
         assertEquals(0, result.code)
