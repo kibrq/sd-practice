@@ -24,17 +24,17 @@ class CatCommand : Command {
     }
 
     private fun performWithArgs(args: List<String>, io: IO): ExitCode {
-        var failHappened = false
+        var succeed = true
         for (fileName in args) {
             try {
                 File(fileName).inputStream().buffered().use {
                     it.transferTo(io.outputStream)
                 }
             } catch (e: Exception) {
-                failHappened = true
+                succeed = false
                 StreamUtils.writeToStream(io.errorStream, e.message)
             }
         }
-        return if (failHappened) ExitCode.fail() else ExitCode.success()
+        return ExitCode.finish(succeed)
     }
 }
