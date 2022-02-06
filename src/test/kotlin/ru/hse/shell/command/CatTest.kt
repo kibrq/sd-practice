@@ -13,7 +13,7 @@ internal class CatTest {
         listOf("") to Pair("", 1),
         listOf("src/test/resources/cat.txt") to Pair("qwerty", 0),
         listOf("src/test/resources/cat2.txt") to Pair("123\n456", 0),
-        listOf("src/test/resources/cat.txt", "src/test/resources/cat2.txt") to Pair("qwerty\n123\n456", 0)
+        listOf("src/test/resources/cat.txt", "src/test/resources/cat2.txt") to Pair("qwerty123\n456", 0)
     )
 
     @TestFactory

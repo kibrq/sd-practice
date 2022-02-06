@@ -34,9 +34,9 @@ internal class WcTest {
 
 
     private val noArgsTestData = listOf(
-        "" to Pair("1 0 0 total\n", 0),
+        "" to Pair("0 0 0 total\n", 0),
         "1234 5" to Pair("1 2 6 total\n", 0),
-        "12\n3 4\n" to Pair("3 3 7 total\n", 0)
+        "12\n3\t4\n" to Pair("2 3 7 total\n", 0)
     )
 
     @TestFactory
