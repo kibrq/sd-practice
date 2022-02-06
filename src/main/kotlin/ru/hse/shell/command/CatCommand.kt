@@ -5,6 +5,9 @@ import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 import java.io.File
 
+/*
+ * Bash's 'cat' analogue: displays the content of the files, listed in the arguments.
+ */
 class CatCommand : Command {
     /*
      * Execute the 'cat' command with given arguments and IO and return an ExitCode.

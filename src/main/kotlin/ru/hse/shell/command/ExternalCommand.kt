@@ -5,6 +5,9 @@ import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 
+/*
+ * ExternalCommand represents tries to find a command with the given name on the computer.
+ */
 class ExternalCommand(private val commandName: String, private val env: Environment) : Command {
     /*
      * Execute external command with given arguments and IO and return an ExitCode.

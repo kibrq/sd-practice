@@ -7,7 +7,10 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
 import ru.hse.shell.model.Statement
 
-
+/*
+ * The object describing the grammar parser.
+ * Usage: `val statement = Parser.parseToEnd(string)`.
+ */
 object Parser : Grammar<Statement>() {
     private val singleQuoteToken by literalToken("'")
     private val doubleQuoteToken by literalToken("\"")

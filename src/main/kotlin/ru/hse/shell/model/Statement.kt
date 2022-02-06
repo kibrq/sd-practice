@@ -2,6 +2,7 @@ package ru.hse.shell.model
 
 /*
  * Statement represents an executable command or assignment.
+ * Part of the grammar.
  */
 sealed class Statement {
     /*

@@ -8,6 +8,9 @@ import java.nio.charset.StandardCharsets
 import java.nio.file.Files
 import java.nio.file.Paths
 
+/*
+ * Bash's 'wc' analogue: writes the number of rows, words and bytes in the given file(s).
+ */
 class WcCommand : Command {
     /*
      * Execute the 'wc' command with given arguments and IO and return an ExitCode.
