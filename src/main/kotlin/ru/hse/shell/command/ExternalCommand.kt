@@ -6,6 +6,9 @@ import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 
 class ExternalCommand(private val commandName: String, private val env: Environment) : Command {
+    /*
+     * Execute external command with given arguments and IO and return an ExitCode.
+     */
     override fun perform(args: List<String>, io: IO): ExitCode {
         val processBuilder = ProcessBuilder().apply {
             command(commandName)

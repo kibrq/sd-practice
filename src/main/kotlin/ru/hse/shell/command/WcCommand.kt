@@ -9,6 +9,9 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 class WcCommand : Command {
+    /*
+     * Execute the 'wc' command with given arguments and IO and return an ExitCode.
+     */
     override fun perform(args: List<String>, io: IO): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)

@@ -6,6 +6,9 @@ import ru.hse.shell.util.StreamUtils
 import java.io.File
 
 class CatCommand : Command {
+    /*
+     * Execute the 'cat' command with given arguments and IO and return an ExitCode.
+     */
     override fun perform(args: List<String>, io: IO): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)
