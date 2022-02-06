@@ -7,6 +7,8 @@ import com.github.h0tk3y.betterParse.lexer.regexToken
 import com.github.h0tk3y.betterParse.parser.Parser
 import ru.hse.shell.model.Statement
 
+// Объект, описывающий парсер грамматики
+// Использование: `val statement = Parser.parseToEnd(input)`, где `input` - строка
 
 object Parser : Grammar<Statement>() {
     val singleQuoteToken by literalToken("'")
