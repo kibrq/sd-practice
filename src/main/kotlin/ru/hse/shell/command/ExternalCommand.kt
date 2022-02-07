@@ -14,7 +14,8 @@ class ExternalCommand(private val commandName: String, private val env: Environm
      */
     override fun perform(args: List<String>, io: IO): ExitCode {
         val processBuilder = ProcessBuilder().apply {
-            command(commandName)
+            if (System.getProperty("os.name").startsWith("Win")) command("cmd", "/c", commandName)
+            else command(commandName)
             command().addAll(args)
             environment().putAll(env.getAll())
         }
