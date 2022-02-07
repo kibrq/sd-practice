@@ -35,13 +35,13 @@ fun main() {
     val io = IO(InputStream.nullInputStream(), System.out, System.err)
     while (true) {
         val input = prompt() ?: return
-        val statement = try {
+        val statements = try {
             Parser.parseToEnd(input)
         } catch (e: Exception) {
             System.err.println(e.message)
             continue
         }
-        val exitCode = handler.handle(statement, environment, io)
+        val exitCode = handler.handle(statements.first(), environment, io)
         if (exitCode.doExit) {
             exitProcess(exitCode.code)
         }

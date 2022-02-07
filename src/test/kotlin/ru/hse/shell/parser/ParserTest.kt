@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
+import ru.hse.shell.util.Environment
 
 internal class ParserTest {
     private val failCommandTestData = listOf(
@@ -47,9 +48,9 @@ internal class ParserTest {
     @TestFactory
     fun `Sequence of words should be parsed to command`() = commandTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("$input should parsed as one-word command named $expected") {
-            val statement = Parser.parseToEnd(input)
+            val statement = Parser.parseToEnd(input).first()
             if (statement is Statement.RawCommand) {
-                assertEquals(expected, statement.arguments)
+                assertEquals(expected, statement.arguments.map { it.eval(Environment()) })
             } else {
                 assert(false) { "Parsed as not a command" }
             }
@@ -66,12 +67,30 @@ internal class ParserTest {
     @TestFactory
     fun `LHS=RHS should parsed as an assignment`() = assignmentTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("$input should be parsed as ${expected.first} assign ${expected.second}") {
-            val statement = Parser.parseToEnd(input)
+            val statement = Parser.parseToEnd(input).first()
             if (statement is Statement.Assignment) {
                 assertEquals(expected.first, statement.name)
-                assertEquals(expected.second, statement.value)
+                assertEquals(expected.second, statement.value.eval(Environment()))
             } else {
                 assert(false) { "Parsed as not an assignment" }
+            }
+        }
+    }
+
+    private val substituteToEmptyTestData = listOf(
+        "ab\$a" to listOf("ab"),
+        "ab\$ rt\$rt" to listOf("ab\$", "rt"),
+        "ab\$ab'a'\$cd" to listOf("aba"),
+    )
+
+    @TestFactory
+    fun `Substitute to empty string`() = substituteToEmptyTestData.map { (input, expected) ->
+        DynamicTest.dynamicTest("$input should parsed and evaluate to $expected") {
+            val statement = Parser.parseToEnd(input).first()
+            if (statement is Statement.RawCommand) {
+                assertEquals(expected, statement.arguments.map { it.eval(Environment()) })
+            } else {
+                assert(false) { "Parsed as not a command" }
             }
         }
     }

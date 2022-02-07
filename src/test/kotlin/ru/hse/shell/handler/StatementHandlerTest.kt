@@ -25,7 +25,7 @@ internal class StatementHandlerTest {
         DynamicTest.dynamicTest("Command $args should write $expected") {
             val io = TestUtils.mockIO()
             val env = Environment()
-            val command = Statement.RawCommand(args)
+            val command = Statement.RawCommand(TestUtils.evalStrings(args))
             val result = handler.handle(command, env, io)
             Assertions.assertEquals(expected.second, result.code)
             Assertions.assertEquals(expected.first, io.outputStream.toString())
@@ -36,7 +36,7 @@ internal class StatementHandlerTest {
     fun `StatementHandler handles external command correctly`() {
         val io = TestUtils.mockIO()
         val env = Environment()
-        val command = Statement.RawCommand(listOf("echo", "2", "abc"))
+        val command = Statement.RawCommand(TestUtils.evalStrings("echo", "2", "abc"))
         val result = handler.handle(command, env, io)
         Assertions.assertEquals(0, result.code)
         Assertions.assertEquals("2 abc" + System.lineSeparator(), io.outputStream.toString())
@@ -46,7 +46,7 @@ internal class StatementHandlerTest {
     fun `StatementHandler handles assignment correctly`() {
         val io = TestUtils.mockIO()
         val env = Environment()
-        val command = Statement.Assignment("a", "22")
+        val command = Statement.Assignment("a", TestUtils.evalString("22"))
         val result = handler.handle(command, env, io)
         Assertions.assertEquals(0, result.code)
         Assertions.assertEquals("", io.outputStream.toString())

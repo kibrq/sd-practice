@@ -17,7 +17,7 @@ class StatementHandler {
      */
     fun handle(statement: Statement, environment: Environment, io: IO): ExitCode {
         return when (statement) {
-            is Statement.Assignment -> executeAssignment(environment, statement.name, statement.value)
+            is Statement.Assignment -> executeAssignment(environment, statement.name, statement.value.eval(environment))
             is Statement.RawCommand -> executeCommand(environment, statement, io)
         }
     }
@@ -28,7 +28,8 @@ class StatementHandler {
     }
 
     private fun executeCommand(environment: Environment, statement: Statement.RawCommand, io: IO): ExitCode {
-        val command = commandRepository.getCommand(statement.arguments.first(), environment)
-        return command.perform(statement.arguments.drop(1), io)
+        val arguments = statement.arguments.map { it.eval(environment) }
+        val command = commandRepository.getCommand(arguments.first(), environment)
+        return command.perform(arguments.drop(1), io)
     }
 }

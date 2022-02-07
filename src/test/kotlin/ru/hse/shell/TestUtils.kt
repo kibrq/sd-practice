@@ -1,5 +1,6 @@
 package ru.hse.shell
 
+import ru.hse.shell.model.EvalString
 import ru.hse.shell.util.IO
 import java.io.ByteArrayOutputStream
 import java.io.InputStream
@@ -17,5 +18,12 @@ class TestUtils {
             outputStream = ByteArrayOutputStream(),
             errorStream = ByteArrayOutputStream()
         )
+
+        fun evalStrings(vararg strings: String) =
+            strings.map { EvalString.ofString(it) }
+
+        fun evalStrings(strings: List<String>) = strings.map { EvalString.ofString(it) }
+
+        fun evalString(string: String) = EvalString.ofString(string)
     }
 }

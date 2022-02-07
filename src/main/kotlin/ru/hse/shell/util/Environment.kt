@@ -9,7 +9,7 @@ class Environment {
     /*
      * Returns the value of the environment variable with given name.
      */
-    fun get(name: String): String? = variables[name]
+    fun get(name: String): String = variables.getOrDefault(name, "")
 
     /*
      * Puts a new environment variable with given name and value.
