@@ -3,7 +3,7 @@ package ru.hse.shell.command
 import ru.hse.shell.util.Environment
 
 /*
- * CommandRepository is a storage that helps map a string name of the basic command and a class that perfroms it.
+ * CommandRepository is a storage that helps map a string name of the basic command and a class that performs it.
  */
 class CommandRepository {
     private val commandsMap: Map<String, Command> = hashMapOf(
