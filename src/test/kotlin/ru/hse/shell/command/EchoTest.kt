@@ -7,9 +7,9 @@ import ru.hse.shell.TestUtils
 
 internal class EchoTest {
     private val commandTestData = listOf(
-        listOf("a") to Pair("a\n", 0),
-        listOf("a", "b") to Pair("a b\n", 0),
-        listOf("a  b", "c  ", "d") to Pair("a  b c   d\n", 0)
+        listOf("a") to Pair("a" + System.lineSeparator(), 0),
+        listOf("a", "b") to Pair("a b" + System.lineSeparator(), 0),
+        listOf("a  b", "c  ", "d") to Pair("a  b c   d" + System.lineSeparator(), 0)
     )
 
     @TestFactory

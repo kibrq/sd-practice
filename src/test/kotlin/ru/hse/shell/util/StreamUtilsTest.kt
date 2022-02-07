@@ -8,13 +8,13 @@ import java.io.ByteArrayOutputStream
 internal class StreamUtilsTest {
     private val testData = listOf(
         Pair("", false) to "",
-        Pair("", true) to "\n",
+        Pair("", true) to System.lineSeparator(),
         Pair("qwe\n\trty", false) to "qwe\n\trty",
-        Pair("qwe\n\trty", true) to "qwe\n\trty\n",
+        Pair("qwe\n\trty", true) to "qwe\n\trty" + System.lineSeparator(),
         Pair("qwerty\n\n", false) to "qwerty\n\n",
-        Pair("qwerty\n\n", true) to "qwerty\n\n\n",
+        Pair("qwerty\n\n", true) to "qwerty\n\n" + System.lineSeparator(),
         Pair("\n", false) to "\n",
-        Pair("\n", true) to "\n\n"
+        Pair("\n", true) to "\n" + System.lineSeparator()
     )
 
     @TestFactory

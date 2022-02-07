@@ -9,7 +9,7 @@ import ru.hse.shell.util.Environment
 internal class ExternalTest {
     private val testData = listOf(
         Pair("pwd", emptyList<String>()) to Pair(System.getProperty("user.dir") + System.lineSeparator(), 0),
-        Pair("echo", listOf("3", "3")) to Pair("3 3\n", 0),
+        Pair("echo", listOf("3", "3")) to Pair("3 3" + System.lineSeparator(), 0),
         Pair("sleep", listOf("3")) to Pair("", 0),
         Pair("maslo", emptyList<String>()) to Pair("", 1)
     )

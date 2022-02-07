@@ -13,9 +13,9 @@ internal class StatementHandlerTest {
 
     private val rawCommandTestData = listOf(
         listOf("cat", "src/test/resources/cat.txt") to Pair("qwerty", 0),
-        listOf("echo", "a", "b") to Pair("a b\n", 0),
+        listOf("echo", "a", "b") to Pair("a b" + System.lineSeparator(), 0),
         listOf("wc", "src/test/resources/wc.txt") to Pair("2 4 17 src/test/resources/wc.txt\n", 0),
-        listOf("pwd") to Pair(System.getProperty("user.dir") + "\n", 0),
+        listOf("pwd") to Pair(System.getProperty("user.dir") + System.lineSeparator(), 0),
         listOf("exit") to Pair("", 0)
     )
 
@@ -38,7 +38,7 @@ internal class StatementHandlerTest {
         val command = Statement.RawCommand(listOf("echo", "2", "abc"))
         val result = handler.handle(command, env, io)
         Assertions.assertEquals(0, result.code)
-        Assertions.assertEquals("2 abc\n", io.outputStream.toString())
+        Assertions.assertEquals("2 abc" + System.lineSeparator(), io.outputStream.toString())
     }
 
     @Test
