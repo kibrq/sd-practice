@@ -7,6 +7,7 @@ import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils
 import ru.hse.shell.model.Statement
 import ru.hse.shell.util.Environment
+import java.io.File
 
 internal class StatementHandlerTest {
     private val handler = StatementHandler()
@@ -14,7 +15,7 @@ internal class StatementHandlerTest {
     private val rawCommandTestData = listOf(
         listOf("cat", "src/test/resources/cat.txt") to Pair("qwerty", 0),
         listOf("echo", "a", "b") to Pair("a b" + System.lineSeparator(), 0),
-        listOf("wc", "src/test/resources/wc.txt") to Pair("2 4 17 src/test/resources/wc.txt\n", 0),
+        listOf("wc", "src/test/resources/wc.txt") to Pair("2 4 ${File("src/test/resources/wc.txt").length()} src/test/resources/wc.txt" + System.lineSeparator(), 0),
         listOf("pwd") to Pair(System.getProperty("user.dir") + System.lineSeparator(), 0),
         listOf("exit") to Pair("", 0)
     )
