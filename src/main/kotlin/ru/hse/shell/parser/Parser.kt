@@ -19,7 +19,7 @@ object Parser : Grammar<List<Statement>>() {
     private val whitespaceToken by regexToken("\\s+")
     private val dollarToken by literalToken("$")
     private val pipeToken by literalToken("|")
-    private val symbolsToken by regexToken("[^\$'\"=\\s+]+")
+    private val symbolsToken by regexToken("[^|\$'\"=\\s+]+")
 
     private val singleQuote by singleQuoteToken map { it.text }
     private val doubleQuote by doubleQuoteToken map { it.text }
@@ -42,7 +42,7 @@ object Parser : Grammar<List<Statement>>() {
                 whitespace.map { EvalString.ofString(it) },
                 symbols.map { EvalString.ofString(it) },
                 assignment.map { EvalString.ofString(it) },
-                variable.map { EvalString.ofString(it) },
+                variable.map { EvalString.ofVariable(it) },
                 pipe.map { EvalString.ofString(it) }
             )
         )
@@ -61,17 +61,18 @@ object Parser : Grammar<List<Statement>>() {
         ))
     ) map { EvalString.ofList(it) }
 
-    private val assignmentExpr by symbols and skip(assignmentToken) and evalString map { (name, value) ->
+    private val assignmentExpr by symbols and skip(assignment) and evalString map { (name, value) ->
         Statement.Assignment(name, value)
     }
 
     private val rawCommand by separated(
         evalString,
-        whitespaceToken,
+        whitespace,
         acceptZero = false
     ) map { Statement.RawCommand(it.terms) }
 
-    private val statement by assignmentExpr or rawCommand
+    private val statement by assignmentExpr or (skip(zeroOrMore(whitespace)) and rawCommand and skip(zeroOrMore(whitespace)))
 
-    override val rootParser: Parser<List<Statement>> = separated(statement, pipeToken, acceptZero = false) map { it.terms }
+    override val rootParser: Parser<List<Statement>> =
+        separated(statement, pipe, acceptZero = false) map { it.terms }
 }
