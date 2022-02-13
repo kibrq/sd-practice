@@ -2,11 +2,9 @@ package ru.hse.shell
 
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
 import org.junit.jupiter.api.Assertions
-import ru.hse.shell.handler.ExpressionHandler
-
-
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
+import ru.hse.shell.handler.ExpressionHandler
 import ru.hse.shell.parser.Parser
 import ru.hse.shell.util.Environment
 
@@ -26,6 +24,8 @@ internal class ShellTest {
                 "ec" + System.lineSeparator()
             ), listOf(0, 0, 0)
         ),
+        listOf("pwd | echo 123") to Pair(listOf("123" + System.lineSeparator()), listOf(0)),
+        listOf("exit | echo 123") to Pair(listOf(""), listOf(0))
     )
 
     @TestFactory
@@ -42,7 +42,4 @@ internal class ShellTest {
                 }
             }
         }
-
-
 }
-

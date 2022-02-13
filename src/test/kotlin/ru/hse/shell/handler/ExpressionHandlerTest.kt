@@ -4,11 +4,11 @@ import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils
-import ru.hse.shell.model.EvalString
 import ru.hse.shell.model.EvalString.Companion.ofList
 import ru.hse.shell.model.EvalString.Companion.ofVariable
 import ru.hse.shell.model.Statement
 import ru.hse.shell.util.Environment
+import ru.hse.shell.util.ExitCode
 
 internal class ExpressionHandlerTest {
     private val handler = ExpressionHandler()
@@ -40,11 +40,15 @@ internal class ExpressionHandlerTest {
     private val expressionTestDataWithEnv = listOf(
         Pair(
             listOf(
-                listOf(ofList(listOf(ofVariable("a"), ofVariable("b"))), EvalString.ofString("123")),
-                listOf(EvalString.ofString("wc"))
+                listOf(ofList(listOf(ofVariable("a"), ofVariable("b"))), TestUtils.evalString("123")),
+                listOf(TestUtils.evalString("wc"))
             ),
             mapOf("a" to "ec", "b" to "ho", "c" to "123", "echo" to "qwerty")
-        ) to Pair("1 1 ${3 + System.lineSeparator().length}" + System.lineSeparator(), 0),
+        ) to Pair("1 1 ${3 + System.lineSeparator().length}" + System.lineSeparator(), ExitCode.success()),
+        Pair(
+            listOf(listOf(ofList(listOf(ofVariable("a"), ofVariable("b"))))),
+            mapOf("a" to "ex", "b" to "it")
+        ) to Pair("", ExitCode.exit())
     )
 
     @TestFactory
@@ -58,7 +62,7 @@ internal class ExpressionHandlerTest {
                 }
                 val commands = commandsWithArgs.first.map { args -> Statement.RawCommand(args) }
                 val result = handler.handle(commands, env, io)
-                Assertions.assertEquals(expected.second, result.code)
+                Assertions.assertEquals(expected.second, result)
                 Assertions.assertEquals(expected.first, io.outputStream.toString())
             }
         }

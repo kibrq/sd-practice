@@ -36,16 +36,6 @@ internal class StatementHandlerTest {
     }
 
     @Test
-    fun `StatementHandler handles external command correctly`() {
-        val io = TestUtils.mockIO()
-        val env = Environment()
-        val command = Statement.RawCommand(TestUtils.evalStrings("echo", "2", "abc"))
-        val result = handler.handle(command, env, io)
-        Assertions.assertEquals(0, result.code)
-        Assertions.assertEquals("2 abc" + System.lineSeparator(), io.outputStream.toString())
-    }
-
-    @Test
     fun `StatementHandler handles assignment correctly`() {
         val io = TestUtils.mockIO()
         val env = Environment()
