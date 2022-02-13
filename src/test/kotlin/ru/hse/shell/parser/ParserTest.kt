@@ -7,6 +7,7 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
 import ru.hse.shell.util.Environment
+import java.util.function.Consumer
 
 internal class ParserTest {
     private val failCommandTestData = listOf(
@@ -23,8 +24,14 @@ internal class ParserTest {
         "a' b'="
     )
 
+    private val failPipeData = listOf(
+        "abs |",
+        "| asd",
+        "|"
+    )
+
     @TestFactory
-    fun `Parsing of such input should fail`() = (failCommandTestData + failAssignmentData).map { input ->
+    fun `Parsing of such input should fail`() = (failCommandTestData + failAssignmentData + failPipeData).map { input ->
         DynamicTest.dynamicTest("Parsing of $input should fail") {
             assertThrows(Exception::class.java) { Parser.parseToEnd(input) }
         }
@@ -81,6 +88,7 @@ internal class ParserTest {
         "ab\$a" to listOf("ab"),
         "ab\$ rt\$rt" to listOf("ab\$", "rt"),
         "ab\$ab'a'\$cd" to listOf("aba"),
+        "ab\"\$longlongvariable\"" to listOf("ab")
     )
 
     @TestFactory
@@ -92,6 +100,27 @@ internal class ParserTest {
             } else {
                 assert(false) { "Parsed as not a command" }
             }
+        }
+    }
+
+    private val pipeTestData = listOf(
+        "abc | abc" to listOf(listOf("abc"), listOf("abc")),
+        "ab'|'c" to listOf(listOf("ab|c")),
+        "ab\"\$a|\"" to listOf(listOf("ab|"))
+    )
+
+    @TestFactory
+    fun `Parsing pipe`() = pipeTestData.map {
+        (input, expected) ->
+        DynamicTest.dynamicTest("$input should parsed and evaluate to $expected") {
+            val env = Environment()
+            val statements : MutableList<List<String>> = mutableListOf()
+            Parser.parseToEnd(input).forEach {
+                if (it is Statement.RawCommand) {
+                    statements.add(it.arguments.map { its -> its.eval(env) })
+                }
+            }
+            assertEquals(expected, statements)
         }
     }
 }
