@@ -15,7 +15,10 @@ internal class ExpressionHandlerTest {
 
     private val expressionTestData = listOf(
         listOf(listOf("cat", "src/test/resources/cat.txt"), listOf("wc")) to Pair("1 1 6" + System.lineSeparator(), 0),
-        listOf(listOf("echo", "123"), listOf("wc")) to Pair("1 1 4" + System.lineSeparator(), 0),
+        listOf(
+            listOf("echo", "123"),
+            listOf("wc")
+        ) to Pair("1 1 ${3 + System.lineSeparator().length}" + System.lineSeparator(), 0),
         listOf(listOf("echo", "123"), listOf("echo")) to Pair(System.lineSeparator(), 0),
         listOf(listOf("echo", "123"), listOf("exit"), listOf("echo")) to Pair("", 0)
     )
@@ -36,10 +39,12 @@ internal class ExpressionHandlerTest {
 
     private val expressionTestDataWithEnv = listOf(
         Pair(
-            listOf(listOf(ofList(listOf(ofVariable("a"), ofVariable("b"))), EvalString.ofString("123")),
-                listOf(EvalString.ofString("wc"))),
+            listOf(
+                listOf(ofList(listOf(ofVariable("a"), ofVariable("b"))), EvalString.ofString("123")),
+                listOf(EvalString.ofString("wc"))
+            ),
             mapOf("a" to "ec", "b" to "ho", "c" to "123", "echo" to "qwerty")
-        ) to Pair("1 1 4" + System.lineSeparator(), 0),
+        ) to Pair("1 1 ${3 + System.lineSeparator().length}" + System.lineSeparator(), 0),
     )
 
     @TestFactory
