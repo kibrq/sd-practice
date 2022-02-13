@@ -1,7 +1,7 @@
 package ru.hse.shell
 
 import com.github.h0tk3y.betterParse.grammar.parseToEnd
-import ru.hse.shell.handler.StatementHandler
+import ru.hse.shell.handler.ExpressionHandler
 import ru.hse.shell.parser.Parser
 import ru.hse.shell.util.Environment
 import ru.hse.shell.util.IO
@@ -11,7 +11,7 @@ import kotlin.system.exitProcess
 private const val promptString = ">> "
 
 private fun prompt(): String? {
-    // Running from IntelliJ mixes stderr and stdout
+    // Running from IntelliJ mixes stderr and stdout.
     // https://youtrack.jetbrains.com/issue/IDEA-70016
     System.err.flush()
     Thread.sleep(100)
@@ -31,7 +31,7 @@ private fun prompt(): String? {
  */
 fun main() {
     val environment = Environment()
-    val handler = StatementHandler()
+    val handler = ExpressionHandler()
     val io = IO(InputStream.nullInputStream(), System.out, System.err)
     while (true) {
         val input = prompt() ?: return
@@ -41,7 +41,7 @@ fun main() {
             System.err.println(e.message)
             continue
         }
-        val exitCode = handler.handle(statements.first(), environment, io)
+        val exitCode = handler.handle(statements, environment, io)
         if (exitCode.doExit) {
             exitProcess(exitCode.code)
         }

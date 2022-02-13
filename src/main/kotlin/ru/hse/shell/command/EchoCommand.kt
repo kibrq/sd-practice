@@ -15,7 +15,7 @@ class EchoCommand : Command {
         for (arg in args.dropLast(1)) {
             StreamUtils.writeToStream(io.outputStream, "$arg ", addNewline = false)
         }
-        StreamUtils.writeToStream(io.outputStream, args.last())
+        StreamUtils.writeToStream(io.outputStream, args.lastOrNull() ?: "")
         return ExitCode.success()
     }
 }

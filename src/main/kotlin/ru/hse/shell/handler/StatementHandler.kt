@@ -1,6 +1,7 @@
 package ru.hse.shell.handler
 
 import ru.hse.shell.command.CommandRepository
+import ru.hse.shell.model.EvalString
 import ru.hse.shell.model.Statement
 import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
@@ -17,13 +18,13 @@ class StatementHandler {
      */
     fun handle(statement: Statement, environment: Environment, io: IO): ExitCode {
         return when (statement) {
-            is Statement.Assignment -> executeAssignment(environment, statement.name, statement.value.eval(environment))
+            is Statement.Assignment -> executeAssignment(environment, statement.name, statement.value)
             is Statement.RawCommand -> executeCommand(environment, statement, io)
         }
     }
 
-    private fun executeAssignment(environment: Environment, name: String, value: String): ExitCode {
-        environment.put(name, value)
+    private fun executeAssignment(environment: Environment, name: String, value: EvalString): ExitCode {
+        environment.put(name, value.eval(environment))
         return ExitCode.success()
     }
 
