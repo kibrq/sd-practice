@@ -26,7 +26,7 @@ class WcCommand : Command {
         return try {
             val content = IOUtils.toString(io.inputStream, StandardCharsets.UTF_8)
             val wc = computeWordCount(content)
-            val message = "${wc.rowsCount} ${wc.wordsCount} ${wc.bytesCount} total"
+            val message = "${wc.rowsCount} ${wc.wordsCount} ${wc.bytesCount}"
             StreamUtils.writeToStream(io.outputStream, message)
             ExitCode.success()
         } catch (e: Exception) {
