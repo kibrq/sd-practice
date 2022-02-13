@@ -71,7 +71,9 @@ object Parser : Grammar<List<Statement>>() {
         acceptZero = false
     ) map { Statement.RawCommand(it.terms) }
 
-    private val statement by assignmentExpr or (skip(zeroOrMore(whitespace)) and rawCommand and skip(zeroOrMore(whitespace)))
+    private val whitespacedCommand by skip(zeroOrMore(whitespace)) and rawCommand and skip(zeroOrMore(whitespace))
+
+    private val statement by assignmentExpr or whitespacedCommand
 
     override val rootParser: Parser<List<Statement>> =
         separated(statement, pipe, acceptZero = false) map { it.terms }

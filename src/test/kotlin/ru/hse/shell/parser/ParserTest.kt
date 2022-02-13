@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.model.Statement
 import ru.hse.shell.util.Environment
-import java.util.function.Consumer
 
 internal class ParserTest {
     private val failCommandTestData = listOf(
@@ -110,11 +109,10 @@ internal class ParserTest {
     )
 
     @TestFactory
-    fun `Parsing pipe`() = pipeTestData.map {
-        (input, expected) ->
+    fun `Parsing pipe`() = pipeTestData.map { (input, expected) ->
         DynamicTest.dynamicTest("$input should parsed and evaluate to $expected") {
             val env = Environment()
-            val statements : MutableList<List<String>> = mutableListOf()
+            val statements: MutableList<List<String>> = mutableListOf()
             Parser.parseToEnd(input).forEach {
                 if (it is Statement.RawCommand) {
                     statements.add(it.arguments.map { its -> its.eval(env) })

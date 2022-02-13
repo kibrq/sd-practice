@@ -19,8 +19,7 @@ class TestUtils {
             errorStream = ByteArrayOutputStream()
         )
 
-        fun evalStrings(vararg strings: String) =
-            strings.map { EvalString.ofString(it) }
+        fun evalStrings(vararg strings: String) = strings.map { EvalString.ofString(it) }
 
         fun evalStrings(strings: List<String>) = strings.map { EvalString.ofString(it) }
 
