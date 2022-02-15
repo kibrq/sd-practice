@@ -19,7 +19,8 @@ repositories {
 dependencies {
     implementation("com.github.h0tk3y.betterParse:better-parse:0.4.3")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
-    implementation("commons-io:commons-io:2.6")
+    implementation("commons-io:commons-io:2.11.0")
+    implementation("com.github.ajalt.clikt:clikt:3.4.0")
 }
 
 tasks.test {

@@ -11,7 +11,8 @@ class CommandRepository {
         "cat" to CatCommand(),
         "pwd" to PwdCommand(),
         "echo" to EchoCommand(),
-        "exit" to ExitCommand()
+        "exit" to ExitCommand(),
+        "grep" to GrepCommand()
     )
 
     /*
