@@ -7,6 +7,7 @@ import com.github.ajalt.clikt.parameters.options.default
 import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
+import com.github.ajalt.clikt.parameters.types.restrictTo
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
@@ -57,7 +58,7 @@ class GrepCommand : Command {
          * Grep matcher with '-w' option: the pattern is searched for as a word.
          */
         class WordMatcher(pattern: Regex) : Matcher(pattern) {
-            override fun matches(target: String): Boolean = target.split("\\s+").any { pattern matches it }
+            override fun matches(target: String): Boolean = target.split(Regex("\\s+")).any { pattern matches it }
         }
 
         /*
@@ -76,7 +77,8 @@ class GrepCommand : Command {
         private val pattern: String by argument(help = "Pattern to find")
         private val caseInsensitive: Boolean by option("-i", help = "Case-insensitive search").flag()
         val findAsWord: Boolean by option("-w", help = "Find as word").flag()
-        val numberOfLines: Int by option("-A", help = "Number of adjacent rows in the output").int().default(0)
+        val numberOfLines: Int by option("-A", help = "Number of adjacent rows in the output").int()
+            .restrictTo(0..Int.MAX_VALUE, clamp = true).default(0)
         val sources: List<String> by argument(help = "List of sources").multiple()
         override fun run() = Unit
 
