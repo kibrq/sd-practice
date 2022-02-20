@@ -20,7 +20,8 @@ internal class ExpressionHandlerTest {
             listOf("wc")
         ) to Pair("1 1 ${3 + System.lineSeparator().length}" + System.lineSeparator(), 0),
         listOf(listOf("echo", "123"), listOf("echo")) to Pair(System.lineSeparator(), 0),
-        listOf(listOf("echo", "123"), listOf("exit"), listOf("echo")) to Pair("", 0)
+        listOf(listOf("echo", "123"), listOf("exit"), listOf("echo")) to Pair("", 0),
+        listOf(listOf("grep", "-qwerty")) to Pair("", ExitCode.fail().code)
     )
 
     @TestFactory
