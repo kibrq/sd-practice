@@ -11,6 +11,7 @@ import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 import java.io.File
+import java.util.stream.Stream
 
 /*
  * Bash's 'grep' analogue: finds pattern as substring in given input.
@@ -22,19 +23,30 @@ class GrepCommand : Command {
     override fun perform(args: List<String>, io: IO): ExitCode {
         val grepArgs = GrepArgs(args)
         val matcher = matcher(grepArgs.findAsWord, grepArgs.pattern())
-        for (filename in grepArgs.sources) {
-            var context = 0
-            File(filename).forEachLine {
-                // If contexts intersect, then `context` just resets
-                if (matcher.matches(it)) {
-                    context = grepArgs.numberOfLines + 1
+
+        val lines = when {
+            grepArgs.sources.isEmpty() -> io.inputStream.bufferedReader().lines()
+            else -> {
+                var stream = Stream.empty<String>()
+                for (filename in grepArgs.sources) {
+                    stream = Stream.concat(stream, File(filename).bufferedReader().lines())
                 }
-                if (context > 0) {
-                    StreamUtils.writeToStream(io.outputStream, it, true)
-                }
-                context--
+                stream
             }
         }
+
+        var context = 0
+        lines.forEachOrdered {
+            // If contexts intersect, then `context` just resets
+            if (matcher.matches(it)) {
+                context = grepArgs.numberOfLines + 1
+            }
+            if (context > 0) {
+                StreamUtils.writeToStream(io.outputStream, it, true)
+            }
+            context--
+        }
+
         return ExitCode.success()
     }
 
