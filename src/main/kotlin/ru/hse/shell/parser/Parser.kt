@@ -43,6 +43,7 @@ object Parser : Grammar<List<Statement>>() {
                 symbols.map { EvalString.ofString(it) },
                 assignment.map { EvalString.ofString(it) },
                 variable.map { EvalString.ofVariable(it) },
+                dollar.map { EvalString.ofString(it) },
                 pipe.map { EvalString.ofString(it) }
             )
         )

@@ -87,7 +87,8 @@ internal class ParserTest {
         "ab\$a" to listOf("ab"),
         "ab\$ rt\$rt" to listOf("ab\$", "rt"),
         "ab\$ab'a'\$cd" to listOf("aba"),
-        "ab\"\$longlongvariable\"" to listOf("ab")
+        "ab\"\$longlongvariable\"" to listOf("ab"),
+        "\"ab\$\"" to listOf("ab\$")
     )
 
     @TestFactory
