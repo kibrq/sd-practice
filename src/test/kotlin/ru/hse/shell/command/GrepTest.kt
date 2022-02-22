@@ -2,6 +2,7 @@ package ru.hse.shell.command
 
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
+import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils.Companion.mockIO
 import ru.hse.shell.TestUtils.Companion.newline
@@ -34,6 +35,34 @@ internal class GrepTest {
             val result = command.perform(input + grepTestFile, io)
             Assertions.assertEquals(expected.second, result.code)
             Assertions.assertEquals(expected.first, io.outputStream.toString())
+        }
+    }
+
+    private val failTestData: List<List<String>> = listOf(
+        listOf("-x"),
+        listOf("-W"),
+        listOf("-A", "xxx"),
+        listOf("-A", "-w"),
+        listOf("-A"),
+        listOf("-i", "-A"),
+        listOf("-wA")
+    )
+
+    @TestFactory
+    fun `Grep command invalid arguments`() = failTestData.map { input ->
+        DynamicTest.dynamicTest("Parsing of $input should fail") {
+            val io = mockIO()
+            val command = GrepCommand()
+            Assertions.assertThrows(Exception::class.java) { command.perform(input + grepTestFile, io) }
+        }
+    }
+
+    @Test
+    fun `Grep command should fail on empty arguments`() {
+        val io = mockIO()
+        val command = GrepCommand()
+        Assertions.assertThrows(Exception::class.java) {
+            command.perform(emptyList(), io)
         }
     }
 }
