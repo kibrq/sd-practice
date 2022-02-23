@@ -1,5 +1,8 @@
 package ru.hse.shell.command
 
+import com.github.ajalt.clikt.core.BadParameterValue
+import com.github.ajalt.clikt.core.MissingArgument
+import com.github.ajalt.clikt.core.NoSuchOption
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.Test
@@ -10,7 +13,7 @@ import ru.hse.shell.TestUtils.Companion.newline
 internal class GrepTest {
     private val grepTestFile = "src/test/resources/grep.txt"
 
-    private val commandTestData = listOf(
+    private val correctTestData = listOf(
         listOf("pena14") to Pair(newline("pena14"), 0),
         listOf("pe") to Pair(newline("pena14") + newline("pe na") + newline("pena portal \t5"), 0),
         listOf("pena") to Pair(newline("pena14") + newline("pena portal \t5"), 0),
@@ -28,8 +31,8 @@ internal class GrepTest {
     )
 
     @TestFactory
-    fun `Grep command test`() = commandTestData.map { (input, expected) ->
-        DynamicTest.dynamicTest("echo $input should return $expected") {
+    fun `Grep command test`() = correctTestData.map { (input, expected) ->
+        DynamicTest.dynamicTest("grep $input should return $expected") {
             val io = mockIO()
             val command = GrepCommand()
             val result = command.perform(input + grepTestFile, io)
@@ -38,30 +41,51 @@ internal class GrepTest {
         }
     }
 
-    private val failTestData: List<List<String>> = listOf(
+    private fun <T : Throwable> testGrepThrowsWithException(args: List<String>, clazz: Class<T>) =
+        DynamicTest.dynamicTest("grep $args should fail with given exception") {
+            val io = mockIO()
+            val command = GrepCommand()
+            Assertions.assertThrows(clazz) {
+                command.perform(args + grepTestFile, io)
+            }
+        }
+
+    private val noSuchOptionTestData = listOf(
         listOf("-x"),
-        listOf("-W"),
+        listOf("-W")
+    )
+
+    private val badParameterValueTestData = listOf(
         listOf("-A", "xxx"),
-        listOf("-A", "-w"),
+        listOf("-A", "-w")
+    )
+
+    private val missingArgumentTestData = listOf(
         listOf("-A"),
         listOf("-i", "-A"),
         listOf("-wA")
     )
 
     @TestFactory
-    fun `Grep command invalid arguments`() = failTestData.map { input ->
-        DynamicTest.dynamicTest("Parsing of $input should fail") {
-            val io = mockIO()
-            val command = GrepCommand()
-            Assertions.assertThrows(Exception::class.java) { command.perform(input + grepTestFile, io) }
-        }
+    fun `Grep command no such option`() = noSuchOptionTestData.map {
+        testGrepThrowsWithException(it, NoSuchOption::class.java)
+    }
+
+    @TestFactory
+    fun `Grep command bad parameter value`() = badParameterValueTestData.map {
+        testGrepThrowsWithException(it, BadParameterValue::class.java)
+    }
+
+    @TestFactory
+    fun `Grep command missing argument`() = missingArgumentTestData.map {
+        testGrepThrowsWithException(it, MissingArgument::class.java)
     }
 
     @Test
     fun `Grep command should fail on empty arguments`() {
         val io = mockIO()
         val command = GrepCommand()
-        Assertions.assertThrows(Exception::class.java) {
+        Assertions.assertThrows(MissingArgument::class.java) {
             command.perform(emptyList(), io)
         }
     }
