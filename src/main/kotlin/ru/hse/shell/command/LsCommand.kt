@@ -12,6 +12,9 @@ import kotlin.streams.toList
  */
 class LsCommand : Command {
 
+    /*
+    * Execute the 'ls' command with given arguments and IO and return an ExitCode.
+    */
     override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         val curPath = env.getCurrentDirectory()
         val paths = Files.walk(curPath, 1).map { curPath.relativize(it).toString() }.filter {

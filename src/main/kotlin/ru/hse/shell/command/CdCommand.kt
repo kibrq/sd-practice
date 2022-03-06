@@ -10,6 +10,10 @@ import kotlin.io.path.isDirectory
  * Bash's 'cd' analogue: move between directories.
  */
 class CdCommand : Command {
+
+    /*
+    * Execute the 'cd' command with given arguments and IO and return an ExitCode.
+    */
     override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         args.ifEmpty {
             env.restoreCurrentDirectory()
