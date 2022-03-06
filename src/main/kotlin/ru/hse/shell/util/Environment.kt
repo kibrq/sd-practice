@@ -42,7 +42,7 @@ class Environment {
     * Sets current directory to parameter path
     */
     fun changeCurrentDirectory(path: String) {
-        currentDirectory = currentDirectory.resolve(path)
+        currentDirectory = resolveCurrentDirectory(path)
     }
 
     /*
