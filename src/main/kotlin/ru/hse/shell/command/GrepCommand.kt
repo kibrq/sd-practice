@@ -8,6 +8,7 @@ import com.github.ajalt.clikt.parameters.options.flag
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.types.int
 import com.github.ajalt.clikt.parameters.types.restrictTo
+import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
@@ -21,7 +22,7 @@ class GrepCommand : Command {
     /*
      * Execute the 'grep' command with given arguments and IO and return an ExitCode.
      */
-    override fun perform(args: List<String>, io: IO): ExitCode {
+    override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         val grepArgs = GrepArgs(args)
         val matcher = matcher(grepArgs.findAsWord, grepArgs.pattern())
 

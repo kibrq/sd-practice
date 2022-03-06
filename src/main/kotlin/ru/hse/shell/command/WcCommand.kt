@@ -1,6 +1,7 @@
 package ru.hse.shell.command
 
 import org.apache.commons.io.IOUtils
+import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
@@ -15,7 +16,7 @@ class WcCommand : Command {
     /*
      * Execute the 'wc' command with given arguments and IO and return an ExitCode.
      */
-    override fun perform(args: List<String>, io: IO): ExitCode {
+    override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)
             else -> performWithArgs(args, io)

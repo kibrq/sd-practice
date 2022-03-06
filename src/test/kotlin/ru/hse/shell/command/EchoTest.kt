@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils
+import ru.hse.shell.util.Environment
 
 internal class EchoTest {
     private val commandTestData = listOf(
@@ -17,7 +18,8 @@ internal class EchoTest {
         DynamicTest.dynamicTest("echo $input should return $expected") {
             val io = TestUtils.mockIO()
             val command = EchoCommand()
-            val result = command.perform(input, io)
+            val env = Environment()
+            val result = command.perform(input, io, env)
             assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }

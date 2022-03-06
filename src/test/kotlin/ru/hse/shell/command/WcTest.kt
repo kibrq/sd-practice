@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.DynamicTest
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils
+import ru.hse.shell.util.Environment
 import ru.hse.shell.util.IO
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
@@ -33,7 +34,8 @@ internal class WcTest {
         DynamicTest.dynamicTest("wc $input should return $expected") {
             val io = TestUtils.mockIO()
             val command = WcCommand()
-            val result = command.perform(input, io)
+            val env = Environment()
+            val result = command.perform(input, io, env)
             assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }
@@ -55,7 +57,8 @@ internal class WcTest {
                 errorStream = ByteArrayOutputStream()
             )
             val command = WcCommand()
-            val result = command.perform(listOf(), io)
+            val env = Environment()
+            val result = command.perform(listOf(), io, env)
             assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }

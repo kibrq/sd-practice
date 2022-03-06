@@ -30,7 +30,7 @@ class StatementHandler {
 
     private fun executeCommand(environment: Environment, statement: Statement.RawCommand, io: IO): ExitCode {
         val arguments = statement.arguments.map { it.eval(environment) }
-        val command = commandRepository.getCommand(arguments.first(), environment)
-        return command.perform(arguments.drop(1), io)
+        val command = commandRepository.getCommand(arguments.first())
+        return command.perform(arguments.drop(1), io, environment)
     }
 }

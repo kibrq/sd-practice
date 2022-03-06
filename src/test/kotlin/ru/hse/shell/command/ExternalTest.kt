@@ -25,8 +25,8 @@ internal class ExternalTest {
         DynamicTest.dynamicTest("$input should return $expected") {
             val io = TestUtils.mockIO()
             val env = Environment()
-            val command = ExternalCommand(input.first, env)
-            val result = command.perform(input.second, io)
+            val command = ExternalCommand(input.first)
+            val result = command.perform(input.second, io, env)
             assertEquals(expected.second, result.code)
             assertEquals(expected.first, io.outputStream.toString())
         }

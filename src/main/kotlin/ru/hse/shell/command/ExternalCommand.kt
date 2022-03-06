@@ -8,11 +8,11 @@ import ru.hse.shell.util.StreamUtils
 /*
  * ExternalCommand tries to find a command with the given name on the computer.
  */
-class ExternalCommand(private val commandName: String, private val env: Environment) : Command {
+class ExternalCommand(private val commandName: String) : Command {
     /*
      * Execute external command with given arguments and IO and return an ExitCode.
      */
-    override fun perform(args: List<String>, io: IO): ExitCode {
+    override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         val processBuilder = ProcessBuilder().apply {
             if (System.getProperty("os.name").startsWith("Win")) command("cmd", "/c", commandName)
             else command(commandName)

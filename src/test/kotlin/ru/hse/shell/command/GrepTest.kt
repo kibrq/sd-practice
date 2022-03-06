@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.TestFactory
 import ru.hse.shell.TestUtils.Companion.mockIO
 import ru.hse.shell.TestUtils.Companion.newline
+import ru.hse.shell.util.Environment
 
 internal class GrepTest {
     private val grepTestFile = "src/test/resources/grep.txt"
@@ -35,7 +36,8 @@ internal class GrepTest {
         DynamicTest.dynamicTest("grep $input should return $expected") {
             val io = mockIO()
             val command = GrepCommand()
-            val result = command.perform(input + grepTestFile, io)
+            val env = Environment()
+            val result = command.perform(input + grepTestFile, io, env)
             Assertions.assertEquals(expected.second, result.code)
             Assertions.assertEquals(expected.first, io.outputStream.toString())
         }
@@ -45,8 +47,9 @@ internal class GrepTest {
         DynamicTest.dynamicTest("grep $args should fail with given exception") {
             val io = mockIO()
             val command = GrepCommand()
+            val env = Environment()
             Assertions.assertThrows(clazz) {
-                command.perform(args + grepTestFile, io)
+                command.perform(args + grepTestFile, io, env)
             }
         }
 
@@ -84,9 +87,10 @@ internal class GrepTest {
     @Test
     fun `Grep command should fail on empty arguments`() {
         val io = mockIO()
+        val env = Environment()
         val command = GrepCommand()
         Assertions.assertThrows(MissingArgument::class.java) {
-            command.perform(emptyList(), io)
+            command.perform(emptyList(), io, env)
         }
     }
 }

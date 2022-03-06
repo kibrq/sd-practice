@@ -1,5 +1,6 @@
 package ru.hse.shell.command
 
+import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
@@ -12,10 +13,10 @@ class CatCommand : Command {
     /*
      * Execute the 'cat' command with given arguments and IO and return an ExitCode.
      */
-    override fun perform(args: List<String>, io: IO): ExitCode {
+    override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)
-            else -> performWithArgs(args, io)
+            else -> performWithArgs(args, io, env)
         }
     }
 
@@ -29,11 +30,12 @@ class CatCommand : Command {
         }
     }
 
-    private fun performWithArgs(args: List<String>, io: IO): ExitCode {
+    private fun performWithArgs(args: List<String>, io: IO, env: Environment): ExitCode {
         var succeed = true
         for (fileName in args) {
             try {
-                File(fileName).inputStream().buffered().use {
+                val filePath = env.resolveCurrentDirectory(fileName)
+                filePath.toFile().inputStream().buffered().use {
                     it.transferTo(io.outputStream)
                 }
             } catch (e: Exception) {
