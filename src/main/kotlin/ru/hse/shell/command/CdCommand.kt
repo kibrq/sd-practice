@@ -3,6 +3,7 @@ package ru.hse.shell.command
 import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
+import ru.hse.shell.util.StreamUtils
 import kotlin.io.path.isDirectory
 
 /*
@@ -18,6 +19,7 @@ class CdCommand : Command {
         if (args.size == 1) {
             val newPath = env.resolveCurrentDirectory(args[0])
             if (!newPath.isDirectory()) {
+                StreamUtils.writeToStream(io.errorStream, "cd: no such file or directory: " + args[0])
                 return ExitCode.fail()
             }
             env.changeCurrentDirectory(args[0])

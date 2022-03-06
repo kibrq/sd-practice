@@ -12,7 +12,6 @@ import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
-import java.io.File
 import java.util.stream.Stream
 
 /*
@@ -31,7 +30,8 @@ class GrepCommand : Command {
             else -> {
                 var stream = Stream.empty<String>()
                 for (filename in grepArgs.sources) {
-                    stream = Stream.concat(stream, File(filename).bufferedReader().lines())
+                    stream =
+                        Stream.concat(stream, env.resolveCurrentDirectory(filename).toFile().bufferedReader().lines())
                 }
                 stream
             }

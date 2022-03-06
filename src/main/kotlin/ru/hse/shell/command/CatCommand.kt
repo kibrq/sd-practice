@@ -4,7 +4,6 @@ import ru.hse.shell.util.Environment
 import ru.hse.shell.util.ExitCode
 import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
-import java.io.File
 
 /*
  * Bash's 'cat' analogue: displays the content of the files, listed in the arguments.

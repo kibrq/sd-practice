@@ -7,7 +7,6 @@ import ru.hse.shell.util.IO
 import ru.hse.shell.util.StreamUtils
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
-import java.nio.file.Paths
 
 /*
  * Bash's 'wc' analogue: writes the number of rows, words and bytes in the given file(s).
@@ -19,7 +18,7 @@ class WcCommand : Command {
     override fun perform(args: List<String>, io: IO, env: Environment): ExitCode {
         return when {
             args.isEmpty() -> performWithNoArgs(io)
-            else -> performWithArgs(args, io)
+            else -> performWithArgs(args, io, env)
         }
     }
 
@@ -36,14 +35,14 @@ class WcCommand : Command {
         }
     }
 
-    private fun performWithArgs(args: List<String>, io: IO): ExitCode {
+    private fun performWithArgs(args: List<String>, io: IO, env: Environment): ExitCode {
         var succeed = true
         var totalRowsCount = 0L
         var totalWordsCount = 0L
         var totalBytesCount = 0L
         for (fileName in args) {
             try {
-                val content = Files.readString(Paths.get(fileName))
+                val content = Files.readString(env.resolveCurrentDirectory(fileName))
                 val wc = computeWordCount(content)
 
                 val message = "${wc.rowsCount} ${wc.wordsCount} ${wc.bytesCount} $fileName"
