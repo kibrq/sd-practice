@@ -8,6 +8,7 @@ import ru.hse.shell.util.IO
  */
 class LsCommand : Command {
     override fun perform(args: List<String>, io: IO): ExitCode {
-        TODO("Not yet implemented")
+        val curPath = Paths.get("").toAbsolutePath().toString()
+        List<String> files = File(curPath).walk()
     }
 }
