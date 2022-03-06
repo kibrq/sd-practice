@@ -17,6 +17,7 @@ class ExternalCommand(private val commandName: String) : Command {
             if (System.getProperty("os.name").startsWith("Win")) command("cmd", "/c", commandName)
             else command(commandName)
             command().addAll(args)
+            directory(env.getCurrentDirectory().toFile())
             environment().putAll(env.getAll())
         }
 
