@@ -8,4 +8,3 @@
  */
 
 rootProject.name = "xcv"
-include("app")
