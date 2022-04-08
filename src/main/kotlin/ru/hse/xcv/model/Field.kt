@@ -1,23 +1,20 @@
 package ru.hse.xcv.model
 
-import kotlin.collections.HashMap
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
 
 import ru.hse.xcv.util.Coordinate
-import ru.hse.xcv.model.DynamicObject
 
-enum class Tile() {}
+enum class Tile {
+    FLOOR,
+    WALL,
+    EMPTY
+}
 
 class Field(
-    val staticLayer:  Map<Coordinate, Tile>,
-    val dynamicLayer: MutableMap<Coordinate, DynamicObject>,
-    val lock:         ReentrantReadWriteLock
+    var staticLayer: Map<Coordinate, Tile>,
+    var dynamicLayer: MutableMap<Coordinate, DynamicObject>,
+    val lock: ReentrantReadWriteLock = ReentrantReadWriteLock()
 ) {
-    constructor(staticLayer: Map<Coordinate, Tile>, dynamicLayer: MutableMap<Coordinate, DynamicObject>): this(
-        staticLayer = staticLayer,
-        dynamicLayer = dynamicLayer,
-        lock = ReentrantReadWriteLock()
-    )
 }
