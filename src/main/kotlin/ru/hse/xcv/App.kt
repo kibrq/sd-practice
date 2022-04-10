@@ -1,12 +1,7 @@
 package ru.hse.xcv
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
-}
+import ru.hse.xcv.util.Coordinate
 
 fun main() {
-    println(App().greeting)
+    val c = Coordinate(1, 2)
 }

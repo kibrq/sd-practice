@@ -1,11 +1,11 @@
 package ru.hse.xcv.model.entities
 
 import ru.hse.xcv.model.stats.Stats
-import ru.hse.xcv.util.Coordinate
+import org.hexworks.zircon.api.data.Position
 
 class Mob(
-    position: Coordinate,
-    direction: Coordinate,
+    position: Position,
+    direction: Position,
     moveSpeed: Int,
     stats: Stats,
     val experienceGain: Int

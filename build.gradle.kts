@@ -8,7 +8,7 @@
 
 plugins {
     // Apply the org.jetbrains.kotlin.jvm Plugin to add support for Kotlin.
-    id("org.jetbrains.kotlin.jvm") version "1.5.31"
+    id("org.jetbrains.kotlin.jvm") version "1.6.10"
 
     kotlin("plugin.serialization") version "1.6.20"
 
@@ -35,6 +35,10 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    // Tile Graphics
+    implementation("org.hexworks.zircon:zircon.core-jvm:2021.1.0-RELEASE")
+    implementation("org.hexworks.zircon:zircon.jvm.swing:2021.1.0-RELEASE")
 }
 
 application {

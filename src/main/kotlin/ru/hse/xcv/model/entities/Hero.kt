@@ -1,14 +1,15 @@
 package ru.hse.xcv.model.entities
 
+import org.hexworks.zircon.api.data.Position
+
 import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.items.Item
 import ru.hse.xcv.model.stats.Stats
 import ru.hse.xcv.model.spells.SpellBook
-import ru.hse.xcv.util.Coordinate
 
 class Hero(
-    position: Coordinate,
-    direction: Coordinate,
+    position: Position,
+    direction: Position,
     moveSpeed: Int,
     stats: Stats
 ) : Entity(position, direction, moveSpeed, stats) {

@@ -3,18 +3,22 @@ package ru.hse.xcv.model
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
+import kotlin.concurrent.read
+import kotlinx.serialization.Serializable
 
-import ru.hse.xcv.util.Coordinate
+import org.hexworks.zircon.api.data.Position
 
-enum class Tile {
-    FLOOR,
-    WALL,
-    EMPTY
+@Serializable
+enum class Tile() {
+    NONE, WALL, FLOOR
 }
 
+typealias ReadOnlyNeighborhood = Pair<Map<Position, Tile>, Map<Position, DynamicObject>>
+
 class Field(
-    var staticLayer: Map<Coordinate, Tile>,
-    var dynamicLayer: MutableMap<Coordinate, DynamicObject>,
+    val staticLayer:  Map<Position, Tile>,
+    val dynamicLayer: MutableMap<Position, DynamicObject>,
     val lock: ReentrantReadWriteLock = ReentrantReadWriteLock()
 ) {
+
 }
