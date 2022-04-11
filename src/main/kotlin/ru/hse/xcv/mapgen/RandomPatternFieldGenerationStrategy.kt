@@ -1,35 +1,40 @@
 package ru.hse.xcv.mapgen
 
-import kotlin.collections.MutableList
-import kotlin.random.Random
-
 import org.hexworks.zircon.api.data.Position
+import org.hexworks.zircon.api.data.Size
+import org.hexworks.zircon.api.data.Rect
 
 import ru.hse.xcv.mapgen.FieldGenerationStrategy
-import ru.hse.xcv.mapgen.Rectangle
 import ru.hse.xcv.model.Field
-import ru.hse.xcv.model.Tile
-import kotlin.math.PI
-import kotlin.math.sin
-import kotlin.math.cos
-import kotlin.sequences.generateSequence
-import kotlin.math.floor
+import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.DynamicObject
+import ru.hse.xcv.util.readRect
 
 
-class RandomPatternFieldGenerationStrategy: FieldGenerationStrategy {
-    override fun generate(bounds: Rectangle): Field {
+class RandomPatternFieldGenerationStrategy(
+    val size: Size,
+    val smoothTimes: Int = 8,
+): FieldGenerationStrategy {
 
-    }
+    override fun generate(): Field {
+        val (width, height) = size
+        var tiles: MutableMap<Position, FieldTile> = mutableMapOf()
+        size.fetchPositions().forEach { pos ->
+            tiles[pos] = if (Math.random() < 0.5) FieldTile.FLOOR else FieldTile.WALL
+        }
+        val newTiles: MutableMap<Position, FieldTile> = mutableMapOf()
 
-    private fun generateRandomPointsOnCircle(o: Position, r: Int, nPoints: Int): List<Position> {
-        return generateSequence { Random.nextDouble(0.0, 2 * PI) }
-            .take(nPoints)
-            .sorted()
-            .map { Position((o.x + sin(it) * r).toInt(), (o.y + cos(it) * r).toInt()) }
-            .toList()
-    }
-
-    private fun generateRandomPolygon(bounds: Rectangle, nVertices: Int): List<Position> {
-        
+        repeat(smoothTimes) {
+            size.fetchPositions().forEach { pos -> 
+                val neighborhood = tiles.readRect(
+                    Rect.create(pos - Position.offset1x1(), Size.create(3, 3))
+                )
+                val floors = neighborhood.filter { (_, value) -> value == FieldTile.FLOOR }.count()
+                val rocks  = neighborhood.filter { (_, value) -> value == FieldTile.WALL }.count()
+                newTiles.put(pos, if (floors >= rocks) FieldTile.FLOOR else FieldTile.WALL)
+            }
+            tiles = newTiles
+        }
+        return Field(tiles, mutableMapOf<Position, DynamicObject>(), Rect.create(Position.zero(), size))
     }
 }
