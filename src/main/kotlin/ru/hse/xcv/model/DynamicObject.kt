@@ -1,5 +1,9 @@
 package ru.hse.xcv.model
 
-import ru.hse.xcv.util.Coordinate
+import org.hexworks.zercon.api.data.Position
 
-class DynamicObject(var position : Coordinate, var direction : Coordinate, var moveSpeed: Int) {}
+abstract class DynamicObject() {
+    abstract var position: Position
+    abstract var direction: Position
+    abstract var moveSpeed: Int?
+}
