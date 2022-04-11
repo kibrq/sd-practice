@@ -3,7 +3,6 @@ package ru.hse.xcv.model
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
-import kotlin.concurrent.read
 
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.behavior.HasSize
