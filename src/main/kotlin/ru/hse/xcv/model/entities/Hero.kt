@@ -10,15 +10,14 @@ import ru.hse.xcv.model.spells.SpellBook
 class Hero(
     position: Position,
     direction: Position,
-    moveSpeed: Int,
-    stats: Stats = defaultStats,
-    val human: Boolean
-) : Entity(position, direction, moveSpeed, stats) {
+    val isThisPlayer: Boolean = true
+) : Entity(position, direction, defaultMoveSpeed, defaultStats) {
     val spellBook: SpellBook = SpellBook()
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
 
     companion object {
+        const val defaultMoveSpeed = 2
         val defaultStats = Stats(
             power = 5,
             armor = 5,
