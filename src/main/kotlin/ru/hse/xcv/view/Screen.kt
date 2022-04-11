@@ -77,11 +77,12 @@ fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy): Game
 
     gameScreen.addComponent(horizontalSplit)
 
-    val inputManager = InputManager()
+    val inputManager = InputManager(5)
 
     gameScreen.handleKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
         if (PlayerController.SUPPORTED_KEYS.contains(event.code)) {
-            inputManager.addLast(event.code)
+            while (!inputManager.offer(event.code))
+                inputManager.poll()
         }
         Processed
     }
