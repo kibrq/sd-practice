@@ -5,13 +5,16 @@ import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.CP437TilesetResources
 
+
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.mapgen.RandomPatternFieldGenerationStrategy
 import ru.hse.xcv.view.createGameScreen
+import ru.hse.xcv.util.Graphics
 
 import kotlinx.coroutines.*
 
 fun main() {
-    val windowSize = Size.create(40, 30)
+    val windowSize = Size.create(40, 20)
     val fieldSize = Size.create(200, 100)
 
     val (window, world, field, input) = createGameScreen(
@@ -20,14 +23,23 @@ fun main() {
             .withDefaultTileset(CP437TilesetResources.hack64x64())
             .withFpsLimit(90)
             .build(),
-        RandomPatternFieldGenerationStrategy(fieldSize)
+        RandomPatternFieldGenerationStrategy(fieldSize),
+        Graphics.default()
     )
+
+ 
 
     window.display()
     
     window.onShutdown { world.dispose() }
 
     runBlocking {
+           val hero = field.dynamicLayer.forEach { 
+        if(it.value is Hero) {
+            repeat(it.value.position.x) {world.scrollOneRight()}
+            repeat(it.value.position.y) {world.scrollOneForward()}
+        }
+    }
         launch {
             while(true) {
                 val a = input.take()
@@ -37,7 +49,6 @@ fun main() {
                     KeyCode.KEY_A -> world.scrollOneLeft()
                     KeyCode.KEY_D -> world.scrollOneRight()
                 }
-                
             }
         }
     }

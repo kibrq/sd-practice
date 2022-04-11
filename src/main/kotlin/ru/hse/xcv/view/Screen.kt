@@ -22,8 +22,9 @@ import ru.hse.xcv.mapgen.FieldGenerationStrategy
 import ru.hse.xcv.model.Field
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.util.InputManager
+import ru.hse.xcv.util.Graphics
+import ru.hse.xcv.util.WorldTile
 
-typealias WorldTile = Block<Tile>
 typealias GameWorld = GameArea<Tile, WorldTile>
 typealias BaseGameWorld = BaseGameArea<Tile, WorldTile>
 
@@ -43,9 +44,9 @@ data class GameScreen(
     val input: InputManager,
 )
 
-const val GAME_SCREEN_SPLIT_RATIO = 0.7
+const val GAME_SCREEN_SPLIT_RATIO = 0.8
 
-fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy): GameScreen {
+fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy, graphics: Graphics): GameScreen {
     val gameScreen = Screen.create(SwingApplications.startTileGrid(config))
 
     val (width, height) = config.size
@@ -57,7 +58,7 @@ fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy): Game
     val field = strategy.generate()
     val gameArea = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
 
-    putFieldOnGameWorld(gameArea, field)
+    putFieldOnGameWorld(gameArea, field, graphics)
 
     val gamePanel = Components.panel()
         .withPreferredSize(gameAreaVisibleSize)
@@ -90,33 +91,16 @@ fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy): Game
     return GameScreen(gameScreen, gameArea, field, inputManager)
 }
 
-fun staticTileTransform(tile: FieldTile) = when (tile) {
-    FieldTile.WALL -> Block.newBuilder<Tile>()
-        .withContent(
-            Tile.newBuilder()
-                .withCharacter(Symbols.INTERPUNCT)
-                .withForegroundColor(ANSITileColor.YELLOW)
-                .buildCharacterTile()
-        )
-        .withEmptyTile(Tile.empty())
-        .build()
 
-    FieldTile.FLOOR -> Block.newBuilder<Tile>()
-        .withContent(
-            Tile.newBuilder()
-                .withCharacter('#')
-                .withForegroundColor(TileColor.fromString("#999999"))
-                .buildCharacterTile()
-        )
-        .withEmptyTile(Tile.empty())
-        .build()
-}
-
-fun putFieldOnGameWorld(world: GameWorld, field: Field) {
+fun putFieldOnGameWorld(world: GameWorld, field: Field, graphics: Graphics) {
     field.rect.fetchPositions().forEach { pos ->
-        world.setBlockAt(
-            pos.toPosition3D(0),
-            staticTileTransform(field.staticLayer[pos]!!)
-        )
+        val fieldTile = field.staticLayer[pos]
+        if (fieldTile != null)
+            world.setBlockAt(pos.toPosition3D(0), graphics.staticLayerTransform(fieldTile))
+    }
+    field.rect.fetchPositions().forEach { pos ->
+        val obj = field.dynamicLayer[pos]
+        if (obj != null)
+            world.setBlockAt(pos.toPosition3D(1), graphics.dynamicLayerTransform(obj))
     }
 }
