@@ -26,7 +26,7 @@ val SPELL_CASTING = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
 class PlayerController(
     val hero: Hero,
     val input: InputManager,
-    override val eventFactory: org.hexworks.cobalt.events.api.EventBus
+    override val eventFactory: EventBus
 ) : ActionController() {
     override fun action() {
         /*
