@@ -1,5 +1,6 @@
 package ru.hse.xcv.model
 
+import kotlinx.serialization.Serializable
 import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -8,7 +9,8 @@ import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.behavior.HasSize
 import org.hexworks.zircon.api.data.Rect
 
-enum class FieldTile() {
+@Serializable
+enum class FieldTile {
     WALL, FLOOR
 }
 
