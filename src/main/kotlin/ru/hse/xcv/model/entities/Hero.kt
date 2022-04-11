@@ -11,7 +11,8 @@ class Hero(
     position: Position,
     direction: Position,
     moveSpeed: Int,
-    stats: Stats = defaultStats
+    stats: Stats = defaultStats,
+    val human: Boolean
 ) : Entity(position, direction, moveSpeed, stats) {
     val spellBook: SpellBook = SpellBook()
     val inventory: List<Item> = ArrayList()

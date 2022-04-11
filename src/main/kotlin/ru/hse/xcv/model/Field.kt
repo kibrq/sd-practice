@@ -4,21 +4,20 @@ import kotlin.collections.Map
 import kotlin.collections.MutableMap
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
-import kotlinx.serialization.Serializable
 
 import org.hexworks.zircon.api.data.Position
+import org.hexworks.zircon.api.behavior.HasSize
+import org.hexworks.zircon.api.data.Rect
 
-@Serializable
-enum class Tile() {
-    NONE, WALL, FLOOR
+enum class FieldTile() {
+    WALL, FLOOR
 }
 
-typealias ReadOnlyNeighborhood = Pair<Map<Position, Tile>, Map<Position, DynamicObject>>
-
 class Field(
-    val staticLayer:  Map<Position, Tile>,
+    val staticLayer:  Map<Position, FieldTile>,
     val dynamicLayer: MutableMap<Position, DynamicObject>,
-    val lock: ReentrantReadWriteLock = ReentrantReadWriteLock()
-) {
-
+    val rect: Rect,
+) : HasSize {
+    private val lock = ReentrantReadWriteLock()
+    override val size = rect.size
 }
