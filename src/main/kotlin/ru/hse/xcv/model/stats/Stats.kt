@@ -8,6 +8,14 @@ class Stats(
     var maxHealth: Int = 0,
     var currentHealth: Int = maxHealth
 ) {
+
+    init {
+        require(power >= 0)
+        require(armor >= 0)
+        require(maxHealth >= 0)
+        require(currentHealth >= 0)
+    }
+
     fun plus(other: Stats) {
         power = max(0, power + other.power)
         armor = max(0, armor + other.armor)
