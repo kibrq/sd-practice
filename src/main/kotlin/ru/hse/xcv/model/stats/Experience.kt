@@ -7,7 +7,12 @@ class Experience {
     private var level: Int = 1
         get() = field
 
-    fun applyExperience(exp: Int): Int {
-        TODO()
+    fun applyExperience(exp: Int) {
+        check(exp > 0)
+        experience += exp
+        if (experience >= 100) {
+            level += experience / 100
+            experience %=100
+        }
     }
 }

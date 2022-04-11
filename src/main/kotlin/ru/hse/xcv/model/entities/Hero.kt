@@ -11,9 +11,18 @@ class Hero(
     position: Position,
     direction: Position,
     moveSpeed: Int,
-    stats: Stats
+    stats: Stats = defaultStats
 ) : Entity(position, direction, moveSpeed, stats) {
     val spellBook: SpellBook = SpellBook()
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
+
+    companion object {
+        val defaultStats = Stats(
+            power = 5,
+            armor = 5,
+            currentHealth = 100,
+            maxHealth = 100
+        )
+    }
 }
