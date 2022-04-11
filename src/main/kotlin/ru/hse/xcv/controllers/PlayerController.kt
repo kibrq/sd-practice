@@ -2,7 +2,7 @@ package ru.hse.xcv.controllers
 
 
 import org.hexworks.zircon.api.uievent.KeyCode
-import ru.hse.xcv.events.EventFactory
+import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.InputManager
 
@@ -26,7 +26,7 @@ val SPELL_CASTING = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
 class PlayerController(
     val hero: Hero,
     val input: InputManager,
-    override val eventFactory: EventFactory,
+    override val eventFactory: org.hexworks.cobalt.events.api.EventBus
 ) : ActionController() {
     override fun action() {
         /*

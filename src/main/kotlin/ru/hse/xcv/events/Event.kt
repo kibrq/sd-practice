@@ -3,6 +3,8 @@ package ru.hse.xcv.events
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.controllers.ActionController
 import ru.hse.xcv.model.DynamicObject
+import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.stats.Stats
 
 sealed interface Event {
     val callback: ActionController?
@@ -19,7 +21,8 @@ data class MoveEvent(
 ) : Event
 
 data class BuffEvent(
-    val obj: DynamicObject,
+    val entity: Entity,
+    val buff: Stats,
     override val callback: ActionController?,
 ) : Event
 

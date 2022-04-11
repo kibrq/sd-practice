@@ -6,4 +6,4 @@ abstract class DynamicObject(
     var position: Position,
     var direction: Position,
     var moveSpeed: Int
-) {}
+)

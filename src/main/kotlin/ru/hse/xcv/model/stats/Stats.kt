@@ -16,14 +16,14 @@ class Stats(
         require(currentHealth >= 0)
     }
 
-    fun plus(other: Stats) {
+    operator fun plusAssign(other: Stats) {
         power = max(0, power + other.power)
         armor = max(0, armor + other.armor)
         currentHealth = max(0, currentHealth + other.currentHealth)
         maxHealth = max(0, maxHealth + other.maxHealth)
     }
 
-    fun minus(other: Stats) {
+    operator fun minusAssign(other: Stats) {
         power = max(0, power - other.power)
         armor = max(0, armor - other.armor)
         currentHealth = max(0, currentHealth - other.currentHealth)
