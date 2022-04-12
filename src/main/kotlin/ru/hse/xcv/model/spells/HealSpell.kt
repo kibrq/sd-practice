@@ -1,4 +1,4 @@
-package ru.hse.xcv.model.spells
+package ru.hse.xcv.model
 
 class HealSpell: Spell {
     override val name: String = "Heal spell"

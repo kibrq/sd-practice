@@ -1,4 +1,4 @@
-package ru.hse.xcv.util
+package ru.hse.xcv.view
 
 import kotlin.reflect.KClass
 
@@ -10,10 +10,10 @@ import org.hexworks.zircon.api.graphics.Symbols
 
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.entities.Dragon
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Maxim
-import ru.hse.xcv.model.entities.Zombie
+import ru.hse.xcv.model.Dragon
+import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.Maxim
+import ru.hse.xcv.model.Zombie
 
 typealias WorldTile = Block<Tile>
 

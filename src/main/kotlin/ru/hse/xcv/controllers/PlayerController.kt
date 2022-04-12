@@ -1,9 +1,13 @@
 package ru.hse.xcv.controllers
 
-
 import org.hexworks.zircon.api.uievent.KeyCode
+import org.hexworks.zircon.api.data.Position
+
 import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.events.NoneEvent
+import ru.hse.xcv.events.MoveEvent
+
+import ru.hse.xcv.model.Hero
 import ru.hse.xcv.util.InputManager
 
 val UP = KeyCode.KEY_W
@@ -27,29 +31,17 @@ class PlayerController(
     val hero: Hero,
     val input: InputManager,
     override val eventFactory: EventBus
-) : ActionController() {
+) : ActionController {
     override fun action() {
-        /*
-        if (input.isEmpty()) {
-            // eventFactory.fire(NoneEvent(this))
-            return
+        when(input.take()) {
+            UP    -> eventFactory.fire(MoveEvent(hero, Position.create(0, -1), true, this))
+            DOWN  -> eventFactory.fire(MoveEvent(hero, Position.create(0, 1), true, this))
+            LEFT  -> eventFactory.fire(MoveEvent(hero, Position.create(-1, 0), true, this))
+            RIGHT -> eventFactory.fire(MoveEvent(hero, Position.create(1, 0), true, this))
         }
-
-        when(input.poll()) {
-             UP    -> eventFactory.fire(GameMoveEvent(hero, Position.create(0, -1), this))
-             DOWN  -> eventFactory.fire(GameMoveEvent(hero, Position.create(0, 1), this))
-             LEFT  -> eventFactory.fire(GameMoveEvent(hero, Position.create(-1, 0), this))
-             RIGHT -> eventFactory.fire(GameMoveEvent(hero, Position.create(1, 0), this))
-
-             SPELL_H -> eventFactory.fire(GameLetterPronounced('h', this))
-            
-        }
-        */
     }
 
     companion object {
-        val SUPPORTED_KEYS = setOf(
-            UP, DOWN, LEFT, RIGHT, INVENTORY, SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT
-        )
+        val SUPPORTED_KEYS = setOf(UP, DOWN, LEFT, RIGHT, SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
     }
 }

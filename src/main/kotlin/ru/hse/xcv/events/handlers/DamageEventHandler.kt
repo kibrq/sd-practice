@@ -1,10 +1,10 @@
 package ru.hse.xcv.events.handlers
 
 import ru.hse.xcv.events.DamageEvent
-import ru.hse.xcv.model.Field
+import ru.hse.xcv.world.World
 
-class DamageEventHandler(override val field: Field) : EventHandler<DamageEvent> {
+class DamageEventHandler(override val world: World) : EventHandler<DamageEvent> {
     override fun handle(event: DamageEvent) {
-        event.entity.receiveDamage(event.damage)
+        // event.entity.receiveDamage(event.damage)
     }
 }

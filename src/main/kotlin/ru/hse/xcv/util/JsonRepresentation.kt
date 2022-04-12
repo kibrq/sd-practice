@@ -5,12 +5,12 @@ import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.Field
+import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
-import ru.hse.xcv.model.entities.Dragon
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Maxim
-import ru.hse.xcv.model.entities.Zombie
+import ru.hse.xcv.model.Dragon
+import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.Maxim
+import ru.hse.xcv.model.Zombie
 
 
 @Serializable
@@ -63,7 +63,7 @@ private fun dynamicObjectToJsonRepresentation(o: DynamicObject): JsonRepresentat
     )
 }
 
-fun fieldToJsonRepresentation(f: Field): JsonRepresentationField {
+fun fieldToJsonRepresentation(f: FieldModel): JsonRepresentationField {
     return JsonRepresentationField(
         f.staticLayer.toList().map { (k, v) -> positionToJsonRepresentation(k) to v },
         f.dynamicLayer.toList().map { (k, v) ->
@@ -107,8 +107,8 @@ private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObje
     }
 }
 
-fun fieldFromJsonRepresentation(f: JsonRepresentationField): Field {
-    return Field(
+fun fieldFromJsonRepresentation(f: JsonRepresentationField): FieldModel {
+    return FieldModel(
         f.staticLayer.associate { positionFromJsonRepresentation(it.first) to it.second },
         mutableMapOf(*f.dynamicLayer.map {
             positionFromJsonRepresentation(it.first) to dynamicObjectFromJsonRepresentation(

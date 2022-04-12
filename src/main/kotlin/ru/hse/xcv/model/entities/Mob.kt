@@ -1,4 +1,4 @@
-package ru.hse.xcv.model.entities
+package ru.hse.xcv.model
 
 import ru.hse.xcv.model.stats.Stats
 import org.hexworks.zircon.api.data.Position

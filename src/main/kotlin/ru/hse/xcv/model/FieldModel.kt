@@ -14,11 +14,12 @@ enum class FieldTile {
     WALL, FLOOR
 }
 
-class Field(
+class FieldModel(
     val staticLayer:  Map<Position, FieldTile>,
     val dynamicLayer: MutableMap<Position, DynamicObject>,
     val rect: Rect,
 ) : HasSize {
-    private val lock = ReentrantReadWriteLock()
     override val size = rect.size
+
+    fun byPosition(pos: Position) = Pair(staticLayer.get(pos), dynamicLayer.get(pos))
 }

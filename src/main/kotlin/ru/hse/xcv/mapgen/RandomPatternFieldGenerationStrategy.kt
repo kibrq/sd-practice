@@ -1,14 +1,13 @@
 package ru.hse.xcv.mapgen
 
-import jdk.jfr.Percentage
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
 
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Mob
-import ru.hse.xcv.model.Field
+import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.Mob
+import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.util.readRect
 
@@ -35,7 +34,7 @@ class RandomPatternFieldGenerationStrategy(
     private val floorPercentage: Double = 0.52
 ) : FieldGenerationStrategy {
 
-    override fun generate(): Field {
+    override fun generate(): FieldModel {
         var tiles = size.fetchPositions().associateWith {
             if (Math.random() < floorPercentage) FieldTile.FLOOR else FieldTile.WALL
         }
@@ -61,10 +60,10 @@ class RandomPatternFieldGenerationStrategy(
             }
         }
 
-        tiles.filter { it.value == FieldTile.FLOOR }.asSequence().shuffled().take(1).forEach { 
+        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled().take(1).forEach { 
             dynamicLayer[it.key] = Hero(it.key, Position.zero())
         }
 
-        return Field(tiles, dynamicLayer, Rect.create(Position.zero(), size))
+        return FieldModel(tiles, dynamicLayer, Rect.create(Position.zero(), size))
     }
 }

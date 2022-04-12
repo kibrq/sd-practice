@@ -1,4 +1,4 @@
-package ru.hse.xcv.model.spells
+package ru.hse.xcv.model
 
 class FireballSpell: Spell {
     override val name: String = "Fireball"

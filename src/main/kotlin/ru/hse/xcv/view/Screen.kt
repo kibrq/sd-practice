@@ -17,21 +17,20 @@ import org.hexworks.zircon.api.graphics.Symbols
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.KeyboardEventType
 import org.hexworks.zircon.api.uievent.Processed
+
 import ru.hse.xcv.controllers.PlayerController
 import ru.hse.xcv.mapgen.FieldGenerationStrategy
-import ru.hse.xcv.model.Field
+import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.util.InputManager
-import ru.hse.xcv.util.Graphics
-import ru.hse.xcv.util.WorldTile
+import ru.hse.xcv.view.WorldTile
 
-typealias GameWorld = GameArea<Tile, WorldTile>
-typealias BaseGameWorld = BaseGameArea<Tile, WorldTile>
+typealias FieldView = GameArea<Tile, WorldTile>
 
 class CustomGameArea(
     visibleSize: Size,
     actualSize: Size
-) : BaseGameWorld(
+) : BaseGameArea<Tile, WorldTile>(
     initialVisibleSize = visibleSize.toSize3D(10),
     initialActualSize = actualSize.toSize3D(100),
     initialFilters = listOf()
@@ -39,14 +38,13 @@ class CustomGameArea(
 
 data class GameScreen(
     val window: Screen,
-    val world: GameWorld,
-    val field: Field,
+    val world: FieldView,
     val input: InputManager,
 )
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.8
 
-fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy, graphics: Graphics): GameScreen {
+fun createGameScreen(config: AppConfig): GameScreen {
     val gameScreen = Screen.create(SwingApplications.startTileGrid(config))
 
     val (width, height) = config.size
@@ -55,10 +53,7 @@ fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy, graph
 
     val infoPanelSize = Size.create((width * (1 - GAME_SCREEN_SPLIT_RATIO)).toInt(), height)
 
-    val field = strategy.generate()
     val gameArea = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
-
-    putFieldOnGameWorld(gameArea, field, graphics)
 
     val gamePanel = Components.panel()
         .withPreferredSize(gameAreaVisibleSize)
@@ -88,19 +83,5 @@ fun createGameScreen(config: AppConfig, strategy: FieldGenerationStrategy, graph
         Processed
     }
 
-    return GameScreen(gameScreen, gameArea, field, inputManager)
-}
-
-
-fun putFieldOnGameWorld(world: GameWorld, field: Field, graphics: Graphics) {
-    field.rect.fetchPositions().forEach { pos ->
-        val fieldTile = field.staticLayer[pos]
-        if (fieldTile != null)
-            world.setBlockAt(pos.toPosition3D(0), graphics.staticLayerTransform(fieldTile))
-    }
-    field.rect.fetchPositions().forEach { pos ->
-        val obj = field.dynamicLayer[pos]
-        if (obj != null)
-            world.setBlockAt(pos.toPosition3D(1), graphics.dynamicLayerTransform(obj))
-    }
+    return GameScreen(gameScreen, gameArea, inputManager)
 }
