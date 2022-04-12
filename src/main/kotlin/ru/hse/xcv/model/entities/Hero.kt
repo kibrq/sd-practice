@@ -14,13 +14,23 @@ class Hero(
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
 
+
+    fun addExperience(exp: Int) {
+        stats += statsPerLevel * experience.applyExperience(exp)
+    }
+
     companion object {
         const val defaultMoveSpeed = 1
         val defaultStats = Stats(
             power = 5,
             armor = 5,
-            currentHealth = 100,
             maxHealth = 100
+        )
+
+        val statsPerLevel = Stats(
+            power = 1,
+            armor = 1,
+            maxHealth = 20
         )
     }
 }
