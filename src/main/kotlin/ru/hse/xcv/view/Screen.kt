@@ -72,8 +72,8 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     val xcvNamePanel  = Components.header()
         .withText("XCV")
-        .withPreferredSize(infoPanelSize.width / 2, 1)
-        .withPosition(7, 0)
+        .withPreferredSize(3, 1)
+        .withPosition(infoPanelSize.width / 2, 0)
         .build()
 
     val hpNamePanel  = Components.header()
