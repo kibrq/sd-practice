@@ -40,22 +40,22 @@ data class JsonRepresentationField(
     val rect: JsonRepresentationRect
 )
 
-fun positionToJsonRepresentation(p: Position): JsonRepresentationPosition {
+private fun positionToJsonRepresentation(p: Position): JsonRepresentationPosition {
     return JsonRepresentationPosition(p.x, p.y)
 }
 
-fun sizeToJsonRepresentation(s: Size): JsonRepresentationSize {
+private fun sizeToJsonRepresentation(s: Size): JsonRepresentationSize {
     return JsonRepresentationSize(s.width, s.height)
 }
 
-fun rectToJsonRepresentation(r: Rect): JsonRepresentationRect {
+private fun rectToJsonRepresentation(r: Rect): JsonRepresentationRect {
     return JsonRepresentationRect(
         positionToJsonRepresentation(r.position),
         sizeToJsonRepresentation(r.size)
     )
 }
 
-fun dynamicObjectToJsonRepresentation(o: DynamicObject): JsonRepresentationDynamicObject {
+private fun dynamicObjectToJsonRepresentation(o: DynamicObject): JsonRepresentationDynamicObject {
     return JsonRepresentationDynamicObject(
         positionToJsonRepresentation(o.position),
         positionToJsonRepresentation(o.direction),
@@ -73,19 +73,19 @@ fun fieldToJsonRepresentation(f: Field): JsonRepresentationField {
     )
 }
 
-fun positionFromJsonRepresentation(p: JsonRepresentationPosition): Position {
+private fun positionFromJsonRepresentation(p: JsonRepresentationPosition): Position {
     return Position.create(p.x, p.y)
 }
 
-fun sizeFromJsonRepresentation(s: JsonRepresentationSize): Size {
+private fun sizeFromJsonRepresentation(s: JsonRepresentationSize): Size {
     return Size.create(s.width, s.height)
 }
 
-fun rectFromJsonRepresentation(r: JsonRepresentationRect): Rect {
+private fun rectFromJsonRepresentation(r: JsonRepresentationRect): Rect {
     return Rect.create(positionFromJsonRepresentation(r.position), sizeFromJsonRepresentation(r.size))
 }
 
-fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObject): DynamicObject {
+private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObject): DynamicObject {
     return when (o.type) {
         "Hero" -> Hero(
             positionFromJsonRepresentation(o.position),
