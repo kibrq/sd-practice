@@ -6,9 +6,6 @@ import org.hexworks.zircon.api.uievent.KeyCode
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.spells.ChainLightningSpell
-import ru.hse.xcv.model.spells.FireballSpell
-import ru.hse.xcv.model.spells.HealSpell
 import ru.hse.xcv.util.InputManager
 import kotlin.math.abs
 
@@ -36,12 +33,6 @@ class PlayerController(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val lastSpellKeys = mutableListOf<KeyCode>()
 
-    init {
-        hero.spellBook.spells.add(FireballSpell())
-        hero.spellBook.spells.add(ChainLightningSpell())
-        hero.spellBook.spells.add(HealSpell())
-    }
-
     private fun castSpell() {
         val combination = lastSpellKeys.map {
             when (it) {
@@ -60,24 +51,24 @@ class PlayerController(
         val result = when (code ?: input.peek()) {
             UP -> -1
             DOWN -> 1
-            else -> null
+            else -> return 0
         }
-        if (code == null && result != null) {
+        if (code == null) {
             input.poll()
         }
-        return result ?: 0
+        return result
     }
 
     private fun codeLeftRight(code: KeyCode?): Int {
         val result = when (code ?: input.peek()) {
             LEFT -> -1
             RIGHT -> 1
-            else -> null
+            else -> return 0
         }
-        if (code == null && result != null) {
+        if (code == null) {
             input.poll()
         }
-        return result ?: 0
+        return result
     }
 
     private fun handleMoveKey(code: KeyCode) {
