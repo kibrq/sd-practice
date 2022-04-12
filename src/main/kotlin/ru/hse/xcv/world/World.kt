@@ -125,7 +125,7 @@ class World(
             logger.debug("Debug")
             launch {
                 while (true) {
-                    delay(1000 / it.key.moveSpeed.toLong())
+                    delay(5000 / it.key.moveSpeed.toLong())
                     it.value.action()
                 }
             }
