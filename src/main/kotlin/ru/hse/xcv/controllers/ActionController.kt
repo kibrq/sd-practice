@@ -12,7 +12,7 @@ import ru.hse.xcv.model.Zombie
 import ru.hse.xcv.model.Hero
 
 interface ActionController {
-    abstract val eventFactory: EventBus
+    val eventFactory: EventBus
     fun action()
     fun start() {
         eventFactory.fire(NoneEvent(this))
