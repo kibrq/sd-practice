@@ -44,6 +44,7 @@ class PlayerController(
             DOWN  -> eventFactory.fire(MoveEvent(hero, Position.create(0, 1), true, this))
             LEFT  -> eventFactory.fire(MoveEvent(hero, Position.create(-1, 0), true, this))
             RIGHT -> eventFactory.fire(MoveEvent(hero, Position.create(1, 0), true, this))
+            else -> throw IllegalStateException()
         }
     }
 

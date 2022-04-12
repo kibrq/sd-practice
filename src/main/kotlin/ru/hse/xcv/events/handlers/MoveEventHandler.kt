@@ -12,7 +12,7 @@ class MoveEventHandler(
         val (obj, offset, needMoveWorld) = event
         world.moveObject(obj, obj.position + offset)
         if (needMoveWorld) {
-            world.view.makeCentered(obj.position + offset)
+            world.view.makeCentered(obj.position)
         }
     }
 }
