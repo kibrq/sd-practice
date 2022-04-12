@@ -14,8 +14,6 @@ val DOWN = KeyCode.KEY_S
 val LEFT = KeyCode.KEY_A
 val RIGHT = KeyCode.KEY_D
 
-val MOVEMENT = setOf(UP, DOWN, LEFT, RIGHT)
-
 val INVENTORY = KeyCode.KEY_I
 
 val SPELL_H = KeyCode.KEY_H
@@ -24,37 +22,69 @@ val SPELL_K = KeyCode.KEY_K
 val SPELL_L = KeyCode.KEY_L
 val SPELL_SUBMIT = KeyCode.SPACE
 
-val SPELL_CASTING = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
+private val MOVE_KEYS = setOf(UP, DOWN, LEFT, RIGHT)
+private val SPELL_KEYS = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
 
 class PlayerController(
-    val hero: Hero,
-    val input: InputManager,
+    private val hero: Hero,
+    private val input: InputManager,
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun action() {
-        val pair = input.poll()
-        if (pair != null) {
-            val (pressed, code) = pair
-            val direction = when (code) {
-                UP -> Position.create(0, -1 * pressed)
-                DOWN -> Position.create(0, 1 * pressed)
-                LEFT -> Position.create(pressed * -1, 0)
-                RIGHT -> Position.create(pressed * 1, 0)
-                else -> Position.zero()
-            }
-            val (newx, newy) = hero.direction + direction
-            if (abs(newx) <= 1 && abs(newy) <= 1) {
-                hero.direction = hero.direction + direction
-            }
+    private fun codeUpDown(code: KeyCode?): Int {
+        val result = when (code ?: input.peek()) {
+            UP -> -1
+            DOWN -> 1
+            else -> null
         }
-        if (hero.direction != Position.zero()) {
-            eventBus.fire(MoveEvent(hero, hero.direction, true, this))
+        if (code == null && result != null) {
+            input.poll()
+        }
+        return result ?: 0
+    }
+
+    private fun codeLeftRight(code: KeyCode?): Int {
+        val result = when (code ?: input.peek()) {
+            LEFT -> -1
+            RIGHT -> 1
+            else -> null
+        }
+        if (code == null && result != null) {
+            input.poll()
+        }
+        return result ?: 0
+    }
+
+    private fun handleMoveKey(code: KeyCode) {
+        val (x, y) = when (code) {
+            UP, DOWN -> codeLeftRight(null) to codeUpDown(code)
+            LEFT, RIGHT -> codeLeftRight(code) to codeUpDown(null)
+            else -> return
+        }
+        hero.direction = Position.create(x, y)
+        if (abs(hero.direction.x) + abs(hero.direction.y) > 0) {
+            val event = MoveEvent(hero, hero.direction, moveWorld = true)
+            eventBus.fire(event)
+        }
+    }
+
+    private fun handleSpellKey(code: KeyCode) {
+
+    }
+
+    override fun action() {
+        input.poll()?.let { code ->
+            println(code)
+            when (code) {
+                in MOVE_KEYS -> handleMoveKey(code)
+                in SPELL_KEYS -> handleSpellKey(code)
+                else -> return
+            }
         }
     }
 
     companion object {
-        val SUPPORTED_KEYS = setOf(UP, DOWN, LEFT, RIGHT, SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
+        val SUPPORTED_KEYS = MOVE_KEYS + SPELL_KEYS
     }
 }

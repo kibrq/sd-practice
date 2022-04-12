@@ -16,7 +16,7 @@ interface MobStrategy {
     val mob: Mob
     val world: World
 
-    fun takeAction(callback: ActionController): Event
+    fun takeAction(): Event
 }
 
 
@@ -26,12 +26,12 @@ class AggressiveMobStrategy(
 ) : MobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun takeAction(callback: ActionController): Event {
+    override fun takeAction(): Event {
         val (_, dyn) = world.readNeighbourhood(mob.position, Size.create(20, 20))
         return dyn.values.filterIsInstance<Hero>().firstOrNull()?.let {
             val dp = (it.position - mob.position).normalize()
-            MoveEvent(mob, dp, false, callback)
-        } ?: NoneEvent(callback)
+            MoveEvent(mob, dp, moveWorld = false)
+        } ?: NoneEvent
     }
 }
 
@@ -42,6 +42,7 @@ class MobController(
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun action() {
-        eventBus.fire(strategy.takeAction(this))
+        val event = strategy.takeAction()
+        eventBus.fire(event)
     }
 }

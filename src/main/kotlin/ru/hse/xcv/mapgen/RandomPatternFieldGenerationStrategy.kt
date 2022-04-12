@@ -30,7 +30,7 @@ class RandomPatternFieldGenerationStrategy(
     private val size: Size,
     private val smoothTimes: Int = 5,
     private val hardness: Int = 1,
-    private val floorPercentage: Double = 0.6
+    private val floorPercentage: Double = 0.55
 ) : FieldGenerationStrategy {
 
     override fun generate(): FieldModel {
@@ -55,15 +55,19 @@ class RandomPatternFieldGenerationStrategy(
         recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             val mobCount = (hardness * floors.count()) / threshold.height / threshold.width + 1
+//            val mobCount = 0
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
             }
         }
 
-        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled()
-            .take(1).forEach {
-            dynamicLayer[it.key] = Hero(it.key, Position.zero())
-        }
+        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
+            .asSequence()
+            .shuffled()
+            .take(1)
+            .forEach {
+                dynamicLayer[it.key] = Hero(it.key, Position.zero())
+            }
 
         return FieldModel(tiles, dynamicLayer, Rect.create(Position.zero(), size))
     }
