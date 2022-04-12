@@ -3,7 +3,6 @@ package ru.hse.xcv.world
 
 import kotlin.reflect.KClass
 import kotlin.reflect.full.isSuperclassOf
-import kotlin.concurrent.thread
 import kotlinx.coroutines.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
@@ -17,8 +16,7 @@ import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
 
-import ru.hse.xcv.model.Hero
-import ru.hse.xcv.model.Mob
+import ru.hse.xcv.model.entities.*
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.FieldModel

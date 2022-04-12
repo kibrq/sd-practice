@@ -9,15 +9,14 @@ import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.NoneEvent
 import ru.hse.xcv.events.MoveEvent
 
-import ru.hse.xcv.model.Mob
+import ru.hse.xcv.model.entities.*
 import ru.hse.xcv.world.World
-import ru.hse.xcv.model.Hero
 
 import ru.hse.xcv.util.normalize
 
 interface MobStrategy {
-    abstract val mob: Mob
-    abstract val world: World
+    val mob: Mob
+    val world: World
 
     fun takeAction(callback: ActionController): Event
 }
