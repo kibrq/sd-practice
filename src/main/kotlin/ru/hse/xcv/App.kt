@@ -22,6 +22,7 @@ private val screenWidth = gd.displayMode.width
 private val screenHeight = gd.displayMode.height
 
 private const val FPS_LIMIT = 30
+private const val XCV = "xcv"
 private val WINDOW_SIZE = Size.create(screenWidth / 40, screenHeight / 40) // don't ask why
 private val TILESET = CP437TilesetResources.sirHenry32x32()
 private val FIELD_SIZE = Size.create(100, 100)
@@ -48,7 +49,7 @@ fun startGame(
 
 fun main() {
     val appConfig = AppConfig.newBuilder()
-        .withTitle("xcv")
+        .withTitle(XCV)
         .withSize(WINDOW_SIZE)
         .withDefaultTileset(TILESET)
         .withFpsLimit(FPS_LIMIT)

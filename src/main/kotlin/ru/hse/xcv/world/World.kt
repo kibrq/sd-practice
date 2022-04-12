@@ -98,8 +98,14 @@ class World(
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
-        // runBlocking {launch { while(true) controller.action() }}
-
+        runBlocking {
+            launch {
+                while (true) {
+                    delay(5000 / obj.moveSpeed.toLong())
+                    controller.action()
+                }
+            }
+        }
     }
 
     fun deleteObject(obj: DynamicObject) {
@@ -135,7 +141,7 @@ class World(
     fun readNeighbourhood(center: Position, size: Size) = lock.read {
         val shift = Position.create(size.width / 2, size.height / 2)
         val rect = Rect.create(center - shift, size)
-        Pair(model.staticLayer.readRect(rect), model.dynamicLayer.readRect(rect))
+        model.staticLayer.readRect(rect) to model.dynamicLayer.readRect(rect)
     }
 
     companion object {

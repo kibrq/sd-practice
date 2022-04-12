@@ -4,6 +4,7 @@ import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.uievent.KeyCode
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.LetterPressedEvent
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.InputManager
@@ -34,15 +35,7 @@ class PlayerController(
     private val lastSpellKeys = mutableListOf<KeyCode>()
 
     private fun castSpell() {
-        val combination = lastSpellKeys.map {
-            when (it) {
-                SPELL_H -> 'H'
-                SPELL_J -> 'J'
-                SPELL_K -> 'K'
-                SPELL_L -> 'L'
-                else -> return
-            }
-        }.joinToString("")
+        val combination = lastSpellKeys.map { it.toCharOrNull() ?: return }.joinToString("")
         val spell = hero.spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
     }
@@ -91,6 +84,10 @@ class PlayerController(
             lastSpellKeys.clear()
         } else {
             lastSpellKeys.add(code)
+        }
+        code.toCharOrNull()?.let {
+            val event = LetterPressedEvent(it)
+            eventBus.fire(event)
         }
     }
 
