@@ -12,6 +12,8 @@ import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.Hero
 import ru.hse.xcv.util.InputManager
 
+import ru.hse.xcv.util.normalize
+
 val UP = KeyCode.KEY_W
 val DOWN = KeyCode.KEY_S
 val LEFT = KeyCode.KEY_A
@@ -38,14 +40,23 @@ class PlayerController(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun action() {
-        logger.debug("Actioning")
-        when(input.take()) {
-            UP    -> eventFactory.fire(MoveEvent(hero, Position.create(0, -1), true, this))
-            DOWN  -> eventFactory.fire(MoveEvent(hero, Position.create(0, 1), true, this))
-            LEFT  -> eventFactory.fire(MoveEvent(hero, Position.create(-1, 0), true, this))
-            RIGHT -> eventFactory.fire(MoveEvent(hero, Position.create(1, 0), true, this))
-            else -> throw IllegalStateException()
+        val pair = input.poll()
+        if (pair != null) {
+            val (pressed, code) = pair
+            val direction = when(code) {
+                UP    -> Position.create(0, -1 * pressed)
+                DOWN  -> Position.create(0, 1 * pressed)
+                LEFT  -> Position.create(pressed * -1, 0)
+                RIGHT -> Position.create(pressed * 1, 0)
+                else -> {Position.zero()}
+            }
+            val (newx, newy) = hero.direction + direction
+            if (Math.abs(newx) <= 1 && Math.abs(newy) <= 1) {
+                hero.direction = hero.direction + direction
+            }
         }
+        if (hero.direction != Position.zero())
+            eventFactory.fire(MoveEvent(hero, hero.direction, true, this))
     }
 
     companion object {

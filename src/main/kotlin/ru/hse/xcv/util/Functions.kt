@@ -5,13 +5,13 @@ import org.hexworks.zircon.api.data.Rect
 
 import ru.hse.xcv.view.FieldView
 
+fun Position.normalize() = Position.create(x / maxOf(Math.abs(x), Math.abs(y), 1), y / maxOf(Math.abs(x), Math.abs(y), 1))
+
 fun <T> Map<Position, T>.readRect(rect: Rect) =
     rect.fetchPositions()
         .map { it to this[it] }
         .filter { it.second != null }
         .toMap()
-
-
 
 
 fun FieldView.makeCentered(position: Position) {

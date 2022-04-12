@@ -29,9 +29,9 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
 
 class RandomPatternFieldGenerationStrategy(
     private val size: Size,
-    private val smoothTimes: Int = 8,
-    private val hardness: Int = 5,
-    private val floorPercentage: Double = 0.52
+    private val smoothTimes: Int = 5,
+    private val hardness: Int = 1,
+    private val floorPercentage: Double = 0.6
 ) : FieldGenerationStrategy {
 
     override fun generate(): FieldModel {
@@ -51,7 +51,7 @@ class RandomPatternFieldGenerationStrategy(
         }
 
         val dynamicLayer = mutableMapOf<Position, DynamicObject>()
-        /* 
+
         val threshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
             val floors =  tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
@@ -59,11 +59,6 @@ class RandomPatternFieldGenerationStrategy(
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
             }
-        }
-        */
-
-        tiles.filter { it.value == FieldTile.FLOOR }.asSequence().shuffled().take(10).forEach {
-            dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
         }
 
         tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled().take(1).forEach { 

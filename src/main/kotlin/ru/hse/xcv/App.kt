@@ -29,7 +29,7 @@ fun startGame(
     val world = World(strategy.generate(), view, Graphics.default(), ActionControllerFactory(bus, input)) 
     bus.registerGameHandlers(world)
 
-    world.getObjectsByType(Hero::class).first()?.let {
+    world.getObjectsByType(Hero::class).keys.first()?.let {
         view.makeCentered(it.position)
     }
 
@@ -43,7 +43,7 @@ fun main() {
     val appConfig = AppConfig.newBuilder()
             .withSize(WINDOW_SIZE)
             .withDefaultTileset(CP437TilesetResources.hack64x64())
-            .withFpsLimit(90)
+            .withFpsLimit(30)
             .build()
 
     val gameScreen = createGameScreen(appConfig)

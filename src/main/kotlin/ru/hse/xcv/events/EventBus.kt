@@ -24,20 +24,13 @@ class EventBus {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     fun fire(event: Event) {
-        runBlocking {
-            launch {
-                logger.debug("Fire")
-                delay(100)
-                event.callback?.action()
-            }
-            when (event) {
-                is NoneEvent -> none.run(event)
-                is MoveEvent -> move.run(event)
-                is BuffEvent -> buff.run(event)
-                is CreateSpellEvent -> createSpell.run(event)
-                is DamageEvent -> damage.run(event)
-                is LetterPressedEvent -> letterPressed.run(event)
-            }
+        when (event) {
+            is NoneEvent -> none.run(event)
+            is MoveEvent -> move.run(event)
+            is BuffEvent -> buff.run(event)
+            is CreateSpellEvent -> createSpell.run(event)
+            is DamageEvent -> damage.run(event)
+            is LetterPressedEvent -> letterPressed.run(event)
         }
     }
 

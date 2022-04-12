@@ -12,13 +12,11 @@ import ru.hse.xcv.model.Dragon
 import ru.hse.xcv.model.Maxim
 import ru.hse.xcv.model.Zombie
 import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.Mob
 
 interface ActionController {
     val eventFactory: EventBus
     fun action()
-    fun start() {
-        eventFactory.fire(NoneEvent(this))
-    }
 }
 
 class ActionControllerFactory(
@@ -32,7 +30,6 @@ class ActionControllerFactory(
             is Zombie -> MobController(AggressiveMobStrategy(obj, world), eventFactory)
             is Maxim  -> MobController(AggressiveMobStrategy(obj, world), eventFactory)
             is Hero   -> PlayerController(obj, inputManager, eventFactory)
-            else -> throw IllegalStateException()
         }
     }
 }

@@ -2,6 +2,9 @@ package ru.hse.xcv.world
 
 
 import kotlin.reflect.KClass
+import kotlin.reflect.full.isSuperclassOf
+import kotlin.concurrent.thread
+import kotlinx.coroutines.*
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
@@ -15,6 +18,7 @@ import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
 
 import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.Mob
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.FieldModel
@@ -55,7 +59,7 @@ class World (
         logger.debug("inited")
     }
 
-    fun moveObject(obj: DynamicObject, newPosition: Position) {
+    fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
         
         val (onCurrent, onNew, block) = lock.read { 
@@ -67,15 +71,14 @@ class World (
         }
 
         if (onCurrent.first != FieldTile.FLOOR || onCurrent.second !== obj)
-            return
+            return false
         if (onNew.first != FieldTile.FLOOR || onNew.second != null)
-            return
+            return false
         if (block == null || block === NULL_BLOCK)
-            return
+            return false
         
         lock.write { 
             obj.position = newPosition
-            obj.direction = newPosition - currentPosition
             
             model.dynamicLayer.remove(currentPosition)
             model.dynamicLayer.put(newPosition, obj)
@@ -83,6 +86,8 @@ class World (
             view.setBlockAt(currentPosition.toPosition3D(1), NULL_BLOCK)
             view.setBlockAt(newPosition.toPosition3D(1), block)
         }
+
+        return true
     }
 
     fun createObject(obj: DynamicObject, position: Position) {
@@ -102,8 +107,8 @@ class World (
             controllers.put(obj, controller)
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
-
-        controller.action()
+        // runBlocking {launch { while(true) controller.action() }}
+        
     }
 
     fun deleteObject(obj: DynamicObject) {
@@ -121,10 +126,19 @@ class World (
         }
     }
 
-    fun <T: DynamicObject> getObjectsByType(clazz: KClass<T>) = controllers.keys.filter{ clazz.isInstance(it) }.toList()
+    fun <T: DynamicObject> getObjectsByType(clazz: KClass<T>) = controllers.filter{ clazz.isSuperclassOf(it.key::class) }
 
-    fun start() {
-        controllers.values.forEach { controller -> controller.start() }
+    fun start() = runBlocking {
+
+        getObjectsByType(Hero::class).values.forEach {
+            launch { while(true) { delay(50); it.action() }}
+        }
+
+        getObjectsByType(Mob::class).values.chunked(20).forEach { 
+            logger.debug ("Debug")
+            launch { while(true) { delay(200); for (a in it) a.action() }} 
+        }
+    
     }
 
     fun readNeighbourhood(center: Position, size: Size) = lock.read() {
