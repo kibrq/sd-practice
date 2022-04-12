@@ -8,7 +8,7 @@ class Zombie(
     direction: Position
 ): Mob(position, direction, moveSpeed, stats, experienceGain) {
     companion object {
-        const val moveSpeed = 2
+        const val moveSpeed = 5
         const val experienceGain = 20
         val stats = Stats(power = 2, armor = 2, maxHealth = 20)
     }

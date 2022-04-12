@@ -40,7 +40,7 @@ class World (
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
-        logger.debug("${model}")
+        logger.debug("$model")
         model.rect.fetchPositions().forEach { position ->
             val (tile, obj) = model.byPosition(position)
             
@@ -50,7 +50,7 @@ class World (
 
             if (obj != null) {
                 val controller = controllerFactory.create(obj, this)
-                controllers.put(obj, controller)
+                controllers[obj] = controller
                 view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
             }
         }
@@ -79,7 +79,7 @@ class World (
             obj.position = newPosition
             
             model.dynamicLayer.remove(currentPosition)
-            model.dynamicLayer.put(newPosition, obj)
+            model.dynamicLayer[newPosition] = obj
 
             view.setBlockAt(currentPosition.toPosition3D(1), NULL_BLOCK)
             view.setBlockAt(newPosition.toPosition3D(1), block)
@@ -101,8 +101,8 @@ class World (
 
         lock.write { 
             obj.position = position
-            model.dynamicLayer.put(position, obj)
-            controllers.put(obj, controller)
+            model.dynamicLayer[position] = obj
+            controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
         // runBlocking {launch { while(true) controller.action() }}
@@ -128,13 +128,9 @@ class World (
 
     fun start() = runBlocking {
 
-        getObjectsByType(Hero::class).values.forEach {
-            launch { while(true) { delay(50); it.action() }}
-        }
-
-        getObjectsByType(Mob::class).values.chunked(20).forEach { 
+        getObjectsByType(Entity::class).entries.forEach {
             logger.debug ("Debug")
-            launch { while(true) { delay(200); for (a in it) a.action() }} 
+            launch { while(true) { delay(1000 / it.key.moveSpeed.toLong()); it.value.action() }}
         }
     
     }

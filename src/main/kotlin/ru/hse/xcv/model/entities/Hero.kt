@@ -2,7 +2,7 @@ package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.items.Item
-import ru.hse.xcv.model.SpellBook
+import ru.hse.xcv.model.spells.SpellBook
 import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.stats.Stats
 
@@ -20,7 +20,7 @@ class Hero(
     }
 
     companion object {
-        const val defaultMoveSpeed = 1
+        const val defaultMoveSpeed = 20
         val defaultStats = Stats(
             power = 5,
             armor = 5,

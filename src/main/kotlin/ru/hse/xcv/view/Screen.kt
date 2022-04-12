@@ -5,25 +5,17 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
-import org.hexworks.zircon.api.color.ANSITileColor
-import org.hexworks.zircon.api.color.TileColor
-import org.hexworks.zircon.api.data.Block
 import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.game.GameArea
 import org.hexworks.zircon.api.game.ProjectionMode
 import org.hexworks.zircon.api.game.base.BaseGameArea
-import org.hexworks.zircon.api.graphics.Symbols
 import org.hexworks.zircon.api.screen.Screen
 import org.hexworks.zircon.api.uievent.KeyboardEventType
 import org.hexworks.zircon.api.uievent.Processed
 
 import ru.hse.xcv.controllers.PlayerController
-import ru.hse.xcv.mapgen.FieldGenerationStrategy
-import ru.hse.xcv.model.FieldModel
-import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.util.InputManager
-import ru.hse.xcv.view.WorldTile
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -42,7 +34,7 @@ data class GameScreen(
     val input: InputManager,
 )
 
-const val GAME_SCREEN_SPLIT_RATIO = 0.8
+const val GAME_SCREEN_SPLIT_RATIO = 0.85
 
 fun createGameScreen(config: AppConfig): GameScreen {
     val gameScreen = Screen.create(SwingApplications.startTileGrid(config))

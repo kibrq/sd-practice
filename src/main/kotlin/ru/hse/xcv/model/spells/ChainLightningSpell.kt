@@ -1,4 +1,4 @@
-package ru.hse.xcv.model
+package ru.hse.xcv.model.spells
 
 class ChainLightningSpell: Spell {
     override val name: String = "Chain lightning"

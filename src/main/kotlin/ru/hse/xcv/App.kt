@@ -15,7 +15,7 @@ import ru.hse.xcv.world.World
 import ru.hse.xcv.controllers.ActionControllerFactory
 import ru.hse.xcv.util.makeCentered
 
-val WINDOW_SIZE = Size.create(40, 20)
+val WINDOW_SIZE = Size.create(30, 15)
 
 fun startGame(
     gameScreen: GameScreen,
@@ -27,7 +27,7 @@ fun startGame(
     val world = World(strategy.generate(), view, Graphics.default(), ActionControllerFactory(bus, input)) 
     bus.registerGameHandlers(world)
 
-    world.getObjectsByType(Hero::class).keys.first()?.let {
+    world.getObjectsByType(Hero::class).keys.first().let {
         view.makeCentered(it.position)
     }
 

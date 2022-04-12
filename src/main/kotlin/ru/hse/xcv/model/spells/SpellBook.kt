@@ -1,4 +1,4 @@
-package ru.hse.xcv.model
+package ru.hse.xcv.model.spells
 
 class SpellBook {
     val spells: List<Spell> = ArrayList()

@@ -31,7 +31,7 @@ class AggressiveMobStrategy(
 
     override fun takeAction(callback: ActionController): Event {
         val (_, dyn) = world.readNeighbourhood(mob.position, Size.create(20, 20))
-        val hero = dyn.values.filter { it is Hero }.firstOrNull()
+        val hero = dyn.values.filterIsInstance<Hero>().firstOrNull()
         if (hero != null) {
             val dp = (hero.position - mob.position).normalize()
             return MoveEvent(mob, dp, false, callback)

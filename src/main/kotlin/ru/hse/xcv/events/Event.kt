@@ -4,7 +4,7 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.controllers.ActionController
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
-import ru.hse.xcv.model.Spell
+import ru.hse.xcv.model.spells.Spell
 import ru.hse.xcv.model.stats.Stats
 
 sealed interface Event {
