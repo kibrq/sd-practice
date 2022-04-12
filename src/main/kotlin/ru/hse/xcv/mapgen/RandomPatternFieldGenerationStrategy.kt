@@ -5,8 +5,8 @@ import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
 
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.Hero
-import ru.hse.xcv.model.Mob
+import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.util.readRect

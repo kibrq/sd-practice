@@ -2,14 +2,12 @@ package ru.hse.xcv
 
 import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.application.AppConfig
-import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Size
-import org.hexworks.zircon.api.uievent.KeyCode
 
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.mapgen.FieldGenerationStrategy
 import ru.hse.xcv.mapgen.RandomPatternFieldGenerationStrategy
-import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.view.createGameScreen
 import ru.hse.xcv.view.GameScreen
 import ru.hse.xcv.view.Graphics

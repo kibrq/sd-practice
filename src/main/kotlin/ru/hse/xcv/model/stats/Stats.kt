@@ -29,4 +29,13 @@ class Stats(
         currentHealth = max(0, currentHealth - other.currentHealth)
         maxHealth = max(0, maxHealth - other.maxHealth)
     }
+
+    operator fun times(multiplier: Int): Stats {
+        check(multiplier > 0)
+        power *= multiplier
+        armor *= multiplier
+        currentHealth *= multiplier
+        maxHealth *= multiplier
+        return this
+    }
 }

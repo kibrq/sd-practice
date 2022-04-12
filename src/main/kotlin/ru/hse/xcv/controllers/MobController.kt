@@ -34,7 +34,6 @@ class AggressiveMobStrategy(
         val (_, dyn) = world.readNeighbourhood(mob.position, Size.create(20, 20))
         val hero = dyn.values.filter { it is Hero }.firstOrNull()
         if (hero != null) {
-            logger.debug("Hero near")
             val dp = (hero.position - mob.position).normalize()
             return MoveEvent(mob, dp, false, callback)
         }

@@ -3,7 +3,7 @@ package ru.hse.xcv.events
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.controllers.ActionController
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.Entity
+import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.Spell
 import ru.hse.xcv.model.stats.Stats
 

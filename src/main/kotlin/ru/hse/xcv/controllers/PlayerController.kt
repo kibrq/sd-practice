@@ -6,10 +6,9 @@ import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.data.Position
 
 import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.events.NoneEvent
 import ru.hse.xcv.events.MoveEvent
 
-import ru.hse.xcv.model.Hero
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.InputManager
 
 import ru.hse.xcv.util.normalize
