@@ -1,5 +1,7 @@
 package ru.hse.xcv.events
 
+import org.hexworks.cobalt.logging.api.LoggerFactory
+
 import ru.hse.xcv.world.World
 
 import ru.hse.xcv.events.handlers.EventHandler
@@ -19,9 +21,13 @@ class EventBus {
     private val damage = EventDispatcher<DamageEvent>()
     private val letterPressed = EventDispatcher<LetterPressedEvent>()
 
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     fun fire(event: Event) {
         runBlocking {
             launch {
+                logger.debug("Fire")
+                delay(100)
                 event.callback?.action()
             }
             when (event) {

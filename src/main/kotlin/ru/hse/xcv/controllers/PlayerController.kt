@@ -1,5 +1,7 @@
 package ru.hse.xcv.controllers
 
+import org.hexworks.cobalt.logging.api.LoggerFactory
+
 import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.data.Position
 
@@ -32,7 +34,11 @@ class PlayerController(
     val input: InputManager,
     override val eventFactory: EventBus
 ) : ActionController {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     override fun action() {
+        logger.debug("Actioning")
         when(input.take()) {
             UP    -> eventFactory.fire(MoveEvent(hero, Position.create(0, -1), true, this))
             DOWN  -> eventFactory.fire(MoveEvent(hero, Position.create(0, 1), true, this))

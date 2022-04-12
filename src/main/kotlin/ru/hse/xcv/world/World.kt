@@ -11,6 +11,8 @@ import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Block
 import org.hexworks.zircon.api.data.Tile
+import org.hexworks.zircon.api.data.Rect
+import org.hexworks.zircon.api.data.Size
 
 import ru.hse.xcv.model.Hero
 import ru.hse.xcv.model.DynamicObject
@@ -21,6 +23,8 @@ import ru.hse.xcv.view.Graphics
 
 import ru.hse.xcv.controllers.ActionController
 import ru.hse.xcv.controllers.ActionControllerFactory
+
+import ru.hse.xcv.util.readRect
 
 class World (
     val model: FieldModel,
@@ -43,7 +47,7 @@ class World (
             }
 
             if (obj != null) {
-                val controller = controllerFactory.create(obj)
+                val controller = controllerFactory.create(obj, this)
                 controllers.put(obj, controller)
                 view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
             }
@@ -90,7 +94,7 @@ class World (
             return
         logger.debug("Put on Map")
 
-        val controller = controllerFactory.create(obj)
+        val controller = controllerFactory.create(obj, this)
 
         lock.write { 
             obj.position = position
@@ -122,6 +126,13 @@ class World (
     fun start() {
         controllers.values.forEach { controller -> controller.start() }
     }
+
+    fun readNeighbourhood(center: Position, size: Size) = lock.read() {
+        val shift = Position.create(size.width/2, size.height/2)
+        val rect = Rect.create(center - shift, size)
+        Pair(model.staticLayer.readRect(rect), model.dynamicLayer.readRect(rect))
+    }
+
     companion object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()
             .withContent(Tile.empty())

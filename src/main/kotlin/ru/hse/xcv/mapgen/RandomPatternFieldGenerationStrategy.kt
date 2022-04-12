@@ -51,6 +51,7 @@ class RandomPatternFieldGenerationStrategy(
         }
 
         val dynamicLayer = mutableMapOf<Position, DynamicObject>()
+        /* 
         val threshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
             val floors =  tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
@@ -58,6 +59,11 @@ class RandomPatternFieldGenerationStrategy(
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
             }
+        }
+        */
+
+        tiles.filter { it.value == FieldTile.FLOOR }.asSequence().shuffled().take(10).forEach {
+            dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
         }
 
         tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled().take(1).forEach { 
