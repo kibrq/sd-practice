@@ -22,7 +22,6 @@ class EventBus {
     fun fire(event: Event) {
         runBlocking {
             launch {
-                delay(50)
                 event.callback?.action()
             }
             when (event) {
