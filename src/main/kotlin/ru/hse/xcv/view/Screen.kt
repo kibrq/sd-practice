@@ -1,13 +1,11 @@
 package ru.hse.xcv.view
 
 
-import org.hexworks.zircon.api.ColorThemes
 import org.hexworks.zircon.api.ComponentDecorations.box
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
-import org.hexworks.zircon.api.component.ComponentStyleSet
 import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.game.GameArea
@@ -60,7 +58,7 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .withPreferredSize(infoPanelSize)
         .build()
 
-    val healthPanel  = Components.progressBar()
+    val healthPanel = Components.progressBar()
         .withNumberOfSteps(100)
         .withRange(100)
         .withDisplayPercentValueOfProgress(true)
@@ -70,13 +68,13 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .build()
     //healthPanel.progress += 10
 
-    val xcvNamePanel  = Components.header()
+    val xcvNamePanel = Components.header()
         .withText("XCV")
         .withPreferredSize(3, 1)
         .withPosition(infoPanelSize.width / 2, 0)
         .build()
 
-    val hpNamePanel  = Components.header()
+    val hpNamePanel = Components.header()
         .withText("HP:")
         .withPreferredSize(3, 2)
         .withPosition(0, 2)
