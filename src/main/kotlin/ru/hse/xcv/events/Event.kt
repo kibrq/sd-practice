@@ -18,6 +18,7 @@ data class NoneEvent(
 data class MoveEvent(
     val obj: DynamicObject,
     val offset: Position,
+    val moveWorld: Boolean = false,
     override val callback: ActionController?
 ) : Event
 

@@ -1,5 +1,6 @@
 package ru.hse.xcv.mapgen
 
+import jdk.jfr.Percentage
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
@@ -31,11 +32,12 @@ class RandomPatternFieldGenerationStrategy(
     private val size: Size,
     private val smoothTimes: Int = 8,
     private val hardness: Int = 5,
+    private val floorPercentage: Double = 0.52
 ) : FieldGenerationStrategy {
 
     override fun generate(): Field {
         var tiles = size.fetchPositions().associateWith {
-            if (Math.random() < 0.5) FieldTile.FLOOR else FieldTile.WALL
+            if (Math.random() < floorPercentage) FieldTile.FLOOR else FieldTile.WALL
         }
 
         repeat(smoothTimes) {
