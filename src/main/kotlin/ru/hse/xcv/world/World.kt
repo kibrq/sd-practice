@@ -12,7 +12,6 @@ import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Block
 import org.hexworks.zircon.api.data.Tile
 
-import ru.hse.xcv.model.Hero
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.FieldModel

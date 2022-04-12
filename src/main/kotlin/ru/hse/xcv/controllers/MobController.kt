@@ -1,7 +1,7 @@
 package ru.hse.xcv.controllers
 
 import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.model.Mob
+import ru.hse.xcv.model.entities.Mob
 
 class MobStrategy()
 
