@@ -22,7 +22,7 @@ private val screenWidth = gd.displayMode.width
 private val screenHeight = gd.displayMode.height
 
 private const val FPS_LIMIT = 30
-private val WINDOW_SIZE = Size.create(screenWidth / 32, screenHeight / 36) // don't ask why
+private val WINDOW_SIZE = Size.create(screenWidth / 50, screenHeight / 50) // don't ask why
 private val TILESET = CP437TilesetResources.sirHenry32x32()
 private val FIELD_SIZE = Size.create(100, 100)
 
