@@ -1,7 +1,8 @@
 package ru.hse.xcv.model.spells
 
-class ChainLightningSpell: Spell {
-    override val name: String = "Chain lightning"
-    override val description: String = ""
-    override val coolDown: Int = 1
+class ChainLightningSpell : Spell {
+    override val name = "Chain lightning"
+    override val combination = "HJKL"
+    override val description = "Chains lightning"
+    override val coolDown = 1
 }

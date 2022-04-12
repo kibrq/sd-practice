@@ -1,7 +1,8 @@
 package ru.hse.xcv.model.spells
 
-class HealSpell: Spell {
-    override val name: String = "Heal spell"
-    override val description: String = "Heals"
-    override val coolDown: Int = 1
+class HealSpell : Spell {
+    override val name = "Heal spell"
+    override val combination = "HH"
+    override val description = "Heals"
+    override val coolDown = 1
 }
