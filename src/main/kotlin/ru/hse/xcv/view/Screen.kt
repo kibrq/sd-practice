@@ -75,7 +75,7 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .withNumberOfSteps(100)
         .withRange(100)
         .withDisplayPercentValueOfProgress(true)
-        .withPreferredSize(infoPanelSize.width - 1 - hpNamePanel.width, 3)
+        .withPreferredSize(infoPanelSize.width - hpNamePanel.width, 3)
         .withDecorations(box(BoxType.BASIC))
         .withPosition(Position.create(0, -1).relativeToRightOf(hpNamePanel))
         .build()
