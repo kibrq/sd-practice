@@ -13,10 +13,17 @@ import ru.hse.xcv.view.GameScreen
 import ru.hse.xcv.view.Graphics
 import ru.hse.xcv.view.createGameScreen
 import ru.hse.xcv.world.World
+import java.awt.GraphicsDevice
+import java.awt.GraphicsEnvironment
+
+
+private val gd: GraphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().defaultScreenDevice
+private val screenWidth = gd.displayMode.width
+private val screenHeight = gd.displayMode.height
 
 private const val FPS_LIMIT = 30
-private val WINDOW_SIZE = Size.create(26, 14)
-private val TILESET = CP437TilesetResources.hack64x64()
+private val WINDOW_SIZE = Size.create(screenWidth / 32, screenHeight / 36) // don't ask why
+private val TILESET = CP437TilesetResources.sirHenry32x32()
 private val FIELD_SIZE = Size.create(100, 100)
 
 fun startGame(
