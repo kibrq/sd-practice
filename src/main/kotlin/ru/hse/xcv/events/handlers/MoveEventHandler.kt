@@ -6,6 +6,7 @@ import org.hexworks.zircon.api.data.Position3D
 import org.hexworks.zircon.api.data.Tile
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.Field
+import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.view.GameWorld
 
 class MoveEventHandler(
@@ -22,7 +23,7 @@ class MoveEventHandler(
         world.setBlockAt(pos, kal)
         repeat(event.obj.moveSpeed) {
             val newPos = event.obj.position + event.offset
-            if (field.dynamicLayer[newPos] == null) {
+            if (field.staticLayer[newPos] == FieldTile.FLOOR && field.dynamicLayer[newPos] == null) {
                 field.dynamicLayer.remove(event.obj.position)
                 event.obj.position = newPos
                 field.dynamicLayer[newPos] = event.obj

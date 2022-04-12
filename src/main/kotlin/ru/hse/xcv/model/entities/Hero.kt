@@ -15,7 +15,7 @@ class Hero(
     val experience: Experience = Experience()
 
     companion object {
-        const val defaultMoveSpeed = 2
+        const val defaultMoveSpeed = 1
         val defaultStats = Stats(
             power = 5,
             armor = 5,

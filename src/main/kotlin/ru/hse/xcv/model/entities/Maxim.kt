@@ -8,8 +8,8 @@ class Maxim(
     direction: Position
 ): Mob(position, direction, moveSpeed, stats, experienceGain) {
     companion object {
-        const val moveSpeed = 4
-        const val experienceGain = 40
-        val stats = Stats(power = 2, armor = 5, maxHealth = 50)
+        const val moveSpeed = 4000
+        const val experienceGain = 40000
+        val stats = Stats(power = 2000, armor = 5000, maxHealth = 50000)
     }
 }
