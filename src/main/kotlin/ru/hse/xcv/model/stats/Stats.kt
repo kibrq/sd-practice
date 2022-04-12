@@ -8,7 +8,6 @@ class Stats(
     var maxHealth: Int = 0,
     var currentHealth: Int = maxHealth
 ) {
-
     init {
         require(power >= 0)
         require(armor >= 0)
@@ -31,7 +30,7 @@ class Stats(
     }
 
     operator fun times(multiplier: Int): Stats {
-        check(multiplier > 0)
+        require(multiplier > 0)
         power *= multiplier
         armor *= multiplier
         currentHealth *= multiplier

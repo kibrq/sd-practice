@@ -69,15 +69,17 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     gameScreen.handleKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
         if (PlayerController.SUPPORTED_KEYS.contains(event.code)) {
-            while (!inputManager.offer(Pair(1, event.code)))
+            while (!inputManager.offer(Pair(1, event.code))) {
                 inputManager.poll()
+            }
         }
         Processed
     }
     gameScreen.handleKeyboardEvents(KeyboardEventType.KEY_RELEASED) { event, _ ->
         if (PlayerController.SUPPORTED_KEYS.contains(event.code)) {
-            while (!inputManager.offer(Pair(-1, event.code)))
+            while (!inputManager.offer(Pair(-1, event.code))) {
                 inputManager.poll()
+            }
         }
         Processed
     }

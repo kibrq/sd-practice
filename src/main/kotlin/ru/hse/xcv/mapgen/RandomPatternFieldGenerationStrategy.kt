@@ -3,12 +3,11 @@ package ru.hse.xcv.mapgen
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
-
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.readRect
 
 
@@ -19,10 +18,10 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
         return listOf(rect)
     }
 
-    val (first, second) = if (width < height) 
-                            rect.splitVertical(height / 2) 
-                         else
-                            rect.splitHorizontal(width / 2)
+    val (first, second) = if (width < height)
+        rect.splitVertical(height / 2)
+    else
+        rect.splitHorizontal(width / 2)
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
 
@@ -54,14 +53,15 @@ class RandomPatternFieldGenerationStrategy(
 
         val threshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
-            val floors =  tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
+            val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             val mobCount = (hardness * floors.count()) / threshold.height / threshold.width + 1
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key, Position.zero())
             }
         }
 
-        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled().take(1).forEach { 
+        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }.asSequence().shuffled()
+            .take(1).forEach {
             dynamicLayer[it.key] = Hero(it.key, Position.zero())
         }
 

@@ -1,49 +1,42 @@
 package ru.hse.xcv.world
 
 
-import kotlin.reflect.KClass
-import kotlin.reflect.full.isSuperclassOf
-import kotlinx.coroutines.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import org.hexworks.cobalt.logging.api.LoggerFactory
+import org.hexworks.zircon.api.data.*
+import ru.hse.xcv.controllers.ActionController
+import ru.hse.xcv.controllers.ActionControllerFactory
+import ru.hse.xcv.model.DynamicObject
+import ru.hse.xcv.model.FieldModel
+import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.util.readRect
+import ru.hse.xcv.view.FieldView
+import ru.hse.xcv.view.Graphics
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
+import kotlin.reflect.KClass
+import kotlin.reflect.full.isSubclassOf
 
-import org.hexworks.cobalt.logging.api.LoggerFactory
-
-import org.hexworks.zircon.api.data.Position
-import org.hexworks.zircon.api.data.Block
-import org.hexworks.zircon.api.data.Tile
-import org.hexworks.zircon.api.data.Rect
-import org.hexworks.zircon.api.data.Size
-
-import ru.hse.xcv.model.entities.*
-import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.FieldTile
-import ru.hse.xcv.model.FieldModel
-import ru.hse.xcv.view.FieldView
-import ru.hse.xcv.view.Graphics
-
-import ru.hse.xcv.controllers.ActionController
-import ru.hse.xcv.controllers.ActionControllerFactory
-
-import ru.hse.xcv.util.readRect
-
-class World (
+class World(
     val model: FieldModel,
-    val view:  FieldView,
+    val view: FieldView,
     private val graphics: Graphics,
     private val controllerFactory: ActionControllerFactory
 ) {
     private val lock = ReentrantReadWriteLock()
     private val controllers = hashMapOf<DynamicObject, ActionController>()
-    
+
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
         logger.debug("$model")
         model.rect.fetchPositions().forEach { position ->
             val (tile, obj) = model.byPosition(position)
-            
+
             if (tile != null) {
                 view.setBlockAt(position.toPosition3D(0), graphics.staticLayerTransform(tile))
             }
@@ -54,13 +47,13 @@ class World (
                 view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
             }
         }
-        logger.debug("inited")
+        logger.debug("world initialized")
     }
 
     fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
-        
-        val (onCurrent, onNew, block) = lock.read { 
+
+        val (onCurrent, onNew, block) = lock.read {
             Triple(
                 model.byPosition(currentPosition),
                 model.byPosition(newPosition),
@@ -74,10 +67,10 @@ class World (
             return false
         if (block == null || block === NULL_BLOCK)
             return false
-        
-        lock.write { 
+
+        lock.write {
             obj.position = newPosition
-            
+
             model.dynamicLayer.remove(currentPosition)
             model.dynamicLayer[newPosition] = obj
 
@@ -89,7 +82,7 @@ class World (
     }
 
     fun createObject(obj: DynamicObject, position: Position) {
-        val onCurrent = lock.read { 
+        val onCurrent = lock.read {
             model.byPosition(position)
         }
         logger.debug { "${onCurrent.first} ${onCurrent.second}" }
@@ -99,14 +92,14 @@ class World (
 
         val controller = controllerFactory.create(obj, this)
 
-        lock.write { 
+        lock.write {
             obj.position = position
             model.dynamicLayer[position] = obj
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
         // runBlocking {launch { while(true) controller.action() }}
-        
+
     }
 
     fun deleteObject(obj: DynamicObject) {
@@ -116,7 +109,7 @@ class World (
 
         if (onCurrent.first != FieldTile.FLOOR || onCurrent.second == null)
             return
-        
+
         lock.write {
             model.dynamicLayer.remove(obj.position)
             controllers.remove(obj)
@@ -124,19 +117,23 @@ class World (
         }
     }
 
-    fun <T: DynamicObject> getObjectsByType(clazz: KClass<T>) = controllers.filter{ clazz.isSuperclassOf(it.key::class) }
+    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>) =
+        controllers.filterKeys { it::class.isSubclassOf(clazz) }
 
     fun start() = runBlocking {
-
         getObjectsByType(Entity::class).entries.forEach {
-            logger.debug ("Debug")
-            launch { while(true) { delay(1000 / it.key.moveSpeed.toLong()); it.value.action() }}
+            logger.debug("Debug")
+            launch {
+                while (true) {
+                    delay(1000 / it.key.moveSpeed.toLong());
+                    it.value.action()
+                }
+            }
         }
-    
     }
 
-    fun readNeighbourhood(center: Position, size: Size) = lock.read() {
-        val shift = Position.create(size.width/2, size.height/2)
+    fun readNeighbourhood(center: Position, size: Size) = lock.read {
+        val shift = Position.create(size.width / 2, size.height / 2)
         val rect = Rect.create(center - shift, size)
         Pair(model.staticLayer.readRect(rect), model.dynamicLayer.readRect(rect))
     }

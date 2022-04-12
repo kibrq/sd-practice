@@ -11,7 +11,7 @@ interface Item {
 
     companion object {
         fun getRandomItem(): Item {
-            return when(Random.nextInt(0, 4)) {
+            return when (Random.nextInt(0, 4)) {
                 0 -> Sword()
                 1 -> Helmet()
                 2 -> BodyArmor()

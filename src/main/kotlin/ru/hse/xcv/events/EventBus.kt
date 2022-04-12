@@ -1,17 +1,8 @@
 package ru.hse.xcv.events
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
-
+import ru.hse.xcv.events.handlers.*
 import ru.hse.xcv.world.World
-
-import ru.hse.xcv.events.handlers.EventHandler
-import ru.hse.xcv.events.handlers.MoveEventHandler
-import ru.hse.xcv.events.handlers.DamageEventHandler
-import ru.hse.xcv.events.handlers.CreateSpellEventHandler
-import ru.hse.xcv.events.handlers.BuffEventHandler
-import ru.hse.xcv.events.handlers.LetterPressedEventHandler
-
-import kotlinx.coroutines.*
 
 class EventBus {
     private val none = EventDispatcher<NoneEvent>()
@@ -38,7 +29,7 @@ class EventBus {
         none.register(object : EventHandler<NoneEvent> {
             override val world = world
 
-            override fun handle(event: NoneEvent) {}
+            override fun handle(event: NoneEvent) = Unit
         })
 
         move.register(MoveEventHandler(world))

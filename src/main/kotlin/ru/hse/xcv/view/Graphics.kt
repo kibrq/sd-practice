@@ -1,32 +1,30 @@
 package ru.hse.xcv.view
 
-import kotlin.reflect.KClass
-
-import org.hexworks.zircon.api.data.Block
-import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.color.ANSITileColor
 import org.hexworks.zircon.api.color.TileColor
+import org.hexworks.zircon.api.data.Block
+import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.graphics.Symbols
-
-import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.DynamicObject
+import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.entities.Dragon
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Maxim
 import ru.hse.xcv.model.entities.Zombie
+import kotlin.reflect.KClass
 
 typealias WorldTile = Block<Tile>
 
-fun worldTileOfSymbolAndColor(char: Char, color: TileColor) = 
+fun worldTileOfSymbolAndColor(char: Char, color: TileColor) =
     Block.newBuilder<Tile>()
-    .withContent(
-        Tile.newBuilder()
-            .withCharacter(char)
-            .withForegroundColor(color)
-            .buildCharacterTile()
-    )
-    .withEmptyTile(Tile.empty())
-    .build()
+        .withContent(
+            Tile.newBuilder()
+                .withCharacter(char)
+                .withForegroundColor(color)
+                .buildCharacterTile()
+        )
+        .withEmptyTile(Tile.empty())
+        .build()
 
 
 interface Graphics {
@@ -37,12 +35,12 @@ interface Graphics {
         fun default() = FromMapGraphics(
             mapOf(
                 FieldTile.FLOOR to worldTileOfSymbolAndColor(Symbols.INTERPUNCT, ANSITileColor.YELLOW),
-                FieldTile.WALL  to worldTileOfSymbolAndColor('#', TileColor.fromString("#999999"))
+                FieldTile.WALL to worldTileOfSymbolAndColor('#', TileColor.fromString("#999999"))
             ),
             mapOf(
-                Hero::class   to worldTileOfSymbolAndColor(Symbols.FACE_WHITE, ANSITileColor.GREEN),
+                Hero::class to worldTileOfSymbolAndColor(Symbols.FACE_WHITE, ANSITileColor.GREEN),
                 Dragon::class to worldTileOfSymbolAndColor(Symbols.SECTION_SIGN, ANSITileColor.RED),
-                Maxim::class  to worldTileOfSymbolAndColor(Symbols.FEMALE, ANSITileColor.YELLOW),
+                Maxim::class to worldTileOfSymbolAndColor(Symbols.FEMALE, ANSITileColor.YELLOW),
                 Zombie::class to worldTileOfSymbolAndColor(Symbols.YEN, ANSITileColor.RED)
             )
         )

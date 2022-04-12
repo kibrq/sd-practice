@@ -3,28 +3,30 @@ package ru.hse.xcv
 import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.application.AppConfig
 import org.hexworks.zircon.api.data.Size
-
+import ru.hse.xcv.controllers.ActionControllerFactory
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.mapgen.FieldGenerationStrategy
 import ru.hse.xcv.mapgen.RandomPatternFieldGenerationStrategy
 import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.view.createGameScreen
+import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.view.GameScreen
 import ru.hse.xcv.view.Graphics
+import ru.hse.xcv.view.createGameScreen
 import ru.hse.xcv.world.World
-import ru.hse.xcv.controllers.ActionControllerFactory
-import ru.hse.xcv.util.makeCentered
 
-val WINDOW_SIZE = Size.create(30, 15)
+private const val FPS_LIMIT = 30
+private val WINDOW_SIZE = Size.create(26, 14)
+private val TILESET = CP437TilesetResources.hack64x64()
+private val FIELD_SIZE = Size.create(100, 100)
 
 fun startGame(
     gameScreen: GameScreen,
     strategy: FieldGenerationStrategy,
-    bus: EventBus,
+    bus: EventBus
 ) {
     val (window, view, input) = gameScreen
-    
-    val world = World(strategy.generate(), view, Graphics.default(), ActionControllerFactory(bus, input)) 
+
+    val world = World(strategy.generate(), view, Graphics.default(), ActionControllerFactory(bus, input))
     bus.registerGameHandlers(world)
 
     world.getObjectsByType(Hero::class).keys.first().let {
@@ -39,10 +41,11 @@ fun startGame(
 
 fun main() {
     val appConfig = AppConfig.newBuilder()
-            .withSize(WINDOW_SIZE)
-            .withDefaultTileset(CP437TilesetResources.hack64x64())
-            .withFpsLimit(30)
-            .build()
+        .withTitle("xcv")
+        .withSize(WINDOW_SIZE)
+        .withDefaultTileset(TILESET)
+        .withFpsLimit(FPS_LIMIT)
+        .build()
 
     val gameScreen = createGameScreen(appConfig)
 
@@ -50,7 +53,7 @@ fun main() {
 
     startGame(
         gameScreen,
-        RandomPatternFieldGenerationStrategy(Size.create(100, 100)),
+        RandomPatternFieldGenerationStrategy(FIELD_SIZE),
         eventBus
     )
 }

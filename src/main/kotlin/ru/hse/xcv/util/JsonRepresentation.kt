@@ -25,7 +25,6 @@ data class JsonRepresentationRect(
     val size: JsonRepresentationSize
 )
 
-
 @Serializable
 data class JsonRepresentationDynamicObject(
     val position: JsonRepresentationPosition,

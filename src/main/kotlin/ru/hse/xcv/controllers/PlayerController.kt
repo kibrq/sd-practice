@@ -1,17 +1,13 @@
 package ru.hse.xcv.controllers
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
-
-import org.hexworks.zircon.api.uievent.KeyCode
 import org.hexworks.zircon.api.data.Position
-
+import org.hexworks.zircon.api.uievent.KeyCode
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
-
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.InputManager
-
-import ru.hse.xcv.util.normalize
+import kotlin.math.abs
 
 val UP = KeyCode.KEY_W
 val DOWN = KeyCode.KEY_S
@@ -33,29 +29,29 @@ val SPELL_CASTING = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_SUBMIT)
 class PlayerController(
     val hero: Hero,
     val input: InputManager,
-    override val eventFactory: EventBus
+    override val eventBus: EventBus
 ) : ActionController {
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun action() {
         val pair = input.poll()
         if (pair != null) {
             val (pressed, code) = pair
-            val direction = when(code) {
-                UP    -> Position.create(0, -1 * pressed)
-                DOWN  -> Position.create(0, 1 * pressed)
-                LEFT  -> Position.create(pressed * -1, 0)
+            val direction = when (code) {
+                UP -> Position.create(0, -1 * pressed)
+                DOWN -> Position.create(0, 1 * pressed)
+                LEFT -> Position.create(pressed * -1, 0)
                 RIGHT -> Position.create(pressed * 1, 0)
-                else -> {Position.zero()}
+                else -> Position.zero()
             }
             val (newx, newy) = hero.direction + direction
-            if (Math.abs(newx) <= 1 && Math.abs(newy) <= 1) {
+            if (abs(newx) <= 1 && abs(newy) <= 1) {
                 hero.direction = hero.direction + direction
             }
         }
-        if (hero.direction != Position.zero())
-            eventFactory.fire(MoveEvent(hero, hero.direction, true, this))
+        if (hero.direction != Position.zero()) {
+            eventBus.fire(MoveEvent(hero, hero.direction, true, this))
+        }
     }
 
     companion object {

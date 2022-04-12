@@ -6,9 +6,9 @@ import ru.hse.xcv.model.stats.Stats
 class Zombie(
     position: Position,
     direction: Position
-): Mob(position, direction, moveSpeed, stats, experienceGain) {
+) : Mob(position, direction, moveSpeed, stats, experienceGain) {
     companion object {
-        const val moveSpeed = 5
+        const val moveSpeed = 3
         const val experienceGain = 20
         val stats = Stats(power = 2, armor = 2, maxHealth = 20)
     }

@@ -6,7 +6,7 @@ import ru.hse.xcv.model.stats.Stats
 class Dragon(
     position: Position,
     direction: Position
-): Mob(position, direction, moveSpeed, stats, experienceGain) {
+) : Mob(position, direction, moveSpeed, stats, experienceGain) {
     companion object {
         const val moveSpeed = 2
         const val experienceGain = 200

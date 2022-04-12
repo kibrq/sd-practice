@@ -4,8 +4,9 @@ import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 
 import ru.hse.xcv.view.FieldView
+import kotlin.math.abs
 
-fun Position.normalize() = Position.create(x / maxOf(Math.abs(x), Math.abs(y), 1), y / maxOf(Math.abs(x), Math.abs(y), 1))
+fun Position.normalize() = Position.create(x / maxOf(abs(x), abs(y), 1), y / maxOf(abs(x), abs(y), 1))
 
 fun <T> Map<Position, T>.readRect(rect: Rect) =
     rect.fetchPositions()
@@ -17,9 +18,7 @@ fun <T> Map<Position, T>.readRect(rect: Rect) =
 fun FieldView.makeCentered(position: Position) {
     val (w, h) = this.visibleSize
     val (x, y) = position
-    
 
-    scrollTo(
-        Position.create(maxOf(x - w / 2, 0), maxOf(y - h / 2, 0)).toPosition3D(0)
-    )
+    val newPosition = Position.create(maxOf(x - w / 2, 0), maxOf(y - h / 2, 0)).toPosition3D(0)
+    scrollTo(newPosition)
 }

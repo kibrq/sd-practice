@@ -5,6 +5,6 @@ import ru.hse.xcv.world.World
 
 class LetterPressedEventHandler(
     override val world: World,
-): EventHandler<LetterPressedEvent> {
+) : EventHandler<LetterPressedEvent> {
     override fun handle(event: LetterPressedEvent) {}
 }
