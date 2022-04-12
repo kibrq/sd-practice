@@ -75,7 +75,7 @@ class PlayerController(
 
     override fun action() {
         input.poll()?.let { code ->
-            println(code)
+            logger.debug(code.name)
             when (code) {
                 in MOVE_KEYS -> handleMoveKey(code)
                 in SPELL_KEYS -> handleSpellKey(code)
