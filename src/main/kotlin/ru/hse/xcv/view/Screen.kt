@@ -65,7 +65,7 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     gameScreen.addComponent(horizontalSplit)
 
-    val inputManager = InputManager(2)
+    val inputManager = InputManager(5)
 
     gameScreen.handleKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
         if (event.code in PlayerController.SUPPORTED_KEYS) {

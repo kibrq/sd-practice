@@ -8,7 +8,7 @@ class Dragon(
     direction: Position
 ) : Mob(position, direction, moveSpeed, stats, experienceGain) {
     companion object {
-        const val moveSpeed = 2
+        const val moveSpeed = 10
         const val experienceGain = 200
         val stats = Stats(power = 10, armor = 10, maxHealth = 200)
     }

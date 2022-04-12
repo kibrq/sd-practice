@@ -20,7 +20,7 @@ class Hero(
     }
 
     companion object {
-        const val defaultMoveSpeed = 10
+        const val defaultMoveSpeed = 25
         val defaultStats = Stats(
             power = 5,
             armor = 5,
