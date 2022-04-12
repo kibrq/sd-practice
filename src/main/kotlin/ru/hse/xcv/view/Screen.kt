@@ -6,6 +6,7 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
+import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.game.GameArea
@@ -58,16 +59,6 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .withPreferredSize(infoPanelSize)
         .build()
 
-    val healthPanel = Components.progressBar()
-        .withNumberOfSteps(100)
-        .withRange(100)
-        .withDisplayPercentValueOfProgress(true)
-        .withPreferredSize(infoPanelSize.width - 3, 3)
-        .withDecorations(box(BoxType.BASIC))
-        .withPosition(3, 1)
-        .build()
-    //healthPanel.progress += 10
-
     val xcvNamePanel = Components.header()
         .withText("XCV")
         .withPreferredSize(3, 1)
@@ -79,6 +70,16 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .withPreferredSize(3, 2)
         .withPosition(0, 2)
         .build()
+
+    val healthPanel = Components.progressBar()
+        .withNumberOfSteps(100)
+        .withRange(100)
+        .withDisplayPercentValueOfProgress(true)
+        .withPreferredSize(infoPanelSize.width - 1 - hpNamePanel.width, 3)
+        .withDecorations(box(BoxType.BASIC))
+        .withPosition(Position.create(0, -1).relativeToRightOf(hpNamePanel))
+        .build()
+
     infoPanel.addComponent(xcvNamePanel)
     infoPanel.addComponent(hpNamePanel)
     infoPanel.addComponent(healthPanel)
