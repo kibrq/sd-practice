@@ -55,9 +55,8 @@ fun main() {
         .withFpsLimit(FPS_LIMIT)
         .build()
 
-    val gameScreen = createGameScreen(appConfig)
-
     val eventBus = EventBus()
+    val gameScreen = createGameScreen(appConfig, eventBus)
 
     startGame(
         gameScreen,
