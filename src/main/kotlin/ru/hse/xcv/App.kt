@@ -3,11 +3,15 @@ package ru.hse.xcv
 import org.hexworks.zircon.api.CP437TilesetResources
 import org.hexworks.zircon.api.application.AppConfig
 import org.hexworks.zircon.api.data.Size
+import org.hexworks.zircon.api.screen.Screen
+import org.hexworks.zircon.api.uievent.KeyboardEventType
+import org.hexworks.zircon.api.uievent.Processed
 import ru.hse.xcv.controllers.ActionControllerFactory
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.mapgen.FieldGenerationStrategy
 import ru.hse.xcv.mapgen.RandomPatternFieldGenerationStrategy
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.util.InputManager
 import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.view.GameScreen
 import ru.hse.xcv.view.Graphics
@@ -29,12 +33,19 @@ private val FIELD_SIZE = Size.create(100, 100)
 
 fun startGame(
     gameScreen: GameScreen,
+    inputManager: InputManager,
     strategy: FieldGenerationStrategy,
     bus: EventBus
 ) {
-    val (window, view, input) = gameScreen
+    val (window, view) = gameScreen
 
-    val world = World(strategy.generate(), view, Graphics.default(), ActionControllerFactory(bus, input))
+    val world = World(
+        strategy.generate(),
+        view,
+        Graphics.default(),
+        ActionControllerFactory(bus, inputManager)
+    )
+
     bus.registerGameHandlers(world)
 
     world.getObjectsByType(Hero::class).keys.first().let {
@@ -46,6 +57,26 @@ fun startGame(
     world.start()
 }
 
+fun createInputManager(eventBus: EventBus, screen: Screen): InputManager {
+    val inputManager = InputManager(eventBus)
+
+    screen.handleKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
+        if (event.code in InputManager.SUPPORTED_KEYS) {
+            inputManager.keyPressed(event.code)
+        }
+        Processed
+    }
+
+    screen.handleKeyboardEvents(KeyboardEventType.KEY_RELEASED) { event, _ ->
+        if (event.code in InputManager.SUPPORTED_KEYS) {
+            inputManager.keyReleased(event.code)
+        }
+        Processed
+    }
+
+    return inputManager
+}
+
 
 fun main() {
     val appConfig = AppConfig.newBuilder()
@@ -55,12 +86,13 @@ fun main() {
         .withFpsLimit(FPS_LIMIT)
         .build()
 
-    val gameScreen = createGameScreen(appConfig)
-
     val eventBus = EventBus()
+    val gameScreen = createGameScreen(appConfig, eventBus)
+    val inputManager = createInputManager(eventBus, gameScreen.window)
 
     startGame(
         gameScreen,
+        inputManager,
         RandomPatternFieldGenerationStrategy(FIELD_SIZE),
         eventBus
     )

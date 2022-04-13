@@ -22,3 +22,7 @@ fun FieldView.makeCentered(position: Position) {
     val newPosition = Position.create(maxOf(x - w / 2, 0), maxOf(y - h / 2, 0)).toPosition3D(0)
     scrollTo(newPosition)
 }
+
+operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = (first + other.first) to (second + other.second)
+
+fun List<Pair<Int, Int>>.sum(): Pair<Int, Int> = fold(0 to 0) { acc, cur -> acc + cur }
