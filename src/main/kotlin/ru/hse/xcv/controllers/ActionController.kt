@@ -15,15 +15,15 @@ interface ActionController {
 }
 
 class ActionControllerFactory(
-    private val eventFactory: EventBus,
+    private val eventBus: EventBus,
     private val inputManager: InputManager,
 ) {
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
-            is Dragon -> MobController(AggressiveMobStrategy(obj, world), eventFactory)
-            is Zombie -> MobController(AggressiveMobStrategy(obj, world), eventFactory)
-            is Maxim -> MobController(AggressiveMobStrategy(obj, world), eventFactory)
-            is Hero -> PlayerController(obj, inputManager, eventFactory)
+            is Dragon -> MobController(AggressiveMobStrategy(obj, world), eventBus)
+            is Zombie -> MobController(AggressiveMobStrategy(obj, world), eventBus)
+            is Maxim -> MobController(AggressiveMobStrategy(obj, world), eventBus)
+            is Hero -> PlayerController(obj, inputManager, eventBus)
             else -> throw IllegalStateException()
         }
     }

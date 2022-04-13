@@ -14,11 +14,7 @@ import org.hexworks.zircon.api.game.ProjectionMode
 import org.hexworks.zircon.api.game.base.BaseGameArea
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.screen.Screen
-import org.hexworks.zircon.api.uievent.KeyboardEventType
-import org.hexworks.zircon.api.uievent.Processed
-
-import ru.hse.xcv.controllers.PlayerController
-import ru.hse.xcv.util.InputManager
+import ru.hse.xcv.events.EventBus
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -33,14 +29,13 @@ class CustomGameArea(
 
 data class GameScreen(
     val window: Screen,
-    val world: FieldView,
-    val input: InputManager,
+    val view: FieldView
 )
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
-fun createGameScreen(config: AppConfig): GameScreen {
-    val gameScreen = Screen.create(SwingApplications.startTileGrid(config))
+fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
+    val screen = Screen.create(SwingApplications.startTileGrid(config))
 
     val (width, height) = config.size
     val gameAreaVisibleSize = Size.create((width * GAME_SCREEN_SPLIT_RATIO).toInt(), height)
@@ -91,16 +86,7 @@ fun createGameScreen(config: AppConfig): GameScreen {
     horizontalSplit.addComponent(gamePanel)
     horizontalSplit.addComponent(infoPanel)
 
-    gameScreen.addComponent(horizontalSplit)
+    screen.addComponent(horizontalSplit)
 
-    val inputManager = InputManager(5)
-
-    gameScreen.handleKeyboardEvents(KeyboardEventType.KEY_PRESSED) { event, _ ->
-        if (event.code in PlayerController.SUPPORTED_KEYS) {
-            inputManager.offer(event.code)
-        }
-        Processed
-    }
-
-    return GameScreen(gameScreen, gameArea, inputManager)
+    return GameScreen(screen, gameArea)
 }
