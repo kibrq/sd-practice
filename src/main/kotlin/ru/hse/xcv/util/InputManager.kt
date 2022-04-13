@@ -24,6 +24,8 @@ class InputManager(private val eventBus: EventBus) {
     private val movementKeysPressed = mutableSetOf<KeyCode>()
     private val spellKeyBuffer = mutableListOf<KeyCode>()
     private val readySpellsQueue = ArrayDeque<String>()
+    private val toRemove = mutableSetOf<KeyCode>()
+    private var previousMovementKeys = setOf<KeyCode>()
 
     private fun fireLetterPressedEvent(code: KeyCode) {
         val event = LetterPressedEvent(code.toCharOrNull() ?: return)
@@ -45,7 +47,12 @@ class InputManager(private val eventBus: EventBus) {
     }
 
     val currentMovementKeys: Set<KeyCode>
-        get() = movementKeysPressed.toSet()
+        get() {
+            previousMovementKeys = movementKeysPressed.toSet()
+            toRemove.forEach { movementKeysPressed.remove(it) }
+            toRemove.clear()
+            return previousMovementKeys
+        }
 
     val readySpell: String?
         get() = readySpellsQueue.removeFirstOrNull()
@@ -59,8 +66,12 @@ class InputManager(private val eventBus: EventBus) {
     }
 
     fun keyReleased(code: KeyCode) {
-        if (code in MOVE_KEYS) {
+        if (code !in MOVE_KEYS) return
+
+        if (code in previousMovementKeys) {
             movementKeysPressed.remove(code)
+        } else {
+            toRemove.add(code)
         }
     }
 
