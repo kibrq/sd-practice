@@ -51,7 +51,7 @@ class FromMapGraphics(
     private val staticLayerTransformMap: Map<FieldTile, WorldTile>,
     private val dynamicLayerTransformMap: Map<KClass<out DynamicObject>, WorldTile>,
 ) : Graphics {
-    override fun staticLayerTransform(tile: FieldTile) = staticLayerTransformMap[tile]!!
+    override fun staticLayerTransform(tile: FieldTile) = staticLayerTransformMap.getValue(tile)
 
-    override fun dynamicLayerTransform(obj: DynamicObject) = dynamicLayerTransformMap[obj::class]!!
+    override fun dynamicLayerTransform(obj: DynamicObject) = dynamicLayerTransformMap.getValue(obj::class)
 }
