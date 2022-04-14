@@ -10,11 +10,14 @@ class MoveEventHandler(
 ) : EventHandler<MoveEvent> {
     override fun handle(event: MoveEvent) {
         val (obj, offset, needMoveWorld) = event
-        val path = listOf(offset, Position.create(offset.x, 0), Position.create(0, offset.y))
-        for (currentOffset in path) {
-            if (world.moveObject(obj, obj.position + currentOffset)) {
-                break
-            }
+        val possibleMoves = listOf(
+            offset,
+            Position.create(offset.x, 0),
+            Position.create(0, offset.y)
+        )
+        for (currentOffset in possibleMoves) {
+            val moved = world.moveObject(obj, obj.position + currentOffset)
+            if (moved) break
         }
         if (needMoveWorld) {
             world.view.makeCentered(obj.position)
