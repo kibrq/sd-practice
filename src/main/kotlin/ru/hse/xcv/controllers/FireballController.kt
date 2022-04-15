@@ -40,6 +40,7 @@ class FireballController(
                 val event = HPChangeEvent.createDamageEvent(it, fireball.damage)
                 eventBus.fire(event)
             }
+            world.deleteObject(fireball)
             false
         }
     }

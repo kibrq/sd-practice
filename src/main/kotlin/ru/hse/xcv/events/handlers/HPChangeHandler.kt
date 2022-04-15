@@ -14,8 +14,11 @@ class HPChangeHandler(
     override fun handle(event: HPChangeEvent) {
         val entity = event.entity
         entity.changeHP(event.amount)
-        if (entity is Mob && entity.isDead()) {
-            world.hero.addExperience(entity.experienceGain)
+        if (entity.isDead) {
+            world.deleteObject(entity)
+            if (entity is Mob) {
+                world.hero.addExperience(entity.experienceGain)
+            }
         }
         if (entity is Hero) {
             healthPanelController.setHealth(entity.stats.currentHealth, entity.stats.maxHealth)
