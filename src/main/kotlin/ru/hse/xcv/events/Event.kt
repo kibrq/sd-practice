@@ -22,7 +22,7 @@ data class BuffEvent(
     val buff: Stats
 ) : Event
 
-data class CreateSpellEvent(
+data class CastSpellEvent(
     val spell: Spell,
     val position: Position,
     val direction: Position,

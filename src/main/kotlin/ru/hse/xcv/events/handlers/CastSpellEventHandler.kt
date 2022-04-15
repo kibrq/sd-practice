@@ -1,7 +1,7 @@
 package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.events.CreateSpellEvent
+import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.model.entities.Entity
@@ -12,10 +12,10 @@ import ru.hse.xcv.model.spells.HealSpell
 import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
 
-class CreateSpellEventHandler(
+class CastSpellEventHandler(
     override val world: World,
     private val eventBus: EventBus
-) : EventHandler<CreateSpellEvent> {
+) : EventHandler<CastSpellEvent> {
     private fun getDirectionsPrioritized(position: Position, direction: Position): List<Position> {
         val secondPriority = Position.zero() - direction
         val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
@@ -49,7 +49,7 @@ class CreateSpellEventHandler(
         world.hero.heal(amount)
     }
 
-    override fun handle(event: CreateSpellEvent) {
+    override fun handle(event: CastSpellEvent) {
         val directions = getDirectionsPrioritized(event.position, event.direction)
         when (event.spell) {
             is ChainLightningSpell -> useChainLightning(event.spell, event.level, event.position, directions)
