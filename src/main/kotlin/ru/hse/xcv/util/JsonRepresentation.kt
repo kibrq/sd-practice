@@ -85,7 +85,7 @@ private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObje
         "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
         "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
         "Dragon" -> Dragon(positionFromJsonRepresentation(o.position))
-        "Troll" -> Troll(positionFromJsonRepresentation(o.position))
+        "Microchel" -> Microchel(positionFromJsonRepresentation(o.position))
         else -> throw IllegalStateException()
     }
 }

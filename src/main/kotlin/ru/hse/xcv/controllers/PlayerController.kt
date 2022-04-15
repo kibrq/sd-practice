@@ -34,7 +34,7 @@ class PlayerController(
             eventBus.fire(event)
         }
         if (x == 1) {
-            val event = DamageEvent(hero, 5)
+            val event = DamageEvent(hero, 2)
             eventBus.fire(event)
         }
     }

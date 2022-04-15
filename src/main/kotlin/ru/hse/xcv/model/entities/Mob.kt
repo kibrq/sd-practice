@@ -12,7 +12,7 @@ abstract class Mob(position: Position) : Entity(position) {
                 0 -> Zombie(position)
                 1 -> Maxim(position)
                 2 -> Dragon(position)
-                3 -> Troll(position)
+                3 -> Microchel(position)
                 else -> throw IllegalStateException()
             }
     }
