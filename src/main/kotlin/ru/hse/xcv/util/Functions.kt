@@ -35,3 +35,5 @@ fun FieldView.makeCentered(position: Position) {
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = (first + other.first) to (second + other.second)
 
 fun List<Pair<Int, Int>>.sum(): Pair<Int, Int> = fold(0 to 0) { acc, cur -> acc + cur }
+
+fun <T> MutableCollection<T>.addAll(vararg elem: T) = addAll(elem.toList())

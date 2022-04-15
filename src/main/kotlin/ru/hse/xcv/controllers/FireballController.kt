@@ -31,6 +31,8 @@ class FireballController(
             eventBus.fire(event)
             true
         } else if (Hero::class.isInstance(world.model.dynamicLayer[newPosition])) {
+            val event = MoveEvent(fireball, offset, moveWorld = false, crazyMovements = true)
+            eventBus.fire(event)
             true
         } else {
             val entity = world.model.dynamicLayer[newPosition] as? Entity

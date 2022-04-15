@@ -13,7 +13,8 @@ object NoneEvent : Event // do we really need it? (consider using `Event?`)
 data class MoveEvent(
     val obj: DynamicObject,
     val offset: Position,
-    val moveWorld: Boolean = false
+    val moveWorld: Boolean = false,
+    val crazyMovements: Boolean = false
 ) : Event
 
 data class BuffEvent(
