@@ -50,6 +50,9 @@ fun startGame(
 
     world.getObjectsByType(Hero::class).keys.first().let {
         view.makeCentered(it.position)
+        it.spellBook.prefixSearch("").forEach {spell ->
+            panelControllers.spellsPanelController.addSpell(spell)
+        }
     }
 
     window.onShutdown { view.dispose() }
