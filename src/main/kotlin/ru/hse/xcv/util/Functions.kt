@@ -1,5 +1,6 @@
 package ru.hse.xcv.util
 
+import org.hexworks.cobalt.logging.api.Logger
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 
@@ -14,6 +15,8 @@ val possibleDirections: List<Position> = buildList {
         }
     }
 }
+
+fun Logger.debug(msg: Any?) = debug(msg.toString())
 
 fun Position.normalize() = Position.create(x / maxOf(abs(x), abs(y), 1), y / maxOf(abs(x), abs(y), 1))
 
@@ -37,3 +40,4 @@ operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = (first + other.first) 
 fun List<Pair<Int, Int>>.sum(): Pair<Int, Int> = fold(0 to 0) { acc, cur -> acc + cur }
 
 fun <T> MutableCollection<T>.addAll(vararg elem: T) = addAll(elem.toList())
+

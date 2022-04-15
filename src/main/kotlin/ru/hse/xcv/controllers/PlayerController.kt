@@ -48,7 +48,6 @@ class PlayerController(
     }
 
     override fun action(): Boolean {
-        logger.debug(hero.level.toString())
         handleMovement()
         handleSpellCast()
         return true

@@ -14,6 +14,7 @@ import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.util.debug
 import ru.hse.xcv.util.readRect
 import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
@@ -35,7 +36,7 @@ class World(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
-        logger.debug("$model")
+        logger.debug(model)
         model.rect.fetchPositions().forEach { position ->
             val (tile, obj) = model.byPosition(position)
 
