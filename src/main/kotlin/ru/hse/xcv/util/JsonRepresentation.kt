@@ -28,7 +28,6 @@ data class JsonRepresentationRect(
 @Serializable
 data class JsonRepresentationDynamicObject(
     val position: JsonRepresentationPosition,
-    val direction: JsonRepresentationPosition,
     val type: String
 )
 
@@ -57,7 +56,6 @@ private fun rectToJsonRepresentation(r: Rect): JsonRepresentationRect {
 private fun dynamicObjectToJsonRepresentation(o: DynamicObject): JsonRepresentationDynamicObject {
     return JsonRepresentationDynamicObject(
         positionToJsonRepresentation(o.position),
-        positionToJsonRepresentation(o.direction),
         o.javaClass.typeName.substringAfterLast(".")
     )
 }
@@ -86,22 +84,10 @@ private fun rectFromJsonRepresentation(r: JsonRepresentationRect): Rect {
 
 private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObject): DynamicObject {
     return when (o.type) {
-        "Hero" -> Hero(
-            positionFromJsonRepresentation(o.position),
-            positionFromJsonRepresentation(o.direction),
-        )
-        "Zombie" -> Zombie(
-            positionFromJsonRepresentation(o.position),
-            positionFromJsonRepresentation(o.direction),
-        )
-        "Maxim" -> Maxim(
-            positionFromJsonRepresentation(o.position),
-            positionFromJsonRepresentation(o.direction),
-        )
-        "Dragon" -> Dragon(
-            positionFromJsonRepresentation(o.position),
-            positionFromJsonRepresentation(o.direction),
-        )
+        "Hero" -> Hero(positionFromJsonRepresentation(o.position))
+        "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
+        "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
+        "Dragon" -> Dragon(positionFromJsonRepresentation(o.position))
         else -> throw IllegalStateException()
     }
 }
@@ -110,9 +96,7 @@ fun fieldFromJsonRepresentation(f: JsonRepresentationField): FieldModel {
     return FieldModel(
         f.staticLayer.associate { positionFromJsonRepresentation(it.first) to it.second },
         mutableMapOf(*f.dynamicLayer.map {
-            positionFromJsonRepresentation(it.first) to dynamicObjectFromJsonRepresentation(
-                it.second
-            )
+            positionFromJsonRepresentation(it.first) to dynamicObjectFromJsonRepresentation(it.second)
         }.toTypedArray()),
         rectFromJsonRepresentation(f.rect)
     )
