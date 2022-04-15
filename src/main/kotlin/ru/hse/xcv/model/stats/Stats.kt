@@ -35,7 +35,7 @@ data class Stats(
     }
 
     operator fun times(multiplier: Int): Stats {
-        require(multiplier > 0)
+        require(multiplier >= 0)
         power *= multiplier
         armor *= multiplier
         currentHealth *= multiplier

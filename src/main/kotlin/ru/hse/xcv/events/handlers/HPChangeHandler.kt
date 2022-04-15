@@ -2,6 +2,7 @@ package ru.hse.xcv.events.handlers
 
 import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.view.HealthPanelController
 import ru.hse.xcv.world.World
 
@@ -13,6 +14,9 @@ class HPChangeHandler(
     override fun handle(event: HPChangeEvent) {
         val entity = event.entity
         entity.changeHP(event.amount)
+        if (entity is Mob && entity.isDead()) {
+            world.hero.addExperience(entity.experienceGain)
+        }
         if (entity is Hero) {
             healthPanelController.setHealth(entity.stats.currentHealth, entity.stats.maxHealth)
         }

@@ -3,8 +3,8 @@ package ru.hse.xcv.controllers
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
-import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.*
@@ -48,6 +48,7 @@ class PlayerController(
     }
 
     override fun action(): Boolean {
+        logger.debug(hero.level.toString())
         handleMovement()
         handleSpellCast()
         return true
