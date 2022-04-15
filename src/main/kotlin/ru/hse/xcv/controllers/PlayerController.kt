@@ -3,7 +3,6 @@ package ru.hse.xcv.controllers
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CreateSpellEvent
-import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
@@ -31,11 +30,6 @@ class PlayerController(
         if (abs(x) + abs(y) > 0) {
             hero.direction = Position.create(x, y)
             val event = MoveEvent(hero, hero.direction, moveWorld = true)
-            eventBus.fire(event)
-        }
-        //TODO remove this kal
-        if (x == 1) {
-            val event = DamageEvent(hero, 5)
             eventBus.fire(event)
         }
     }
