@@ -92,14 +92,16 @@ class World(
         return true
     }
 
-    fun createObject(obj: DynamicObject, position: Position) {
+    fun createObject(obj: DynamicObject, position: Position): Boolean {
         val onCurrent = lock.read {
             model.byPosition(position)
         }
-        logger.debug { "${onCurrent.first} ${onCurrent.second}" }
+        logger.debug { "try create on ${onCurrent.first}:${onCurrent.second}" }
+
         if (onCurrent.first != FieldTile.FLOOR || onCurrent.second != null)
-            return
-        logger.debug("Put on Map")
+            return false
+
+        logger.debug("Put $obj on map")
 
         val controller = controllerFactory.create(obj, this)
 
@@ -109,12 +111,15 @@ class World(
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
+
         scope.launch {
-            while (true) {
+            while (controller.action()) {
                 delay(5000 / obj.moveSpeed.toLong())
-                controller.action()
             }
+            deleteObject(obj)
         }
+
+        return true
     }
 
     fun deleteObject(obj: DynamicObject) {

@@ -38,12 +38,13 @@ class PlayerController(
         val combination = input.readySpell ?: return
         val spell = hero.spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
-        val event = CreateSpellEvent(spell, hero.position + hero.direction, hero.level)
+        val event = CreateSpellEvent(spell, hero.position, hero.direction, hero.level)
         eventBus.fire(event)
     }
 
-    override fun action() {
+    override fun action(): Boolean {
         handleMovement()
         handleSpellCast()
+        return true
     }
 }

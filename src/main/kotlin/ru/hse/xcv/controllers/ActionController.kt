@@ -12,7 +12,7 @@ import ru.hse.xcv.world.World
 
 interface ActionController {
     val eventBus: EventBus
-    fun action()
+    fun action(): Boolean
 }
 
 class ActionControllerFactory(

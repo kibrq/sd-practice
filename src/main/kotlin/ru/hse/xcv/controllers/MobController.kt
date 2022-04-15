@@ -40,8 +40,9 @@ class MobController(
     override val eventBus: EventBus,
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
-    override fun action() {
-        val event = strategy.takeAction() ?: return
+    override fun action(): Boolean {
+        val event = strategy.takeAction() ?: return true
         eventBus.fire(event)
+        return true
     }
 }

@@ -9,9 +9,13 @@ class FireballSpell : Spell {
     override val description = "Deals damage"
     override val coolDown = 1
 
-    fun createFireball(position: Position, level: Int) = Fireball(level, position)
+    fun createFireball(level: Int, position: Position, direction: Position) = Fireball(level, position, direction)
 
-    inner class Fireball(level: Int, override var position: Position) : DynamicObject() {
+    inner class Fireball(
+        level: Int,
+        override var position: Position,
+        override var direction: Position
+    ) : DynamicObject() {
         override var moveSpeed = 20
         val damage = level * 10
     }

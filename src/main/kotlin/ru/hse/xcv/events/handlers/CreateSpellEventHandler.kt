@@ -5,16 +5,27 @@ import ru.hse.xcv.events.CreateSpellEvent
 import ru.hse.xcv.model.spells.ChainLightningSpell
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.model.spells.HealSpell
+import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
 
 class CreateSpellEventHandler(override val world: World) : EventHandler<CreateSpellEvent> {
-    private fun useChainLightning(spell: ChainLightningSpell, level: Int, position: Position) {
+    private fun getDirectionsPrioritized(position: Position, direction: Position): List<Position> {
+        val secondPriority = Position.zero() - direction
+        val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
+        return listOf(direction, secondPriority) + otherPositions
+    }
+
+    private fun useChainLightning(spell: ChainLightningSpell, level: Int, pos: Position, directions: List<Position>) {
 
     }
 
-    private fun useFireballSpell(spell: FireballSpell, level: Int, position: Position) {
-        val fireball = spell.createFireball(position, level)
-        world.createObject(fireball, position)
+    private fun useFireballSpell(spell: FireballSpell, level: Int, pos: Position, directions: List<Position>) {
+        for (direction in directions) {
+            val fireball = spell.createFireball(level, pos + direction, direction)
+            if (world.createObject(fireball, fireball.position)) {
+                break
+            }
+        }
     }
 
     private fun useHealSpell(spell: HealSpell, level: Int) {
@@ -23,9 +34,10 @@ class CreateSpellEventHandler(override val world: World) : EventHandler<CreateSp
     }
 
     override fun handle(event: CreateSpellEvent) {
+        val directions = getDirectionsPrioritized(event.position, event.direction)
         when (event.spell) {
-            is ChainLightningSpell -> useChainLightning(event.spell, event.level, event.position)
-            is FireballSpell -> useFireballSpell(event.spell, event.level, event.position)
+            is ChainLightningSpell -> useChainLightning(event.spell, event.level, event.position, directions)
+            is FireballSpell -> useFireballSpell(event.spell, event.level, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.level)
         }
     }
