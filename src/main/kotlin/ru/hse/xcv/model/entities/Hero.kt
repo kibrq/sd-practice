@@ -20,9 +20,9 @@ class Hero(
 
     init {
         // https://www.youtube.com/watch?v=zTbw-ln-Fb4
-        spellBook.spells.add(FireballSpell())
-        spellBook.spells.add(ChainLightningSpell())
-        spellBook.spells.add(HealSpell())
+        spellBook.addSpell(FireballSpell())
+        spellBook.addSpell(ChainLightningSpell())
+        spellBook.addSpell(HealSpell())
     }
 
     fun addExperience(exp: Int) {
