@@ -144,7 +144,7 @@ class World(
         scope.launch {
             do {
                 delay(5000 / entity.moveSpeed.toLong())
-            } while (controller.action())
+            } while (controller.action() && !entity.isDead())
             deleteObject(entity)
             if (entity is Hero) {
                 logger.debug("Hero is dead")

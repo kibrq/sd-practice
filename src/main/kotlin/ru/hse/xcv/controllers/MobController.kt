@@ -56,7 +56,6 @@ class MobController(
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun action(): Boolean {
-        if (strategy.mob.isDead()) return false
         val event = strategy.takeAction() ?: return true
         eventBus.fire(event)
         return true
