@@ -42,12 +42,7 @@ class PlayerController(
         eventBus.fire(event)
     }
 
-    var kal = 1
-
     override fun action() {
-        // debug here
-        kal = (kal + 1) % 100
-        if (kal == 1) println("fire hero")
         handleMovement()
         handleSpellCast()
     }

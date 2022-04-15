@@ -13,12 +13,15 @@ class FireballController(
     private val world: World,
     override val eventBus: EventBus
 ) : ActionController {
+    private var mob: Mob? = null
+
     override fun action() {
-        println("fire ball")
         val rect = Size.create(20, 20)
-        val nearestMob = world.nearestObjectInNeighbourhood(fireball.position, rect, Mob::class) ?: return
-        val dp = (nearestMob.position - fireball.position).normalize()
-        val event = MoveEvent(fireball, dp, moveWorld = false)
-        eventBus.fire(event)
+        mob = mob ?: world.nearestObjectInNeighbourhood(fireball.position, rect, Mob::class)
+        mob?.let {
+            val dp = (it.position - fireball.position).normalize()
+            val event = MoveEvent(fireball, dp, moveWorld = false)
+            eventBus.fire(event)
+        }
     }
 }
