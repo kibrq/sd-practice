@@ -1,9 +1,10 @@
 package ru.hse.xcv.world
 
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.*
 import ru.hse.xcv.controllers.ActionController
@@ -18,7 +19,6 @@ import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
-import kotlin.concurrent.thread
 import kotlin.concurrent.write
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
@@ -29,6 +29,7 @@ class World(
     private val graphics: Graphics,
     private val controllerFactory: ActionControllerFactory
 ) {
+    private val scope = CoroutineScope(Dispatchers.Default)
     private val lock = ReentrantReadWriteLock()
     private val controllers = hashMapOf<DynamicObject, ActionController>()
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -108,14 +109,10 @@ class World(
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
-        thread {
-            runBlocking {
-                launch {
-                    while (true) {
-                        delay(5000 / obj.moveSpeed.toLong())
-                        controller.action()
-                    }
-                }
+        scope.launch {
+            while (true) {
+                delay(5000 / obj.moveSpeed.toLong())
+                controller.action()
             }
         }
     }
@@ -135,13 +132,11 @@ class World(
         }
     }
 
-    fun start() = runBlocking {
-        getObjectsByType(Entity::class).entries.forEach {
-            launch {
-                while (true) {
-                    delay(5000 / it.key.moveSpeed.toLong())
-                    it.value.action()
-                }
+    fun start() = getObjectsByType(Entity::class).entries.forEach {
+        scope.launch {
+            while (true) {
+                delay(5000 / it.key.moveSpeed.toLong())
+                it.value.action()
             }
         }
     }
