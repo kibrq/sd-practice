@@ -2,7 +2,6 @@ package ru.hse.xcv.controllers
 
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
-import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
@@ -26,8 +25,7 @@ class AggressiveMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val rect = Size.create(20, 20)
-        return world.nearestObjectInNeighbourhood(mob.position, rect, Hero::class)?.let {
+        return world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class)?.let {
             val dp = (it.position - mob.position).normalize()
             MoveEvent(mob, dp, moveWorld = false)
         }
@@ -41,8 +39,7 @@ class CowardMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val rect = Size.create(20, 20)
-        return world.nearestObjectInNeighbourhood(mob.position, rect, Hero::class)?.let {
+        return world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class)?.let {
             val dp = (mob.position - it.position).normalize()
             MoveEvent(mob, dp, moveWorld = false)
         }

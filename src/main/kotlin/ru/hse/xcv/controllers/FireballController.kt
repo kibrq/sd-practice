@@ -1,6 +1,5 @@
 package ru.hse.xcv.controllers
 
-import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.MoveEvent
@@ -19,8 +18,7 @@ class FireballController(
     private var myMob: Mob? = null
 
     override fun action(): Boolean {
-        val rect = Size.create(20, 20)
-        myMob = myMob ?: world.nearestObjectInNeighbourhood(fireball.position, rect, Mob::class)
+        myMob = myMob ?: world.nearestObjectInNeighbourhood(fireball.position, fireball.fieldOfView, Mob::class)
         val offset = myMob?.let {
             (it.position - fireball.position).normalize()
         } ?: fireball.direction
