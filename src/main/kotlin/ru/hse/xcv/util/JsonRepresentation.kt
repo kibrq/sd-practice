@@ -7,10 +7,7 @@ import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
-import ru.hse.xcv.model.entities.Dragon
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Maxim
-import ru.hse.xcv.model.entities.Zombie
+import ru.hse.xcv.model.entities.*
 
 
 @Serializable
@@ -88,6 +85,7 @@ private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObje
         "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
         "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
         "Dragon" -> Dragon(positionFromJsonRepresentation(o.position))
+        "Troll" -> Troll(positionFromJsonRepresentation(o.position))
         else -> throw IllegalStateException()
     }
 }
