@@ -6,6 +6,7 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
+import org.hexworks.zircon.api.component.ProgressBar
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Size
 import org.hexworks.zircon.api.data.Tile
@@ -14,7 +15,6 @@ import org.hexworks.zircon.api.game.ProjectionMode
 import org.hexworks.zircon.api.game.base.BaseGameArea
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.screen.Screen
-import ru.hse.xcv.events.EventBus
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -29,12 +29,25 @@ class CustomGameArea(
 
 data class GameScreen(
     val window: Screen,
-    val view: FieldView
+    val view: FieldView,
+    val panelControllers: PanelControllers
 )
+
+data class PanelControllers(
+    val healthPanelController: HealthPanelController
+)
+
+class HealthPanelController(
+    private val panel: ProgressBar
+) {
+    fun setHealth(hp: Int, maxHP: Int) {
+        panel.progress = 100 * (hp.toDouble() / maxHP)
+    }
+}
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
-fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
+fun createGameScreen(config: AppConfig): GameScreen {
     val screen = Screen.create(SwingApplications.startTileGrid(config))
 
     val (width, height) = config.size
@@ -74,6 +87,7 @@ fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
         .withDecorations(box(BoxType.BASIC))
         .withPosition(Position.create(0, -1).relativeToRightOf(hpNamePanel))
         .build()
+    healthPanel.progress = 100.0
 
     infoPanel.addComponent(xcvNamePanel)
     infoPanel.addComponent(hpNamePanel)
@@ -88,5 +102,11 @@ fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
 
     screen.addComponent(horizontalSplit)
 
-    return GameScreen(screen, gameArea)
+    return GameScreen(
+        screen,
+        gameArea,
+        PanelControllers(
+            HealthPanelController(healthPanel)
+        )
+    )
 }

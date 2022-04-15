@@ -37,7 +37,7 @@ fun startGame(
     strategy: FieldGenerationStrategy,
     bus: EventBus
 ) {
-    val (window, view) = gameScreen
+    val (window, view, panelControllers) = gameScreen
 
     val world = World(
         strategy.generate(),
@@ -46,7 +46,7 @@ fun startGame(
         ActionControllerFactory(bus, inputManager)
     )
 
-    bus.registerGameHandlers(world)
+    bus.registerGameHandlers(world, panelControllers)
 
     world.getObjectsByType(Hero::class).keys.first().let {
         view.makeCentered(it.position)
@@ -87,7 +87,7 @@ fun main() {
         .build()
 
     val eventBus = EventBus()
-    val gameScreen = createGameScreen(appConfig, eventBus)
+    val gameScreen = createGameScreen(appConfig)
     val inputManager = createInputManager(eventBus, gameScreen.window)
 
     startGame(
