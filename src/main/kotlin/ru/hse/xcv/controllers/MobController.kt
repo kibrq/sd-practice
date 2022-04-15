@@ -6,7 +6,6 @@ import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
-import ru.hse.xcv.events.NoneEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.normalize
@@ -16,7 +15,7 @@ interface MobStrategy {
     val mob: Mob
     val world: World
 
-    fun takeAction(): Event
+    fun takeAction(): Event?
 }
 
 
@@ -26,12 +25,12 @@ class AggressiveMobStrategy(
 ) : MobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun takeAction(): Event {
-        val (_, dyn) = world.readNeighbourhood(mob.position, Size.create(20, 20))
-        return dyn.values.filterIsInstance<Hero>().firstOrNull()?.let {
+    override fun takeAction(): Event? {
+        val rect = Size.create(20, 20)
+        return world.nearestObjectInNeighbourhood(mob.position, rect, Hero::class)?.let {
             val dp = (it.position - mob.position).normalize()
             MoveEvent(mob, dp, moveWorld = false)
-        } ?: NoneEvent
+        }
     }
 }
 
@@ -42,7 +41,7 @@ class MobController(
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun action() {
-        val event = strategy.takeAction()
+        val event = strategy.takeAction() ?: return
         eventBus.fire(event)
     }
 }

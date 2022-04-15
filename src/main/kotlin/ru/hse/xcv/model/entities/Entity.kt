@@ -8,7 +8,7 @@ sealed class Entity(
     position: Position,
     direction: Position,
     moveSpeed: Int,
-    protected var stats: Stats
+    var stats: Stats
 ) : DynamicObject(position, direction, moveSpeed) {
     fun damage(amount: Int) = stats.damage(amount)
 

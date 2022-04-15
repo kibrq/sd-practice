@@ -18,6 +18,7 @@ import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
 import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
+import kotlin.concurrent.thread
 import kotlin.concurrent.write
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
@@ -107,11 +108,13 @@ class World(
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
-        runBlocking {
-            launch {
-                while (true) {
-                    delay(5000 / obj.moveSpeed.toLong())
-                    controller.action()
+        thread {
+            runBlocking {
+                launch {
+                    while (true) {
+                        delay(5000 / obj.moveSpeed.toLong())
+                        controller.action()
+                    }
                 }
             }
         }
@@ -148,6 +151,15 @@ class World(
         val rect = Rect.create(center - shift, size)
         model.staticLayer.readRect(rect) to model.dynamicLayer.readRect(rect)
     }
+
+    fun <T : DynamicObject> nearestObjectInNeighbourhood(center: Position, size: Size, clazz: KClass<T>): T? =
+        readNeighbourhood(center, size).second.values
+            .mapNotNull { clazz.safeCast(it) }
+            .maxByOrNull {
+                val distance = it.position - center
+                distance.x * distance.x + distance.y * distance.y
+            }
+
 
     companion object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()

@@ -38,11 +38,16 @@ class PlayerController(
         val combination = input.readySpell ?: return
         val spell = hero.spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
-        val event = CreateSpellEvent(spell, hero.direction)
+        val event = CreateSpellEvent(spell, hero.position + hero.direction, hero.level)
         eventBus.fire(event)
     }
 
+    var kal = 1
+
     override fun action() {
+        // debug here
+        kal = (kal + 1) % 100
+        if (kal == 1) println("fire hero")
         handleMovement()
         handleSpellCast()
     }

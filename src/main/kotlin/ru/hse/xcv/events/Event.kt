@@ -1,7 +1,6 @@
 package ru.hse.xcv.events
 
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.controllers.ActionController
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.spells.Spell
@@ -9,7 +8,7 @@ import ru.hse.xcv.model.stats.Stats
 
 sealed interface Event
 
-object NoneEvent : Event
+object NoneEvent : Event // do we really need it? (consider using `Event?`)
 
 data class MoveEvent(
     val obj: DynamicObject,
@@ -24,7 +23,8 @@ data class BuffEvent(
 
 data class CreateSpellEvent(
     val spell: Spell,
-    val position: Position
+    val position: Position,
+    val level: Int
 ) : Event
 
 data class DamageEvent(
