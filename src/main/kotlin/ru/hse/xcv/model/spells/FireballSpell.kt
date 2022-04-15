@@ -5,7 +5,7 @@ import ru.hse.xcv.model.DynamicObject
 
 class FireballSpell : Spell {
     override val name = "Fireball"
-    override val combination = "JJK"
+    override val combination = "J"
     override val description = "Deals damage"
     override val coolDown = 1
 
@@ -17,6 +17,6 @@ class FireballSpell : Spell {
         override var direction: Position
     ) : DynamicObject() {
         override var moveSpeed = 20
-        val damage = level * 10
+        val damage = level * 20
     }
 }

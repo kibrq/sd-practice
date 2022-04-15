@@ -9,6 +9,6 @@ class Zombie(position: Position) : Mob(position) {
     override var stats = Stats(
         power = 2,
         armor = 2,
-        maxHealth = 20
+        maxHealth = 25
     )
 }

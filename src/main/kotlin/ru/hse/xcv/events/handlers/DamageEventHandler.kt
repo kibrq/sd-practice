@@ -5,6 +5,6 @@ import ru.hse.xcv.world.World
 
 class DamageEventHandler(override val world: World) : EventHandler<DamageEvent> {
     override fun handle(event: DamageEvent) {
-        // event.entity.receiveDamage(event.damage)
+        event.entity.damage(event.amount)
     }
 }

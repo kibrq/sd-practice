@@ -2,6 +2,7 @@ package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CreateSpellEvent
+import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.spells.ChainLightningSpell
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.model.spells.HealSpell
@@ -25,6 +26,12 @@ class CreateSpellEventHandler(override val world: World) : EventHandler<CreateSp
             if (world.createObject(fireball, fireball.position)) {
                 break
             }
+        }
+        for (direction in directions) {
+            val fireball = spell.createFireball(level, pos + direction, direction)
+            val entity = world.model.dynamicLayer[fireball.position] as? Entity ?: continue
+            entity.damage(fireball.damage) // i dont have eventBus
+            break
         }
     }
 

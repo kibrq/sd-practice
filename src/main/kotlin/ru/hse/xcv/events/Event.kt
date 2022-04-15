@@ -30,7 +30,7 @@ data class CreateSpellEvent(
 
 data class DamageEvent(
     val entity: Entity,
-    val damage: Int
+    val amount: Int
 ) : Event
 
 data class LetterPressedEvent(

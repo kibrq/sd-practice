@@ -13,6 +13,9 @@ data class Stats(
         require(currentHealth >= 0)
     }
 
+    val isDead
+        get() = currentHealth == 0
+
     fun damage(amount: Int) {
         currentHealth = maxOf(0, currentHealth - amount)
     }

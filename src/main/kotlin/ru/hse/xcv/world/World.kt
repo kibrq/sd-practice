@@ -54,6 +54,9 @@ class World(
 
     val hero: Hero = getObjectsByType(Hero::class).keys.first()
 
+    fun isEmpty(position: Position) =
+        model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
+
     fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>): Map<T, ActionController> =
         controllers.mapNotNull { (obj, controller) ->
             clazz.safeCast(obj)?.let {
@@ -113,9 +116,9 @@ class World(
         }
 
         scope.launch {
-            while (controller.action()) {
+            do {
                 delay(5000 / obj.moveSpeed.toLong())
-            }
+            } while (controller.action())
             deleteObject(obj)
         }
 
@@ -137,11 +140,14 @@ class World(
         }
     }
 
-    fun start() = getObjectsByType(Entity::class).entries.forEach {
+    fun start() = getObjectsByType(Entity::class).entries.forEach { (entity, controller) ->
         scope.launch {
-            while (true) {
-                delay(5000 / it.key.moveSpeed.toLong())
-                it.value.action()
+            do {
+                delay(5000 / entity.moveSpeed.toLong())
+            } while (controller.action())
+            deleteObject(entity)
+            if (Hero::class.isInstance(entity)) {
+                logger.debug("Hero is dead")
             }
         }
     }
@@ -155,7 +161,7 @@ class World(
     fun <T : DynamicObject> nearestObjectInNeighbourhood(center: Position, size: Size, clazz: KClass<T>): T? =
         readNeighbourhood(center, size).second.values
             .mapNotNull { clazz.safeCast(it) }
-            .maxByOrNull {
+            .minByOrNull {
                 val distance = it.position - center
                 distance.x * distance.x + distance.y * distance.y
             }

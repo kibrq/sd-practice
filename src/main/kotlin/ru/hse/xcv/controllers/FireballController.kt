@@ -1,8 +1,11 @@
 package ru.hse.xcv.controllers
 
 import org.hexworks.zircon.api.data.Size
+import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
+import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.util.normalize
@@ -21,8 +24,21 @@ class FireballController(
         val offset = myMob?.let {
             (it.position - fireball.position).normalize()
         } ?: fireball.direction
-        val event = MoveEvent(fireball, offset, moveWorld = false)
-        eventBus.fire(event)
-        return true
+
+        val newPosition = fireball.position + offset
+        return if (world.isEmpty(newPosition)) {
+            val event = MoveEvent(fireball, offset, moveWorld = false)
+            eventBus.fire(event)
+            true
+        } else if (Hero::class.isInstance(world.model.dynamicLayer[newPosition])) {
+            true
+        } else {
+            val entity = world.model.dynamicLayer[newPosition] as? Entity
+            entity?.let {
+                val event = DamageEvent(it, fireball.damage)
+                eventBus.fire(event)
+            }
+            false
+        }
     }
 }
