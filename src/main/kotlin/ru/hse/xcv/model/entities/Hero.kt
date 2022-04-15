@@ -16,6 +16,7 @@ class Hero(
     val spellBook: SpellBook = SpellBook()
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
+    val level = experience.level
 
     init {
         // https://www.youtube.com/watch?v=zTbw-ln-Fb4
@@ -25,7 +26,8 @@ class Hero(
     }
 
     fun addExperience(exp: Int) {
-        stats += statsPerLevel * experience.applyExperience(exp)
+        val levels = experience.applyExperience(exp)
+        stats += statsPerLevel * levels
     }
 
     companion object {

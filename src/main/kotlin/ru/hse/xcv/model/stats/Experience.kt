@@ -3,8 +3,10 @@ package ru.hse.xcv.model.stats
 const val EXP_IN_LEVEL = 100
 
 class Experience {
-    private var experience: Int = 0
-    private var level: Int = 1
+    var experience: Int = 0
+        private set
+    var level: Int = 1
+        private set
 
     fun applyExperience(exp: Int): Int {
         require(exp >= 0)

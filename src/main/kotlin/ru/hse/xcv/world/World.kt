@@ -12,6 +12,7 @@ import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.readRect
 import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
@@ -19,7 +20,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.safeCast
 
 class World(
     val model: FieldModel,
@@ -29,7 +30,6 @@ class World(
 ) {
     private val lock = ReentrantReadWriteLock()
     private val controllers = hashMapOf<DynamicObject, ActionController>()
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
@@ -49,6 +49,15 @@ class World(
         }
         logger.debug("world initialized")
     }
+
+    val hero: Hero = getObjectsByType(Hero::class).keys.first()
+
+    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>): Map<T, ActionController> =
+        controllers.mapNotNull { (obj, controller) ->
+            clazz.safeCast(obj)?.let {
+                it to controller
+            }
+        }.toMap()
 
     fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
@@ -123,12 +132,8 @@ class World(
         }
     }
 
-    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>) =
-        controllers.filterKeys { it::class.isSubclassOf(clazz) }
-
     fun start() = runBlocking {
         getObjectsByType(Entity::class).entries.forEach {
-            logger.debug("Debug")
             launch {
                 while (true) {
                     delay(5000 / it.key.moveSpeed.toLong())

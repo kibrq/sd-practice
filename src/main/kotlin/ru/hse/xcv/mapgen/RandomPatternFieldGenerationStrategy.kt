@@ -62,11 +62,9 @@ class RandomPatternFieldGenerationStrategy(
         }
 
         tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
-            .asSequence()
-            .shuffled()
-            .take(1)
-            .forEach {
-                dynamicLayer[it.key] = Hero(it.key, Position.zero())
+            .keys
+            .randomOrNull()?.let {
+                dynamicLayer[it] = Hero(it, Position.create(0, 1))
             }
 
         return FieldModel(tiles, dynamicLayer, Rect.create(Position.zero(), size))
