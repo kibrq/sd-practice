@@ -10,7 +10,7 @@ class EventBus {
     private val move = EventDispatcher<MoveEvent>()
     private val buff = EventDispatcher<BuffEvent>()
     private val createSpell = EventDispatcher<CastSpellEvent>()
-    private val damage = EventDispatcher<DamageEvent>()
+    private val changeHP = EventDispatcher<HPChangeEvent>()
     private val letterPressed = EventDispatcher<LetterPressedEvent>()
 
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -21,7 +21,7 @@ class EventBus {
             is MoveEvent -> move.run(event)
             is BuffEvent -> buff.run(event)
             is CastSpellEvent -> createSpell.run(event)
-            is DamageEvent -> damage.run(event)
+            is HPChangeEvent -> changeHP.run(event)
             is LetterPressedEvent -> letterPressed.run(event)
         }
     }
@@ -36,7 +36,7 @@ class EventBus {
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
         createSpell.register(CastSpellEventHandler(world, this))
-        damage.register(DamageEventHandler(world, panelControllers.healthPanelController))
+        changeHP.register(HPChangeHandler(world, panelControllers.healthPanelController))
         letterPressed.register(LetterPressedEventHandler(world))
     }
 }

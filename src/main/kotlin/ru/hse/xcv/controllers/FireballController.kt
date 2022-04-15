@@ -1,8 +1,8 @@
 package ru.hse.xcv.controllers
 
 import org.hexworks.zircon.api.data.Size
-import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
@@ -37,7 +37,7 @@ class FireballController(
         } else {
             val entity = world.model.dynamicLayer[newPosition] as? Entity
             entity?.let {
-                val event = DamageEvent(it, fireball.damage)
+                val event = HPChangeEvent.createDamageEvent(it, fireball.damage)
                 eventBus.fire(event)
             }
             false

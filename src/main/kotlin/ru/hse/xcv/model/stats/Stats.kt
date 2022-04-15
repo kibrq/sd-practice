@@ -16,12 +16,8 @@ data class Stats(
     val isDead
         get() = currentHealth == 0
 
-    fun damage(amount: Int) {
-        currentHealth = maxOf(0, currentHealth - amount)
-    }
-
-    fun heal(amount: Int) {
-        currentHealth = minOf(maxHealth, currentHealth + amount)
+    fun changeHP(amount: Int) {
+        currentHealth = minOf(maxHealth, maxOf(0, currentHealth + amount))
     }
 
     operator fun plusAssign(other: Stats) {

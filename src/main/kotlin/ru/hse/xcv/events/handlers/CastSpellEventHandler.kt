@@ -2,8 +2,8 @@ package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
-import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.ChainLightningSpell
@@ -37,7 +37,7 @@ class CastSpellEventHandler(
             val fireball = spell.createFireball(level, pos + direction, direction)
             val entity = world.model.dynamicLayer[fireball.position] as? Entity ?: continue
             if (entity !is Hero) {
-                val event = DamageEvent(entity, fireball.damage)
+                val event = HPChangeEvent.createDamageEvent(entity, fireball.damage)
                 eventBus.fire(event)
             }
             break
@@ -46,7 +46,8 @@ class CastSpellEventHandler(
 
     private fun useHealSpell(spell: HealSpell, level: Int) {
         val amount = spell.healAmount(level)
-        world.hero.heal(amount)
+        val event = HPChangeEvent.createHealEvent(world.hero, amount)
+        eventBus.fire(event)
     }
 
     override fun handle(event: CastSpellEvent) {

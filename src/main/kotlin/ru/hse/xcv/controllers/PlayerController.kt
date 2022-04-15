@@ -3,7 +3,7 @@ package ru.hse.xcv.controllers
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
-import ru.hse.xcv.events.DamageEvent
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
@@ -34,7 +34,7 @@ class PlayerController(
             eventBus.fire(event)
         }
         if (x == 1) {
-            val event = DamageEvent(hero, 2)
+            val event = HPChangeEvent.createDamageEvent(hero, 2)
             eventBus.fire(event)
         }
     }

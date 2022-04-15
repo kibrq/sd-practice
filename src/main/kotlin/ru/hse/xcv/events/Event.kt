@@ -29,10 +29,15 @@ data class CastSpellEvent(
     val level: Int
 ) : Event
 
-data class DamageEvent(
+class HPChangeEvent private constructor(
     val entity: Entity,
     val amount: Int
-) : Event
+) : Event {
+    companion object {
+        fun createDamageEvent(entity: Entity, damage: Int) = HPChangeEvent(entity, -damage)
+        fun createHealEvent(entity: Entity, heal: Int) = HPChangeEvent(entity, heal)
+    }
+}
 
 data class LetterPressedEvent(
     val letter: Char

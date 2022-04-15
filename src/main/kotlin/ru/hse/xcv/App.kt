@@ -48,9 +48,9 @@ fun startGame(
 
     bus.registerGameHandlers(world, panelControllers)
 
-    world.getObjectsByType(Hero::class).keys.first().let {
+    world.getAllObjectsOfType(Hero::class).keys.first().let {
         view.makeCentered(it.position)
-        it.spellBook.prefixSearch("").forEach {spell ->
+        it.spellBook.allSpells().forEach { spell ->
             panelControllers.spellsPanelController.addSpell(spell)
         }
     }
