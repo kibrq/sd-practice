@@ -2,14 +2,20 @@ package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CreateSpellEvent
+import ru.hse.xcv.events.DamageEvent
+import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.ChainLightningSpell
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.model.spells.HealSpell
 import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
 
-class CreateSpellEventHandler(override val world: World) : EventHandler<CreateSpellEvent> {
+class CreateSpellEventHandler(
+    override val world: World,
+    private val eventBus: EventBus
+) : EventHandler<CreateSpellEvent> {
     private fun getDirectionsPrioritized(position: Position, direction: Position): List<Position> {
         val secondPriority = Position.zero() - direction
         val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
@@ -30,7 +36,10 @@ class CreateSpellEventHandler(override val world: World) : EventHandler<CreateSp
         for (direction in directions) {
             val fireball = spell.createFireball(level, pos + direction, direction)
             val entity = world.model.dynamicLayer[fireball.position] as? Entity ?: continue
-            entity.damage(fireball.damage) // i dont have eventBus
+            if (entity !is Hero) {
+                val event = DamageEvent(entity, fireball.damage)
+                eventBus.fire(event)
+            }
             break
         }
     }

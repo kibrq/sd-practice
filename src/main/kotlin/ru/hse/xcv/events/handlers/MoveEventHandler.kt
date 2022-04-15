@@ -20,13 +20,13 @@ class MoveEventHandler(
             if (offset.x == 0) {
                 possibleMoves.addAll(
                     Position.create(1, offset.y),
-                    Position.create(-1, offset.y),
+                    Position.create(-1, offset.y)
                 )
             }
             if (offset.y == 0) {
                 possibleMoves.addAll(
                     Position.create(offset.x, 1),
-                    Position.create(offset.x, -1),
+                    Position.create(offset.x, -1)
                 )
             }
         }

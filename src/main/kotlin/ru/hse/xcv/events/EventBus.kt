@@ -35,7 +35,7 @@ class EventBus {
 
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
-        createSpell.register(CreateSpellEventHandler(world))
+        createSpell.register(CreateSpellEventHandler(world, this))
         damage.register(DamageEventHandler(world, panelControllers.healthPanelController))
         letterPressed.register(LetterPressedEventHandler(world))
     }

@@ -146,7 +146,7 @@ class World(
                 delay(5000 / entity.moveSpeed.toLong())
             } while (controller.action())
             deleteObject(entity)
-            if (Hero::class.isInstance(entity)) {
+            if (entity is Hero) {
                 logger.debug("Hero is dead")
             }
         }

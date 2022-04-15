@@ -30,7 +30,7 @@ class FireballController(
             val event = MoveEvent(fireball, offset, moveWorld = false)
             eventBus.fire(event)
             true
-        } else if (Hero::class.isInstance(world.model.dynamicLayer[newPosition])) {
+        } else if (world.model.dynamicLayer[newPosition] is Hero) {
             val event = MoveEvent(fireball, offset, moveWorld = false, crazyMovements = true)
             eventBus.fire(event)
             true
