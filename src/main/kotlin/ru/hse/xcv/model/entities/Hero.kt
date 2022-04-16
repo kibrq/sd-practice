@@ -2,12 +2,15 @@ package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.items.Item
-import ru.hse.xcv.model.spells.*
+import ru.hse.xcv.model.spells.ChainLightningSpell
+import ru.hse.xcv.model.spells.FireballSpell
+import ru.hse.xcv.model.spells.HealSpell
+import ru.hse.xcv.model.spells.book.HeroSpellBook
 import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.stats.Stats
 
 class Hero(position: Position) : Entity(position) {
-    val spellBook: SpellBook = SpellBook()
+    val spellBook: HeroSpellBook = HeroSpellBook()
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
     val power

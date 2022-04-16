@@ -17,13 +17,6 @@ class CastSpellEventHandler(
     private val eventBus: EventBus
 ) : EventHandler<CastSpellEvent> {
     private val coolDowns = mutableMapOf<KClass<out Spell>, Long>()
-    private var wtfSpells = mutableListOf(
-        ChainLightningSpell().apply { coolDown = 0 },
-        FireballSpell().apply { coolDown = 0 },
-        HealSpell().apply { coolDown = 0 },
-        SpeedBoostSpell().apply { coolDown = 0 }
-    )
-    private var savedSpells: MutableList<Spell>? = null
     private val hero
         get() = world.hero
 
@@ -32,19 +25,6 @@ class CastSpellEventHandler(
         val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
         return listOf(direction, secondPriority) + otherPositions
     }
-
-    private fun useWtfSpell() =
-        savedSpells?.let {
-            // wtf turned off
-            hero.moveSpeed /= 2
-            hero.spellBook.spells = it
-            savedSpells = null
-        } ?: run {
-            // wtf turned on
-            hero.moveSpeed *= 2
-            savedSpells = hero.spellBook.spells
-            hero.spellBook.spells = wtfSpells
-        }
 
     private fun useChainLightning(spell: ChainLightningSpell, power: Int, pos: Position, directions: List<Position>) {
 
@@ -74,7 +54,7 @@ class CastSpellEventHandler(
         eventBus.fire(event)
     }
 
-    private fun useSeedBoostSpell(spell: SpeedBoostSpell) {
+    private fun useSpeedBoostSpell(spell: SpeedBoostSpell) {
         hero.moveSpeed = spell.newSpeed(hero.moveSpeed)
         world.delayed(spell.durationMillis) {
             hero.moveSpeed = spell.oldSpeed(hero.moveSpeed)
@@ -90,11 +70,10 @@ class CastSpellEventHandler(
         }
         val directions = getDirectionsPrioritized(event.direction)
         when (event.spell) {
-            is WtfSpell -> useWtfSpell()
             is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
             is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.power)
-            is SpeedBoostSpell -> useSeedBoostSpell(event.spell)
+            is SpeedBoostSpell -> useSpeedBoostSpell(event.spell)
         }
         coolDowns[event.spell::class] = currentTime
     }

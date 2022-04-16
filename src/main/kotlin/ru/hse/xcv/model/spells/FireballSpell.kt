@@ -5,8 +5,8 @@ import ru.hse.xcv.model.DynamicObject
 
 class FireballSpell : Spell {
     override val name = "Fireball"
-    override val combination = "J"
     override val description = "Deals damage"
+    override var combination = "J"
     override var coolDown = 1
 
     fun createFireball(power: Int, position: Position, direction: Position) = Fireball(power, position, direction)

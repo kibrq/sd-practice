@@ -6,6 +6,7 @@ import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.spells.book.WtfSpellBook
 import ru.hse.xcv.util.*
 import kotlin.math.abs
 
@@ -15,6 +16,17 @@ class PlayerController(
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private var wtfSpellBook = WtfSpellBook()
+    private var wtfMode = false
+
+    private fun handleWtfMode() = input.zxc.let {
+        if (it && !wtfMode) {
+            hero.moveSpeed *= 2
+        } else if (!it && wtfMode) {
+            hero.moveSpeed /= 2
+        }
+        wtfMode = it
+    }
 
     private fun handleMovement() {
         val (x, y) = input.currentMovementKeys.map {
@@ -36,13 +48,15 @@ class PlayerController(
 
     private fun handleSpellCast() {
         val combination = input.readySpell ?: return
-        val spell = hero.spellBook.search(combination) ?: return
+        val spellBook = if (wtfMode) wtfSpellBook else hero.spellBook
+        val spell = spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
         val event = CastSpellEvent(spell, hero.position, hero.direction, hero.power)
         eventBus.fire(event)
     }
 
     override fun action(): Boolean {
+        handleWtfMode()
         handleMovement()
         handleSpellCast()
         return true

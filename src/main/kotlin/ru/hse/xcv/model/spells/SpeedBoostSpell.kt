@@ -2,8 +2,8 @@ package ru.hse.xcv.model.spells
 
 class SpeedBoostSpell : Spell {
     override val name = "Speed boost spell"
-    override val combination = "L"
     override val description = "Speeds up hero"
+    override var combination = "L"
     override var coolDown = 10
 
     val durationMillis = 2000L
