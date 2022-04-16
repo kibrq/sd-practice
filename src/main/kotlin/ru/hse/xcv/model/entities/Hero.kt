@@ -2,10 +2,7 @@ package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.items.Item
-import ru.hse.xcv.model.spells.ChainLightningSpell
-import ru.hse.xcv.model.spells.FireballSpell
-import ru.hse.xcv.model.spells.HealSpell
-import ru.hse.xcv.model.spells.SpellBook
+import ru.hse.xcv.model.spells.*
 import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.stats.Stats
 
@@ -35,6 +32,7 @@ class Hero(position: Position) : Entity(position) {
         spellBook.addSpell(FireballSpell())
         spellBook.addSpell(ChainLightningSpell())
         spellBook.addSpell(HealSpell())
+        // spellBook.addSpell(SpeedBoostSpell())
     }
 
     fun addExperience(exp: Int) {

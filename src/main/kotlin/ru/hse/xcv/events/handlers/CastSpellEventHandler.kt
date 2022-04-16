@@ -71,6 +71,15 @@ class CastSpellEventHandler(
         eventBus.fire(event)
     }
 
+    private fun useSeedBoostSpell(spell: SpeedBoostSpell) {
+        val hero = world.hero
+        val oldSpeed = hero.moveSpeed
+        hero.moveSpeed = spell.newSpeed(oldSpeed)
+        world.delayed(spell.durationMillis) {
+            hero.moveSpeed = oldSpeed
+        }
+    }
+
     override fun handle(event: CastSpellEvent) {
         val currentTime = System.currentTimeMillis()
         coolDowns[event.spell::class]?.let {
@@ -84,6 +93,7 @@ class CastSpellEventHandler(
             is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
             is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.power)
+            is SpeedBoostSpell -> useSeedBoostSpell(event.spell)
         }
         coolDowns[event.spell::class] = currentTime
     }

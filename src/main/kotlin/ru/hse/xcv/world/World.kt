@@ -56,6 +56,11 @@ class World(
 
     val hero: Hero = getAllObjectsOfType(Hero::class).keys.first()
 
+    fun delayed(millis: Long, block: () -> Unit) = scope.launch {
+        delay(millis)
+        block()
+    }
+
     fun getDynamicLayer(position: Position): DynamicObject? = model.dynamicLayer[position]
 
     fun getStaticLayer(position: Position): FieldTile? = model.staticLayer[position]
