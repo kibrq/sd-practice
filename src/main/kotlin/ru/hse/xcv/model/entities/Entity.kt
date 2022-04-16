@@ -7,6 +7,9 @@ import ru.hse.xcv.model.stats.Stats
 sealed class Entity(override var position: Position) : DynamicObject() {
     abstract var stats: Stats
 
+    val damage
+        get() = stats.power * 5
+
     val isDead
         get() = stats.isDead
 

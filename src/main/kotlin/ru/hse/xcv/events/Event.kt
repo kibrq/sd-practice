@@ -26,7 +26,7 @@ data class CastSpellEvent(
     val spell: Spell,
     val position: Position,
     val direction: Position,
-    val level: Int
+    val power: Int
 ) : Event
 
 class HPChangeEvent private constructor(

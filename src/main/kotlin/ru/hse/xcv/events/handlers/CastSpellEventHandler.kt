@@ -22,20 +22,20 @@ class CastSpellEventHandler(
         return listOf(direction, secondPriority) + otherPositions
     }
 
-    private fun useChainLightning(spell: ChainLightningSpell, level: Int, pos: Position, directions: List<Position>) {
+    private fun useChainLightning(spell: ChainLightningSpell, power: Int, pos: Position, directions: List<Position>) {
 
     }
 
-    private fun useFireballSpell(spell: FireballSpell, level: Int, pos: Position, directions: List<Position>) {
+    private fun useFireballSpell(spell: FireballSpell, power: Int, pos: Position, directions: List<Position>) {
         for (direction in directions) {
-            val fireball = spell.createFireball(level, pos + direction, direction)
+            val fireball = spell.createFireball(power, pos + direction, direction)
             if (world.createObject(fireball, fireball.position)) {
                 break
             }
         }
         for (direction in directions) {
-            val fireball = spell.createFireball(level, pos + direction, direction)
-            val entity = world.model.dynamicLayer[fireball.position] as? Entity ?: continue
+            val fireball = spell.createFireball(power, pos + direction, direction)
+            val entity = world.getDynamicLayer(fireball.position) as? Entity ?: continue
             if (entity !is Hero) {
                 val event = HPChangeEvent.createDamageEvent(entity, fireball.damage)
                 eventBus.fire(event)
@@ -44,8 +44,8 @@ class CastSpellEventHandler(
         }
     }
 
-    private fun useHealSpell(spell: HealSpell, level: Int) {
-        val amount = spell.healAmount(level)
+    private fun useHealSpell(spell: HealSpell, power: Int) {
+        val amount = spell.healAmount(power)
         val event = HPChangeEvent.createHealEvent(world.hero, amount)
         eventBus.fire(event)
     }
@@ -53,9 +53,9 @@ class CastSpellEventHandler(
     override fun handle(event: CastSpellEvent) {
         val directions = getDirectionsPrioritized(event.position, event.direction)
         when (event.spell) {
-            is ChainLightningSpell -> useChainLightning(event.spell, event.level, event.position, directions)
-            is FireballSpell -> useFireballSpell(event.spell, event.level, event.position, directions)
-            is HealSpell -> useHealSpell(event.spell, event.level)
+            is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
+            is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
+            is HealSpell -> useHealSpell(event.spell, event.power)
         }
     }
 }

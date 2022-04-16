@@ -55,6 +55,10 @@ class World(
 
     val hero: Hero = getAllObjectsOfType(Hero::class).keys.first()
 
+    fun getDynamicLayer(position: Position): DynamicObject? = model.dynamicLayer[position]
+
+    fun getStaticLayer(position: Position): FieldTile? = model.staticLayer[position]
+
     fun isEmpty(position: Position) =
         model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
 
