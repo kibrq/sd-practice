@@ -18,7 +18,7 @@ class FireballController(
     private var myMob: Mob? = null
 
     override fun action(): Boolean {
-        myMob = myMob ?: world.nearestObjectInNeighbourhood(fireball.position, fireball.fieldOfView, Mob::class)
+        myMob = myMob ?: world.nearestVisibleObjectInRectangle(fireball.position, fireball.fieldOfView, Mob::class)
         val offset = myMob?.let {
             (it.position - fireball.position).normalize()
         } ?: fireball.direction

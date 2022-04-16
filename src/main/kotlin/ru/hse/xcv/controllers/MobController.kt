@@ -26,7 +26,7 @@ class AggressiveMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val hero = world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class) ?: return null
+        val hero = world.nearestVisibleObjectInRectangle(mob.position, mob.fieldOfView, Hero::class) ?: return null
         val offset = (hero.position - mob.position).normalize()
         val newPosition = mob.position + offset
         val entity = world.getDynamicLayer(newPosition)
@@ -45,7 +45,7 @@ class CowardMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val hero = world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class) ?: return null
+        val hero = world.nearestVisibleObjectInRectangle(mob.position, mob.fieldOfView, Hero::class) ?: return null
         val offset = (mob.position - hero.position).normalize()
         return MoveEvent(mob, offset, moveWorld = false)
     }
