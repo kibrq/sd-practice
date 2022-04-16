@@ -9,13 +9,18 @@ import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.ChainLightningSpell
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.model.spells.HealSpell
+import ru.hse.xcv.model.spells.Spell
 import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
+import java.util.concurrent.TimeUnit
+import kotlin.reflect.KClass
 
 class CastSpellEventHandler(
     override val world: World,
     private val eventBus: EventBus
 ) : EventHandler<CastSpellEvent> {
+    private val coolDowns = mutableMapOf<KClass<out Spell>, Long>()
+
     private fun getDirectionsPrioritized(position: Position, direction: Position): List<Position> {
         val secondPriority = Position.zero() - direction
         val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
@@ -51,11 +56,18 @@ class CastSpellEventHandler(
     }
 
     override fun handle(event: CastSpellEvent) {
+        val currentTime = System.currentTimeMillis()
+        coolDowns[event.spell::class]?.let {
+            if (currentTime - it < TimeUnit.SECONDS.toMillis(event.spell.coolDown.toLong())) {
+                return
+            }
+        }
         val directions = getDirectionsPrioritized(event.position, event.direction)
         when (event.spell) {
             is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
             is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.power)
         }
+        coolDowns[event.spell::class] = currentTime
     }
 }
