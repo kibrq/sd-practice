@@ -8,4 +8,5 @@ class SpeedBoostSpell : Spell {
 
     val durationMillis = 2000L
     fun newSpeed(oldSpeed: Int) = oldSpeed * 2
+    fun oldSpeed(newSpeed: Int) = newSpeed / 2
 }

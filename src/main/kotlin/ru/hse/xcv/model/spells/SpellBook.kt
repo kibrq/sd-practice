@@ -1,7 +1,7 @@
 package ru.hse.xcv.model.spells
 
 class SpellBook {
-    private val spells = mutableListOf<Spell>()
+    var spells = mutableListOf<Spell>()
     private val secretSpell = WtfSpell()
 
     fun addSpell(spell: Spell) = spells.add(spell)
