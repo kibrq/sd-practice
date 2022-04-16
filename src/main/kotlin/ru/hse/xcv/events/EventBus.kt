@@ -36,7 +36,13 @@ class EventBus {
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
         createSpell.register(CastSpellEventHandler(world, this))
-        changeHP.register(HPChangeHandler(world, panelControllers.healthPanelController))
+        changeHP.register(
+            HPChangeHandler(
+                world,
+                panelControllers.healthPanelController,
+                panelControllers.levelPanelController
+            )
+        )
         letterPressed.register(LetterPressedEventHandler(world))
     }
 }
