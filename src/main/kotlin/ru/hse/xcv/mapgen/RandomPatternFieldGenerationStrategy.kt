@@ -63,7 +63,12 @@ class RandomPatternFieldGenerationStrategy(
 
         tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
             .keys
-            .randomOrNull()?.let {
+            .filter { pos ->
+                val corner = pos - Position.create(10, 10)
+                val size = Size.create(20, 20)
+                val rect = Rect.create(corner, size)
+                tiles.readRect(rect).none { dynamicLayer.containsKey(it.key) }
+            }.randomOrNull()?.let {
                 dynamicLayer[it] = Hero(it)
             }
 

@@ -4,5 +4,5 @@ sealed interface Spell {
     val name: String
     val combination: String
     val description: String
-    val coolDown: Int
+    var coolDown: Int
 }

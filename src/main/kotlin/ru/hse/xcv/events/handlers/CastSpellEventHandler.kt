@@ -6,10 +6,7 @@ import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.spells.ChainLightningSpell
-import ru.hse.xcv.model.spells.FireballSpell
-import ru.hse.xcv.model.spells.HealSpell
-import ru.hse.xcv.model.spells.Spell
+import ru.hse.xcv.model.spells.*
 import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
 import java.util.concurrent.TimeUnit
@@ -20,12 +17,31 @@ class CastSpellEventHandler(
     private val eventBus: EventBus
 ) : EventHandler<CastSpellEvent> {
     private val coolDowns = mutableMapOf<KClass<out Spell>, Long>()
+    private var wtfCoolDowns: Map<Spell, Int>? = null
 
     private fun getDirectionsPrioritized(position: Position, direction: Position): List<Position> {
         val secondPriority = Position.zero() - direction
         val otherPositions = possibleDirections.filter { it != direction && it != secondPriority }
         return listOf(direction, secondPriority) + otherPositions
     }
+
+    private fun useWtfSpell() =
+        wtfCoolDowns?.let { map ->
+            // wtf turned off
+            world.hero.moveSpeed /= 2
+            world.hero.spellBook.allSpells().forEach { spell ->
+                map[spell]?.let {
+                    spell.coolDown = it
+                }
+            }
+            wtfCoolDowns = null
+        } ?: run {
+            // wtf turned on
+            world.hero.moveSpeed *= 2
+            val spells = world.hero.spellBook.allSpells()
+            wtfCoolDowns = spells.associateWith { it.coolDown }
+            spells.forEach { it.coolDown = 0 }
+        }
 
     private fun useChainLightning(spell: ChainLightningSpell, power: Int, pos: Position, directions: List<Position>) {
 
@@ -64,6 +80,7 @@ class CastSpellEventHandler(
         }
         val directions = getDirectionsPrioritized(event.position, event.direction)
         when (event.spell) {
+            is WtfSpell -> useWtfSpell()
             is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
             is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.power)
