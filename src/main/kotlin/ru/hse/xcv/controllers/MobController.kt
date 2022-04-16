@@ -51,6 +51,17 @@ class CowardMobStrategy(
     }
 }
 
+class PassiveMobStrategy(
+    override val mob: Mob,
+    override val world: World
+) : MobStrategy {
+    private val logger = LoggerFactory.getLogger(javaClass)
+
+    override fun takeAction(): Event? {
+        return null
+    }
+}
+
 
 class MobController(
     private val strategy: MobStrategy,
