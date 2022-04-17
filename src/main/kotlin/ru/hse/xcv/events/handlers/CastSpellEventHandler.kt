@@ -29,12 +29,10 @@ class CastSpellEventHandler(
     }
 
     private fun useChainLightning(spell: ChainLightningSpell) {
-        val mob = world.nearestVisibleObjectInRectangle(hero.position, Size.create(spell.range, spell.range), Mob::class)
-        if (mob != null) {
-            mob.isConfused.incrementAndGet()
-            world.delayed(spell.durationMillis) {
-                mob.isConfused.decrementAndGet()
-            }
+        val mob = world.nearestVisibleObjectInRectangle(hero.position, Size.create(spell.range, spell.range), Mob::class) ?: return
+        mob.isConfused.incrementAndGet()
+        world.delayed(spell.durationMillis) {
+            mob.isConfused.decrementAndGet()
         }
     }
 
