@@ -11,6 +11,7 @@ data class Stats(
         require(armor >= 0)
         require(maxHealth >= 0)
         require(currentHealth >= 0)
+        require(maxHealth >= currentHealth)
     }
 
     val isDead
@@ -23,15 +24,15 @@ data class Stats(
     operator fun plusAssign(other: Stats) {
         power = maxOf(0, power + other.power)
         armor = maxOf(0, armor + other.armor)
-        currentHealth = maxOf(0, currentHealth + other.currentHealth)
         maxHealth = maxOf(0, maxHealth + other.maxHealth)
+        currentHealth = minOf(maxHealth, maxOf(0, currentHealth + other.currentHealth))
     }
 
     operator fun minusAssign(other: Stats) {
         power = maxOf(0, power - other.power)
         armor = maxOf(0, armor - other.armor)
-        currentHealth = maxOf(0, currentHealth - other.currentHealth)
         maxHealth = maxOf(0, maxHealth - other.maxHealth)
+        currentHealth = minOf(maxHealth, maxOf(0, currentHealth - other.currentHealth))
     }
 
     operator fun times(multiplier: Int): Stats {
