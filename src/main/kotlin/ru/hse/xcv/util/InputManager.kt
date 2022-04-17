@@ -87,7 +87,7 @@ class InputManager(private val eventBus: EventBus) {
             previousMovementKeys.addAll(toAdd)
             toAdd = nextToAdd.toSet()
             nextToAdd.clear()
-            return previousMovementKeys
+            return previousMovementKeys.toSet()
         }
 
     val readySpell: String?
