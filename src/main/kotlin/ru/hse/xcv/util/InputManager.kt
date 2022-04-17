@@ -20,12 +20,17 @@ val SPELL_K = KeyCode.KEY_K
 val SPELL_L = KeyCode.KEY_L
 val SPELL_CAST = KeyCode.SPACE
 
+/*
+ * Very complicated logic for smooth movement.
+ */
 class InputManager(private val eventBus: EventBus) {
     private val movementKeysPressed = mutableSetOf<KeyCode>()
     private val spellKeyBuffer = mutableListOf<KeyCode>()
     private val readySpellsQueue = ArrayDeque<String>()
     private val toRemove = mutableSetOf<KeyCode>()
-    private var previousMovementKeys = setOf<KeyCode>()
+    private val nextToAdd = mutableSetOf<KeyCode>()
+    private var toAdd = setOf<KeyCode>()
+    private var previousMovementKeys = mutableSetOf<KeyCode>()
 
     private fun fireLetterPressedEvent(code: KeyCode) {
         val event = LetterPressedEvent(code.toCharOrNull() ?: return)
@@ -46,11 +51,22 @@ class InputManager(private val eventBus: EventBus) {
         }
     }
 
+    private fun movementKeyPressed(code: KeyCode) {
+        if (code in toRemove) {
+            nextToAdd.add(code)
+        }
+        movementKeysPressed.add(code)
+        previousMovementKeys.remove(code)
+    }
+
     val currentMovementKeys: Set<KeyCode>
         get() {
-            previousMovementKeys = movementKeysPressed.toSet()
-            toRemove.forEach { movementKeysPressed.remove(it) }
+            previousMovementKeys = movementKeysPressed.toMutableSet()
+            movementKeysPressed.removeAll(toRemove)
             toRemove.clear()
+            previousMovementKeys.addAll(toAdd)
+            toAdd = nextToAdd.toSet()
+            nextToAdd.clear()
             return previousMovementKeys
         }
 
@@ -59,7 +75,7 @@ class InputManager(private val eventBus: EventBus) {
 
     fun keyPressed(code: KeyCode) {
         when (code) {
-            in MOVE_KEYS -> movementKeysPressed.add(code)
+            in MOVE_KEYS -> movementKeyPressed(code)
             in SPELL_KEYS -> spellKeyPressed(code)
             else -> return
         }

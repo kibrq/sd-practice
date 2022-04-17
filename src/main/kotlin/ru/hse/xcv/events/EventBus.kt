@@ -2,6 +2,7 @@ package ru.hse.xcv.events
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import ru.hse.xcv.events.handlers.*
+import ru.hse.xcv.view.PanelControllers
 import ru.hse.xcv.world.World
 
 class EventBus {
@@ -25,7 +26,7 @@ class EventBus {
         }
     }
 
-    fun registerGameHandlers(world: World) {
+    fun registerGameHandlers(world: World, panelControllers: PanelControllers) {
         none.register(object : EventHandler<NoneEvent> {
             override val world = world
 
@@ -34,8 +35,8 @@ class EventBus {
 
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
-        createSpell.register(CreateSpellEventHandler(world))
-        damage.register(DamageEventHandler(world))
+        createSpell.register(CreateSpellEventHandler(world, this))
+        damage.register(DamageEventHandler(world, panelControllers.healthPanelController))
         letterPressed.register(LetterPressedEventHandler(world))
     }
 }

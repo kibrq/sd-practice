@@ -6,6 +6,15 @@ import org.hexworks.zircon.api.data.Rect
 import ru.hse.xcv.view.FieldView
 import kotlin.math.abs
 
+val possibleDirections: List<Position> = buildList {
+    for (i in -1..1) {
+        for (j in -1..1) {
+            if (i == 0 && j == 0) continue
+            add(Position.create(i, j))
+        }
+    }
+}
+
 fun Position.normalize() = Position.create(x / maxOf(abs(x), abs(y), 1), y / maxOf(abs(x), abs(y), 1))
 
 fun <T> Map<Position, T>.readRect(rect: Rect) =
@@ -26,3 +35,5 @@ fun FieldView.makeCentered(position: Position) {
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = (first + other.first) to (second + other.second)
 
 fun List<Pair<Int, Int>>.sum(): Pair<Int, Int> = fold(0 to 0) { acc, cur -> acc + cur }
+
+fun <T> MutableCollection<T>.addAll(vararg elem: T) = addAll(elem.toList())

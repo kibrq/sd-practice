@@ -1,8 +1,6 @@
 package ru.hse.xcv.model.stats
 
-import kotlin.math.max
-
-class Stats(
+data class Stats(
     var power: Int = 0,
     var armor: Int = 0,
     var maxHealth: Int = 0,
@@ -15,18 +13,29 @@ class Stats(
         require(currentHealth >= 0)
     }
 
+    val isDead
+        get() = currentHealth == 0
+
+    fun damage(amount: Int) {
+        currentHealth = maxOf(0, currentHealth - amount)
+    }
+
+    fun heal(amount: Int) {
+        currentHealth = minOf(maxHealth, currentHealth + amount)
+    }
+
     operator fun plusAssign(other: Stats) {
-        power = max(0, power + other.power)
-        armor = max(0, armor + other.armor)
-        currentHealth = max(0, currentHealth + other.currentHealth)
-        maxHealth = max(0, maxHealth + other.maxHealth)
+        power = maxOf(0, power + other.power)
+        armor = maxOf(0, armor + other.armor)
+        currentHealth = maxOf(0, currentHealth + other.currentHealth)
+        maxHealth = maxOf(0, maxHealth + other.maxHealth)
     }
 
     operator fun minusAssign(other: Stats) {
-        power = max(0, power - other.power)
-        armor = max(0, armor - other.armor)
-        currentHealth = max(0, currentHealth - other.currentHealth)
-        maxHealth = max(0, maxHealth - other.maxHealth)
+        power = maxOf(0, power - other.power)
+        armor = maxOf(0, armor - other.armor)
+        currentHealth = maxOf(0, currentHealth - other.currentHealth)
+        maxHealth = maxOf(0, maxHealth - other.maxHealth)
     }
 
     operator fun times(multiplier: Int): Stats {

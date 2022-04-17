@@ -1,9 +1,10 @@
 package ru.hse.xcv.world
 
 
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.*
 import ru.hse.xcv.controllers.ActionController
@@ -12,6 +13,7 @@ import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.readRect
 import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
@@ -19,7 +21,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock
 import kotlin.concurrent.read
 import kotlin.concurrent.write
 import kotlin.reflect.KClass
-import kotlin.reflect.full.isSubclassOf
+import kotlin.reflect.safeCast
 
 class World(
     val model: FieldModel,
@@ -27,9 +29,9 @@ class World(
     private val graphics: Graphics,
     private val controllerFactory: ActionControllerFactory
 ) {
+    private val scope = CoroutineScope(Dispatchers.Default)
     private val lock = ReentrantReadWriteLock()
     private val controllers = hashMapOf<DynamicObject, ActionController>()
-
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
@@ -49,6 +51,18 @@ class World(
         }
         logger.debug("world initialized")
     }
+
+    val hero: Hero = getObjectsByType(Hero::class).keys.first()
+
+    fun isEmpty(position: Position) =
+        model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
+
+    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>): Map<T, ActionController> =
+        controllers.mapNotNull { (obj, controller) ->
+            clazz.safeCast(obj)?.let {
+                it to controller
+            }
+        }.toMap()
 
     fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
@@ -81,14 +95,16 @@ class World(
         return true
     }
 
-    fun createObject(obj: DynamicObject, position: Position) {
+    fun createObject(obj: DynamicObject, position: Position): Boolean {
         val onCurrent = lock.read {
             model.byPosition(position)
         }
-        logger.debug { "${onCurrent.first} ${onCurrent.second}" }
+        logger.debug { "try create on ${onCurrent.first}:${onCurrent.second}" }
+
         if (onCurrent.first != FieldTile.FLOOR || onCurrent.second != null)
-            return
-        logger.debug("Put on Map")
+            return false
+
+        logger.debug("Put $obj on map")
 
         val controller = controllerFactory.create(obj, this)
 
@@ -98,14 +114,15 @@ class World(
             controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
         }
-        runBlocking {
-            launch {
-                while (true) {
-                    delay(5000 / obj.moveSpeed.toLong())
-                    controller.action()
-                }
-            }
+
+        scope.launch {
+            do {
+                delay(5000 / obj.moveSpeed.toLong())
+            } while (controller.action())
+            deleteObject(obj)
         }
+
+        return true
     }
 
     fun deleteObject(obj: DynamicObject) {
@@ -123,17 +140,14 @@ class World(
         }
     }
 
-    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>) =
-        controllers.filterKeys { it::class.isSubclassOf(clazz) }
-
-    fun start() = runBlocking {
-        getObjectsByType(Entity::class).entries.forEach {
-            logger.debug("Debug")
-            launch {
-                while (true) {
-                    delay(5000 / it.key.moveSpeed.toLong())
-                    it.value.action()
-                }
+    fun start() = getObjectsByType(Entity::class).entries.forEach { (entity, controller) ->
+        scope.launch {
+            do {
+                delay(5000 / entity.moveSpeed.toLong())
+            } while (controller.action())
+            deleteObject(entity)
+            if (entity is Hero) {
+                logger.debug("Hero is dead")
             }
         }
     }
@@ -143,6 +157,15 @@ class World(
         val rect = Rect.create(center - shift, size)
         model.staticLayer.readRect(rect) to model.dynamicLayer.readRect(rect)
     }
+
+    fun <T : DynamicObject> nearestObjectInNeighbourhood(center: Position, size: Size, clazz: KClass<T>): T? =
+        readNeighbourhood(center, size).second.values
+            .mapNotNull { clazz.safeCast(it) }
+            .minByOrNull {
+                val distance = it.position - center
+                distance.x * distance.x + distance.y * distance.y
+            }
+
 
     companion object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()

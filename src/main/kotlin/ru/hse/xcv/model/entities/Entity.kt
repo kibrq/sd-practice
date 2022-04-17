@@ -5,13 +5,14 @@ import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.stats.Stats
 import kotlin.math.max
 
-sealed class Entity(
-    position: Position,
-    direction: Position,
-    moveSpeed: Int,
-    var stats: Stats
-) : DynamicObject(position, direction, moveSpeed) {
+sealed class Entity(override var position: Position) : DynamicObject() {
+    abstract var stats: Stats
+
     fun receiveDamage(damage: Int) {
         stats.currentHealth = max(0, stats.currentHealth - damage)
     }
+
+    fun isDead() = stats.isDead
+    fun damage(amount: Int) = stats.damage(amount)
+    fun heal(amount: Int) = stats.heal(amount)
 }

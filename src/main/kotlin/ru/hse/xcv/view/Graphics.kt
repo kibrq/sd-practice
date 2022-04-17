@@ -11,6 +11,7 @@ import ru.hse.xcv.model.entities.Dragon
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Maxim
 import ru.hse.xcv.model.entities.Zombie
+import ru.hse.xcv.model.spells.FireballSpell
 import kotlin.reflect.KClass
 
 typealias WorldTile = Block<Tile>
@@ -41,7 +42,11 @@ interface Graphics {
                 Hero::class to worldTileOfSymbolAndColor(Symbols.FACE_WHITE, ANSITileColor.GREEN),
                 Dragon::class to worldTileOfSymbolAndColor(Symbols.SECTION_SIGN, ANSITileColor.RED),
                 Maxim::class to worldTileOfSymbolAndColor(Symbols.FEMALE, ANSITileColor.YELLOW),
-                Zombie::class to worldTileOfSymbolAndColor(Symbols.YEN, ANSITileColor.RED)
+                Zombie::class to worldTileOfSymbolAndColor(Symbols.YEN, ANSITileColor.RED),
+                FireballSpell.Fireball::class to worldTileOfSymbolAndColor(
+                    Symbols.SOLAR_SYMBOL,
+                    ANSITileColor.BRIGHT_RED
+                )
             )
         )
     }
@@ -51,7 +56,7 @@ class FromMapGraphics(
     private val staticLayerTransformMap: Map<FieldTile, WorldTile>,
     private val dynamicLayerTransformMap: Map<KClass<out DynamicObject>, WorldTile>,
 ) : Graphics {
-    override fun staticLayerTransform(tile: FieldTile) = staticLayerTransformMap[tile]!!
+    override fun staticLayerTransform(tile: FieldTile) = staticLayerTransformMap.getValue(tile)
 
-    override fun dynamicLayerTransform(obj: DynamicObject) = dynamicLayerTransformMap[obj::class]!!
+    override fun dynamicLayerTransform(obj: DynamicObject) = dynamicLayerTransformMap.getValue(obj::class)
 }
