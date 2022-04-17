@@ -1,6 +1,31 @@
-# Software design practice HSE-2022
+# XCV
 
-Homeworks can be found in the appropriate branches.
+Use WASD to move. Press a combination of HJKL keys and then SPACE to cast a spell:
+* `J` - Fireball spell
+* `HJKL` - Chain lightning
+* `HH` - Heal spell
+* `L` - Speed boost spell
+* `ZXC` - Enter WTF mode
+
+In WTF mode speed is increased and all cooldowns are set to zero.
+
+
+### Run game
+
+```bash
+./gradlew run
+```
+
+### Tests
+
+```bash
+./gradlew test
+```
+
+Architecture
+----
+- [Design document](https://docs.google.com/document/d/1QqwoZj0K42nyamNhSfQ_2WnOqvsAzywG9hKymnePOlI/edit?usp=sharing)
+- [Diagrams](https://drive.google.com/drive/folders/1Qxy9MDED6X2xQ6ToKZKjNG6f96sCDFG0?usp=sharing)
 
 ## Contributors
 
