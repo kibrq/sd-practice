@@ -4,6 +4,7 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.spells.Spell
+import ru.hse.xcv.model.spells.book.SpellBook
 import ru.hse.xcv.model.stats.Stats
 
 sealed interface Event
@@ -41,4 +42,9 @@ class HPChangeEvent private constructor(
 
 data class LetterPressedEvent(
     val letter: Char
+) : Event
+
+data class WTFModeEvent(
+    val isEnabled: Boolean,
+    val spellBook: SpellBook
 ) : Event

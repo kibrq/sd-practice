@@ -12,6 +12,7 @@ class EventBus {
     private val createSpell = EventDispatcher<CastSpellEvent>()
     private val changeHP = EventDispatcher<HPChangeEvent>()
     private val letterPressed = EventDispatcher<LetterPressedEvent>()
+    private val wtfMode = EventDispatcher<WTFModeEvent>()
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -23,6 +24,7 @@ class EventBus {
             is CastSpellEvent -> createSpell.run(event)
             is HPChangeEvent -> changeHP.run(event)
             is LetterPressedEvent -> letterPressed.run(event)
+            is WTFModeEvent -> wtfMode.run(event)
         }
     }
 
@@ -35,6 +37,7 @@ class EventBus {
 
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
+        wtfMode.register(WTFModeEventHandler(world, panelControllers.spellsPanelController))
         createSpell.register(CastSpellEventHandler(world, this))
         changeHP.register(
             HPChangeHandler(

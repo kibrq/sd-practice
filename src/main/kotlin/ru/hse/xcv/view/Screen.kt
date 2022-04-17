@@ -64,6 +64,12 @@ class SpellsPanelController(
     private val panel: Panel
 ) {
     private var spellsNumber = 0
+
+    fun clearSpells() {
+        panel.detachAllComponents()
+        spellsNumber = 0
+    }
+
     fun addSpell(spell: Spell) {
         val spellPanel = Components.panel()
             .withPreferredSize(panel.width, 2)
@@ -92,7 +98,6 @@ class SpellsPanelController(
 
         spellPanel.addComponent(spellsNamePanel)
         spellPanel.addComponent(spellsCombinationPanel)
-
         panel.addComponent(spellPanel)
         spellsNumber++
     }

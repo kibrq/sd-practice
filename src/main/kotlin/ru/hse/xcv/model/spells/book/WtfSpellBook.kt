@@ -9,8 +9,8 @@ class WtfSpellBook : SpellBook() {
     }
 
     override val spells = mutableListOf(
-        ChainLightningSpell().toWtfMode("H"),
         FireballSpell().toWtfMode("J"),
+        ChainLightningSpell().toWtfMode("H"),
         HealSpell().toWtfMode("K"),
         SpeedBoostSpell().toWtfMode("L")
     )
