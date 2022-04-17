@@ -38,19 +38,6 @@ class AggressiveMobStrategy(
     }
 }
 
-class CowardMobStrategy(
-    override val mob: Mob,
-    override val world: World
-) : MobStrategy {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    override fun takeAction(): Event? {
-        val hero = world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class) ?: return null
-        val offset = (mob.position - hero.position).normalize()
-        return MoveEvent(mob, offset, moveWorld = false)
-    }
-}
-
 
 class MobController(
     private val strategy: MobStrategy,
