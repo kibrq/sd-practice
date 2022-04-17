@@ -82,4 +82,19 @@ class StatsTest {
         stats.changeHP(228)
         assertEquals(10, stats.currentHealth)
     }
+
+    @Test
+    fun `test times`() {
+        var stats = Stats(
+            armor = 3,
+            power = 1,
+            currentHealth = 10,
+            maxHealth = 10
+        )
+        stats *= 4
+        assertEquals(12, stats.armor)
+        assertEquals(4, stats.power)
+        assertEquals(40, stats.maxHealth)
+        assertEquals(40, stats.currentHealth)
+    }
 }
