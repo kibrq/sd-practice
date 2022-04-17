@@ -29,7 +29,8 @@ class PlayerController(
     }
 
     private fun handleMovement() {
-        val (x, y) = input.currentMovementKeys.map {
+        val currentPressedKeys = input.currentMovementKeys
+        val (x, y) = currentPressedKeys.map {
             when (it) {
                 UP -> 0 to -1
                 DOWN -> 0 to 1
