@@ -2,7 +2,7 @@ package ru.hse.xcv.controllers
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.events.CreateSpellEvent
+import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
@@ -38,7 +38,7 @@ class PlayerController(
         val combination = input.readySpell ?: return
         val spell = hero.spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
-        val event = CreateSpellEvent(spell, hero.position, hero.direction, hero.level)
+        val event = CastSpellEvent(spell, hero.position, hero.direction, hero.power)
         eventBus.fire(event)
     }
 

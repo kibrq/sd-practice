@@ -13,13 +13,14 @@ class Hero(position: Position) : Entity(position) {
     val spellBook: SpellBook = SpellBook()
     val inventory: List<Item> = ArrayList()
     val experience: Experience = Experience()
-    val level = experience.level
+    val power
+        get() = stats.power
 
     override var direction = Position.create(0, 1)
     override var moveSpeed = 25
     override var stats = Stats(
-        power = 5,
-        armor = 5,
+        power = 3,
+        armor = 3,
         maxHealth = 100
     )
 
@@ -38,6 +39,8 @@ class Hero(position: Position) : Entity(position) {
 
     fun addExperience(exp: Int) {
         val levels = experience.applyExperience(exp)
-        stats += statsPerLevel * levels
+        if (levels > 0) {
+            stats += statsPerLevel * levels
+        }
     }
 }

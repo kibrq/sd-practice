@@ -5,6 +5,8 @@ class SpellBook {
 
     fun addSpell(spell: Spell) = spells.add(spell)
 
+    fun allSpells() = spells.toList()
+
     fun prefixSearch(prefix: String): List<Spell> = spells.filter {
         it.combination.startsWith(prefix, ignoreCase = true)
     }

@@ -22,17 +22,22 @@ data class BuffEvent(
     val buff: Stats
 ) : Event
 
-data class CreateSpellEvent(
+data class CastSpellEvent(
     val spell: Spell,
     val position: Position,
     val direction: Position,
-    val level: Int
+    val power: Int
 ) : Event
 
-data class DamageEvent(
+class HPChangeEvent private constructor(
     val entity: Entity,
     val amount: Int
-) : Event
+) : Event {
+    companion object {
+        fun createDamageEvent(entity: Entity, damage: Int) = HPChangeEvent(entity, -damage)
+        fun createHealEvent(entity: Entity, heal: Int) = HPChangeEvent(entity, heal)
+    }
+}
 
 data class LetterPressedEvent(
     val letter: Char

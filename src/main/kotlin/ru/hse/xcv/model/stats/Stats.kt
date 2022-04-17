@@ -16,12 +16,8 @@ data class Stats(
     val isDead
         get() = currentHealth == 0
 
-    fun damage(amount: Int) {
-        currentHealth = maxOf(0, currentHealth - amount)
-    }
-
-    fun heal(amount: Int) {
-        currentHealth = minOf(maxHealth, currentHealth + amount)
+    fun changeHP(amount: Int) {
+        currentHealth = minOf(maxHealth, maxOf(0, currentHealth + amount))
     }
 
     operator fun plusAssign(other: Stats) {
@@ -39,7 +35,7 @@ data class Stats(
     }
 
     operator fun times(multiplier: Int): Stats {
-        require(multiplier > 0)
+        require(multiplier >= 0)
         power *= multiplier
         armor *= multiplier
         currentHealth *= multiplier

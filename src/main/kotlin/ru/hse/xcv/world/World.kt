@@ -14,6 +14,7 @@ import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.util.debug
 import ru.hse.xcv.util.readRect
 import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
@@ -35,7 +36,7 @@ class World(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     init {
-        logger.debug("$model")
+        logger.debug(model)
         model.rect.fetchPositions().forEach { position ->
             val (tile, obj) = model.byPosition(position)
 
@@ -52,12 +53,16 @@ class World(
         logger.debug("world initialized")
     }
 
-    val hero: Hero = getObjectsByType(Hero::class).keys.first()
+    val hero: Hero = getAllObjectsOfType(Hero::class).keys.first()
+
+    fun getDynamicLayer(position: Position): DynamicObject? = model.dynamicLayer[position]
+
+    fun getStaticLayer(position: Position): FieldTile? = model.staticLayer[position]
 
     fun isEmpty(position: Position) =
         model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
 
-    fun <T : DynamicObject> getObjectsByType(clazz: KClass<T>): Map<T, ActionController> =
+    fun <T : DynamicObject> getAllObjectsOfType(clazz: KClass<T>): Map<T, ActionController> =
         controllers.mapNotNull { (obj, controller) ->
             clazz.safeCast(obj)?.let {
                 it to controller
@@ -119,7 +124,6 @@ class World(
             do {
                 delay(5000 / obj.moveSpeed.toLong())
             } while (controller.action())
-            deleteObject(obj)
         }
 
         return true
@@ -140,12 +144,11 @@ class World(
         }
     }
 
-    fun start() = getObjectsByType(Entity::class).entries.forEach { (entity, controller) ->
+    fun start() = getAllObjectsOfType(Entity::class).entries.forEach { (entity, controller) ->
         scope.launch {
             do {
                 delay(5000 / entity.moveSpeed.toLong())
-            } while (controller.action())
-            deleteObject(entity)
+            } while (!entity.isDead && controller.action())
             if (entity is Hero) {
                 logger.debug("Hero is dead")
             }

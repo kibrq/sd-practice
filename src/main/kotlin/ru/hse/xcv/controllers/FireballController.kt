@@ -1,8 +1,7 @@
 package ru.hse.xcv.controllers
 
-import org.hexworks.zircon.api.data.Size
-import ru.hse.xcv.events.DamageEvent
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
@@ -19,8 +18,7 @@ class FireballController(
     private var myMob: Mob? = null
 
     override fun action(): Boolean {
-        val rect = Size.create(20, 20)
-        myMob = myMob ?: world.nearestObjectInNeighbourhood(fireball.position, rect, Mob::class)
+        myMob = myMob ?: world.nearestObjectInNeighbourhood(fireball.position, fireball.fieldOfView, Mob::class)
         val offset = myMob?.let {
             (it.position - fireball.position).normalize()
         } ?: fireball.direction
@@ -30,16 +28,17 @@ class FireballController(
             val event = MoveEvent(fireball, offset, moveWorld = false)
             eventBus.fire(event)
             true
-        } else if (world.model.dynamicLayer[newPosition] is Hero) {
+        } else if (world.getDynamicLayer(newPosition) is Hero) {
             val event = MoveEvent(fireball, offset, moveWorld = false, crazyMovements = true)
             eventBus.fire(event)
             true
         } else {
-            val entity = world.model.dynamicLayer[newPosition] as? Entity
+            val entity = world.getDynamicLayer(newPosition) as? Entity
             entity?.let {
-                val event = DamageEvent(it, fireball.damage)
+                val event = HPChangeEvent.createDamageEvent(it, fireball.damage)
                 eventBus.fire(event)
             }
+            world.deleteObject(fireball)
             false
         }
     }

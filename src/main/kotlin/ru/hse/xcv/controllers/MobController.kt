@@ -2,9 +2,9 @@ package ru.hse.xcv.controllers
 
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
-import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.EventBus
+import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
@@ -21,30 +21,19 @@ interface MobStrategy {
 
 class AggressiveMobStrategy(
     override val mob: Mob,
-    override val world: World,
+    override val world: World
 ) : MobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val rect = Size.create(20, 20)
-        return world.nearestObjectInNeighbourhood(mob.position, rect, Hero::class)?.let {
-            val dp = (it.position - mob.position).normalize()
-            MoveEvent(mob, dp, moveWorld = false)
-        }
-    }
-}
-
-class CowardMobStrategy(
-    override val mob: Mob,
-    override val world: World,
-) : MobStrategy {
-    private val logger = LoggerFactory.getLogger(javaClass)
-
-    override fun takeAction(): Event? {
-        val rect = Size.create(20, 20)
-        return world.nearestObjectInNeighbourhood(mob.position, rect, Hero::class)?.let {
-            val dp = (mob.position - it.position).normalize()
-            MoveEvent(mob, dp, moveWorld = false)
+        val hero = world.nearestObjectInNeighbourhood(mob.position, mob.fieldOfView, Hero::class) ?: return null
+        val offset = (hero.position - mob.position).normalize()
+        val newPosition = mob.position + offset
+        val entity = world.getDynamicLayer(newPosition)
+        return if (entity is Hero) {
+            HPChangeEvent.createDamageEvent(entity, mob.damage)
+        } else {
+            MoveEvent(mob, offset, moveWorld = false)
         }
     }
 }
@@ -52,13 +41,13 @@ class CowardMobStrategy(
 
 class MobController(
     private val strategy: MobStrategy,
-    override val eventBus: EventBus,
+    override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun action(): Boolean {
-        if (strategy.mob.isDead()) return false
-        val event = strategy.takeAction() ?: return true
-        eventBus.fire(event)
+        strategy.takeAction()?.let {
+            eventBus.fire(it)
+        }
         return true
     }
 }

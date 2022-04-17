@@ -23,7 +23,7 @@ class ActionControllerFactory(
         return when (obj) {
             is Dragon -> MobController(AggressiveMobStrategy(obj, world), eventBus)
             is Zombie -> MobController(AggressiveMobStrategy(obj, world), eventBus)
-            is Maxim -> MobController(CowardMobStrategy(obj, world), eventBus)
+            is Maxim -> MobController(AggressiveMobStrategy(obj, world), eventBus)
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
             is Hero -> PlayerController(obj, inputManager, eventBus)
             else -> throw IllegalStateException()
