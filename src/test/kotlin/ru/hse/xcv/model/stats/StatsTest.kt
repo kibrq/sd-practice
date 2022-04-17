@@ -66,4 +66,20 @@ class StatsTest {
         assertEquals(0, stats1.maxHealth)
         assertEquals(0, stats1.currentHealth)
     }
+
+    @Test
+    fun `test change HP`() {
+        val stats = Stats(
+            armor = 3,
+            power = 1,
+            currentHealth = 10,
+            maxHealth = 10
+        )
+        stats.changeHP(-5)
+        assertEquals(5, stats.currentHealth)
+        stats.changeHP(-7)
+        assertEquals(0, stats.currentHealth)
+        stats.changeHP(228)
+        assertEquals(10, stats.currentHealth)
+    }
 }
