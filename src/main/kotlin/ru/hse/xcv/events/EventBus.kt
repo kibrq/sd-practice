@@ -19,6 +19,7 @@ class EventBus {
     private val screenSwitch = EventDispatcher<SwitchScreenEvent>()
     private val scrollInventory = EventDispatcher<ScrollInventoryEvent>()
     private val updateInventory = EventDispatcher<UpdateInventoryEvent>()
+    private val equipItem = EventDispatcher<EquipItemEvent>()
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -33,6 +34,7 @@ class EventBus {
             is SwitchScreenEvent -> screenSwitch.run(event)
             is ScrollInventoryEvent -> scrollInventory.run(event)
             is UpdateInventoryEvent -> updateInventory.run(event)
+            is EquipItemEvent -> equipItem.run(event)
         }
     }
 
@@ -55,8 +57,9 @@ class EventBus {
         screenSwitch.register(SwitchScreenEventHandler(screen, states))
     }
 
-    fun registerInventoryEventHandlers(inventory: InventoryItemList) {
+    fun registerInventoryEventHandlers(world: World, inventory: InventoryItemList) {
         scrollInventory.register(ScrollInventoryEventHandler(inventory))
         updateInventory.register(UpdateInventoryEventHandler(inventory))
+        equipItem.register(EquipItemEventHandler(world.hero, inventory))
     }
 }

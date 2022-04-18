@@ -52,7 +52,7 @@ class PlayerController(
             val event = if (obj is PickableItem) {
                 hero.inventory.add(obj.item)
                 world.deleteObject(obj)
-                UpdateInventoryEvent(hero.inventory)
+                UpdateInventoryEvent(hero.inventory, hero.equippedItems)
             } else {
                 MoveEvent(hero, hero.direction, moveWorld = true)
             }

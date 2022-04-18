@@ -4,9 +4,14 @@ import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.application.AppConfig
 import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.component.ScrollBar
+import org.hexworks.zircon.api.uievent.ComponentEventType
+import org.hexworks.zircon.api.uievent.UIEventResponse
+import ru.hse.xcv.events.EquipItemEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.input.InventoryInputManager
 import ru.hse.xcv.model.items.Item
+import kotlin.math.min
+
 
 class InventoryState(
     override val component: Component,
@@ -17,14 +22,34 @@ class InventoryState(
 
 data class InventoryItemList(
     var items: List<Item>,
+    var equippedItems: List<Item>,
     val scrollbar: ScrollBar
 )
 
-fun itemToComponent(item: Item) =
-    Components.label()
-        .withPreferredSize(20, 4)
+fun itemToComponent(item: Item, status: Boolean, eventBus: EventBus): Component {
+    val itemPanel = Components.panel()
+        .withPreferredSize(30, 4).build()
+    val itemName = Components.label()
+        .withPreferredSize(min(15, item.name.length), 4)
         .withText(item.name)
+        .withPosition(0, 0)
         .build()
+
+    val buttonText = if(status) "Equipped" else "Unequipped"
+    val itemsStatus = Components.button()
+        .withPreferredSize(buttonText.length + 2, 1)
+        .withText(buttonText)
+        .withPosition(15, 0)
+        .build()
+    itemsStatus.handleComponentEvents(ComponentEventType.ACTIVATED) {
+        eventBus.fire(EquipItemEvent(item, !status))
+        UIEventResponse.processed()
+    }
+
+    itemPanel.addComponent(itemName)
+    itemPanel.addComponent(itemsStatus)
+    return itemPanel
+}
 
 fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): Pair<InventoryState, InventoryItemList> {
     val (width, height) = appConfig.size
@@ -36,6 +61,7 @@ fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): Pair<Invent
     val scrollbar = Components.verticalScrollbar().withItemsShownAtOnce(5).build()
     val inventoryItemList = InventoryItemList(
         items = emptyList(),
+        equippedItems = emptyList(),
         scrollbar = scrollbar
     )
     val inventoryState = InventoryState(
@@ -49,9 +75,11 @@ fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): Pair<Invent
             .withPreferredSize(width, height)
             .build()
         val items = inventoryItemList.items.toList()
+        val equippedItems = inventoryItemList.equippedItems.toList()
+
         val end = minOf(items.size, event.newValue + scrollbar.itemsShownAtOnce)
         items.subList(event.newValue, end)
-            .map { itemToComponent(it) }
+            .map { itemToComponent(it, equippedItems.contains(it), eventBus) }
             .forEach { panel -> vbox.addComponent(panel) }
         itemsRootPanel.addComponent(vbox)
     }
