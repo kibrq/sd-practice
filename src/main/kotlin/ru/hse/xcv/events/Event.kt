@@ -5,10 +5,9 @@ import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.spells.Spell
 import ru.hse.xcv.model.stats.Stats
+import ru.hse.xcv.view.State
 
 sealed interface Event
-
-object NoneEvent : Event // do we really need it? (consider using `Event?`)
 
 data class MoveEvent(
     val obj: DynamicObject,
@@ -42,3 +41,11 @@ class HPChangeEvent private constructor(
 data class LetterPressedEvent(
     val letter: Char
 ) : Event
+
+data class SwitchScreenEvent(
+    val newState: State.Type
+) : Event
+
+data class ScrollInventoryEvent(
+    val dPos: Int
+): Event

@@ -1,8 +1,12 @@
-package ru.hse.xcv.util
+package ru.hse.xcv.input
+
+import org.hexworks.cobalt.logging.api.LoggerFactory
 
 import org.hexworks.zircon.api.uievent.KeyCode
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.LetterPressedEvent
+import ru.hse.xcv.events.SwitchScreenEvent
+import ru.hse.xcv.view.State
 import java.util.concurrent.ConcurrentSkipListSet
 
 const val SPELL_KEY_BUFFER_SIZE = 10
@@ -13,10 +17,6 @@ val WTF_Z = KeyCode.KEY_Z
 val WTF_X = KeyCode.KEY_X
 val WTF_C = KeyCode.KEY_C
 
-val UP = KeyCode.KEY_W
-val DOWN = KeyCode.KEY_S
-val LEFT = KeyCode.KEY_A
-val RIGHT = KeyCode.KEY_D
 
 val INVENTORY = KeyCode.KEY_I
 
@@ -29,7 +29,10 @@ val SPELL_CAST = KeyCode.SPACE
 /*
  * Very complicated logic for smooth movement.
  */
-class InputManager(private val eventBus: EventBus) {
+class GameInputManager(override val eventBus: EventBus): InputManager {
+
+    private val logger = LoggerFactory.getLogger(javaClass)
+
     var zxc: Boolean = false
         private set
     private val zxcQueue = ArrayDeque<Char>()
@@ -75,6 +78,7 @@ class InputManager(private val eventBus: EventBus) {
         if (code in toRemove) {
             nextToAdd.add(code)
         }
+        logger.debug("Movement key pressed")
         movementKeysPressed.add(code)
         previousMovementKeys.remove(code)
     }
@@ -93,16 +97,17 @@ class InputManager(private val eventBus: EventBus) {
     val readySpell: String?
         get() = readySpellsQueue.removeFirstOrNull()
 
-    fun keyPressed(code: KeyCode) {
+    override fun keyPressed(code: KeyCode) {
         when (code) {
             in MOVE_KEYS -> movementKeyPressed(code)
             in SPELL_KEYS -> spellKeyPressed(code)
             in ZXC_KEYS -> zxcKeyPressed(code)
+            INVENTORY -> eventBus.fire(SwitchScreenEvent(State.Type.INVENTORY))
             else -> return
         }
     }
 
-    fun keyReleased(code: KeyCode) {
+    override fun keyReleased(code: KeyCode) {
         if (code !in MOVE_KEYS) return
 
         if (code in previousMovementKeys) {

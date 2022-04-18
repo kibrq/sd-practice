@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
 class CastSpellEventHandler(
     override val world: World,
     private val eventBus: EventBus
-) : EventHandler<CastSpellEvent> {
+) : GameEventHandler<CastSpellEvent> {
     private val coolDowns = mutableMapOf<KClass<out Spell>, Long>()
     private val hero
         get() = world.hero
@@ -27,7 +27,7 @@ class CastSpellEventHandler(
     }
 
     private fun useChainLightning(spell: ChainLightningSpell, power: Int, pos: Position, directions: List<Position>) {
-
+        
     }
 
     private fun useFireballSpell(spell: FireballSpell, power: Int, pos: Position, directions: List<Position>) {

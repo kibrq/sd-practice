@@ -2,6 +2,7 @@ package ru.hse.xcv.view
 
 
 import org.hexworks.zircon.api.ComponentDecorations.box
+import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
@@ -18,7 +19,19 @@ import org.hexworks.zircon.api.game.base.BaseGameArea
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.screen.Screen
 import ru.hse.xcv.model.spells.Spell
+import ru.hse.xcv.input.GameInputManager
+import ru.hse.xcv.events.EventBus
+
 import kotlin.math.min
+
+
+class GameState(
+    override val component: Component,
+    override val input: GameInputManager,
+): State {
+    override val type = State.Type.GAME
+}
+
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -31,8 +44,9 @@ class CustomGameArea(
     initialFilters = listOf()
 )
 
+
 data class GameScreen(
-    val window: Screen,
+    val state: GameState,
     val view: FieldView,
     val panelControllers: PanelControllers
 )
@@ -100,8 +114,7 @@ class SpellsPanelController(
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
-fun createGameScreen(config: AppConfig): GameScreen {
-    val screen = Screen.create(SwingApplications.startTileGrid(config))
+fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
 
     val (width, height) = config.size
     val gameAreaVisibleSize = Size.create((width * GAME_SCREEN_SPLIT_RATIO).toInt(), height)
@@ -109,11 +122,11 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     val infoPanelSize = Size.create((width * (1 - GAME_SCREEN_SPLIT_RATIO)).toInt(), height)
 
-    val gameArea = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
+    val gameView = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
 
     val gamePanel = Components.panel()
         .withPreferredSize(gameAreaVisibleSize)
-        .withComponentRenderer(GameComponents.newGameAreaComponentRenderer(gameArea, ProjectionMode.TOP_DOWN))
+        .withComponentRenderer(GameComponents.newGameAreaComponentRenderer(gameView, ProjectionMode.TOP_DOWN))
         .build()
 
     val infoPanel = Components.panel()
@@ -187,11 +200,14 @@ fun createGameScreen(config: AppConfig): GameScreen {
     horizontalSplit.addComponent(gamePanel)
     horizontalSplit.addComponent(infoPanel)
 
-    screen.addComponent(horizontalSplit)
+    val gameState = GameState(
+        component = horizontalSplit,
+        input = GameInputManager(eventBus),
+    )
 
     return GameScreen(
-        screen,
-        gameArea,
+        gameState,
+        gameView,
         PanelControllers(
             HealthPanelController(healthPanel),
             LevelPanelController(levelValuePanel),

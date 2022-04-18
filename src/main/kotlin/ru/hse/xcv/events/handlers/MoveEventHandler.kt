@@ -8,7 +8,7 @@ import ru.hse.xcv.world.World
 
 class MoveEventHandler(
     override val world: World,
-) : EventHandler<MoveEvent> {
+) : GameEventHandler<MoveEvent> {
     override fun handle(event: MoveEvent) {
         val (obj, offset, needMoveWorld) = event
         val possibleMoves = mutableListOf(

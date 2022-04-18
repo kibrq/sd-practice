@@ -7,12 +7,19 @@ import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.book.WtfSpellBook
+import ru.hse.xcv.input.GameInputManager
+
+import ru.hse.xcv.input.UP
+import ru.hse.xcv.input.DOWN
+import ru.hse.xcv.input.LEFT
+import ru.hse.xcv.input.RIGHT
+
 import ru.hse.xcv.util.*
 import kotlin.math.abs
 
 class PlayerController(
     private val hero: Hero,
-    private val input: InputManager,
+    private val input: GameInputManager,
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)

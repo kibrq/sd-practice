@@ -12,7 +12,7 @@ class HPChangeHandler(
     private val healthPanelController: HealthPanelController,
     private val levelPanelController: LevelPanelController
 ) :
-    EventHandler<HPChangeEvent> {
+    GameEventHandler<HPChangeEvent> {
     override fun handle(event: HPChangeEvent) {
         val entity = event.entity
         entity.changeHP(event.amount)

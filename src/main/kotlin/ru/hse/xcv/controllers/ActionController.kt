@@ -4,7 +4,7 @@ import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.*
 import ru.hse.xcv.model.spells.FireballSpell
-import ru.hse.xcv.util.InputManager
+import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.world.World
 
 interface ActionController {
@@ -14,7 +14,7 @@ interface ActionController {
 
 class ActionControllerFactory(
     private val eventBus: EventBus,
-    private val inputManager: InputManager,
+    private val inputManager: GameInputManager,
 ) {
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
