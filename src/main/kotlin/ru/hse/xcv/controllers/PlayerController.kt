@@ -2,10 +2,7 @@ package ru.hse.xcv.controllers
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.events.CastSpellEvent
-import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.events.MoveEvent
-import ru.hse.xcv.events.SpellBookChangeEvent
+import ru.hse.xcv.events.*
 import ru.hse.xcv.input.*
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.PickableItem
@@ -52,13 +49,14 @@ class PlayerController(
             hero.direction = Position.create(x, y)
             val newPosition = hero.position + hero.direction
             val obj = world.getDynamicLayer(newPosition)
-            if (obj is PickableItem) {
+            val event = if (obj is PickableItem) {
                 hero.inventory.add(obj.item)
                 world.deleteObject(obj)
+                UpdateInventoryEvent(hero.inventory)
             } else {
-                val event = MoveEvent(hero, hero.direction, moveWorld = true)
-                eventBus.fire(event)
+                MoveEvent(hero, hero.direction, moveWorld = true)
             }
+            eventBus.fire(event)
         }
     }
 

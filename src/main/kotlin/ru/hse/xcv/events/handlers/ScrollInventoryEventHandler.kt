@@ -1,7 +1,6 @@
 package ru.hse.xcv.events.handlers
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
-
 import ru.hse.xcv.events.ScrollInventoryEvent
 import ru.hse.xcv.view.InventoryItemList
 
@@ -16,7 +15,7 @@ class ScrollInventoryEventHandler(
         val scrollbar = inventoryItemList.scrollbar
         if (event.dPos < 0) {
             scrollbar.decrementValues()
-        } else {
+        } else if (event.dPos > 0 && scrollbar.currentValue < inventoryItemList.items.size) {
             scrollbar.incrementValues()
         }
     }

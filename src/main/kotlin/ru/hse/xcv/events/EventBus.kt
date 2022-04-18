@@ -18,6 +18,7 @@ class EventBus {
 
     private val screenSwitch = EventDispatcher<SwitchScreenEvent>()
     private val scrollInventory = EventDispatcher<ScrollInventoryEvent>()
+    private val updateInventory = EventDispatcher<UpdateInventoryEvent>()
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
@@ -31,6 +32,7 @@ class EventBus {
             is SpellBookChangeEvent -> spellBookChange.run(event)
             is SwitchScreenEvent -> screenSwitch.run(event)
             is ScrollInventoryEvent -> scrollInventory.run(event)
+            is UpdateInventoryEvent -> updateInventory.run(event)
         }
     }
 
@@ -55,5 +57,6 @@ class EventBus {
 
     fun registerInventoryEventHandlers(inventory: InventoryItemList) {
         scrollInventory.register(ScrollInventoryEventHandler(inventory))
+        updateInventory.register(UpdateInventoryEventHandler(inventory))
     }
 }

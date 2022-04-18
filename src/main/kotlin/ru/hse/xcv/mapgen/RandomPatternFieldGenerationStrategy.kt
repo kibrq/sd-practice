@@ -59,7 +59,7 @@ class RandomPatternFieldGenerationStrategy(
             }
         }
 
-        val itemThreshold = Size.create(30, 30)
+        val itemThreshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), itemThreshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             floors.keys.random().let {
