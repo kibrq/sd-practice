@@ -41,7 +41,7 @@ fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): CreateInven
         .withPreferredSize(width, height)
         .build()
 
-    val items = (0..10).map { Helmet().apply { name = "Helmet${it}" } }.toMutableList()
+    val items = (0..10).map { Helmet().apply { name = "Helmet$it" } }.toMutableList()
     val scrollbar = Components.verticalScrollbar().withItemsShownAtOnce(5).build()
 
     scrollbar.onValueChange { event ->

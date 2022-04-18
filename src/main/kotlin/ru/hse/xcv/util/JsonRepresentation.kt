@@ -7,10 +7,11 @@ import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
-import ru.hse.xcv.model.entities.Dragon
-import ru.hse.xcv.model.entities.Hero
-import ru.hse.xcv.model.entities.Maxim
-import ru.hse.xcv.model.entities.Zombie
+import ru.hse.xcv.model.entities.*
+import ru.hse.xcv.model.items.BodyArmor
+import ru.hse.xcv.model.items.Helmet
+import ru.hse.xcv.model.items.Shield
+import ru.hse.xcv.model.items.Sword
 
 @Serializable
 data class JsonRepresentationPosition(val x: Int, val y: Int)
@@ -84,9 +85,14 @@ private fun rectFromJsonRepresentation(r: JsonRepresentationRect): Rect {
 private fun dynamicObjectFromJsonRepresentation(o: JsonRepresentationDynamicObject): DynamicObject {
     return when (o.type) {
         "Hero" -> Hero(positionFromJsonRepresentation(o.position))
-        "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
-        "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
         "Dragon" -> Dragon(positionFromJsonRepresentation(o.position))
+        "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
+        "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
+        "Microchel" -> Microchel(positionFromJsonRepresentation(o.position))
+        "BodyArmor" -> PickableItem(positionFromJsonRepresentation(o.position), BodyArmor())
+        "Helmet" -> PickableItem(positionFromJsonRepresentation(o.position), Helmet())
+        "Shield" -> PickableItem(positionFromJsonRepresentation(o.position), Shield())
+        "Sword" -> PickableItem(positionFromJsonRepresentation(o.position), Sword())
         else -> throw IllegalStateException()
     }
 }

@@ -8,16 +8,20 @@ import ru.hse.xcv.events.MoveEvent
 import ru.hse.xcv.events.SpellBookChangeEvent
 import ru.hse.xcv.input.*
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.PickableItem
 import ru.hse.xcv.model.spells.book.WtfSpellBook
 import ru.hse.xcv.util.sum
+import ru.hse.xcv.world.World
 import kotlin.math.abs
 
 class PlayerController(
-    private val hero: Hero,
+    private val world: World,
     private val input: GameInputManager,
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private val hero: Hero
+        get() = world.hero
     private var wtfSpellBook = WtfSpellBook()
     private var wtfMode = false
 
@@ -46,8 +50,15 @@ class PlayerController(
 
         if (abs(x) + abs(y) > 0) {
             hero.direction = Position.create(x, y)
-            val event = MoveEvent(hero, hero.direction, moveWorld = true)
-            eventBus.fire(event)
+            val newPosition = hero.position + hero.direction
+            val obj = world.getDynamicLayer(newPosition)
+            if (obj is PickableItem) {
+                hero.inventory.add(obj.item)
+                world.deleteObject(obj)
+            } else {
+                val event = MoveEvent(hero, hero.direction, moveWorld = true)
+                eventBus.fire(event)
+            }
         }
     }
 

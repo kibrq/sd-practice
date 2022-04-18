@@ -12,7 +12,7 @@ import ru.hse.xcv.model.stats.Stats
 
 class Hero(position: Position) : Entity(position) {
     val spellBook: HeroSpellBook = HeroSpellBook()
-    val inventory: List<Item> = ArrayList()
+    val inventory: MutableList<Item> = mutableListOf()
     val experience: Experience = Experience()
     val power
         get() = stats.power
