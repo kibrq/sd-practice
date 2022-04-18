@@ -4,6 +4,7 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.spells.Spell
+import ru.hse.xcv.model.spells.book.SpellBook
 import ru.hse.xcv.model.stats.Stats
 import ru.hse.xcv.view.State
 
@@ -49,3 +50,7 @@ data class SwitchScreenEvent(
 data class ScrollInventoryEvent(
     val dPos: Int
 ): Event
+data class WTFModeEvent(
+    val isEnabled: Boolean,
+    val spellBook: SpellBook
+) : Event

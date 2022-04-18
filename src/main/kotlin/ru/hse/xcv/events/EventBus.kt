@@ -15,6 +15,7 @@ class EventBus {
     private val createSpell = EventDispatcher<CastSpellEvent>()
     private val changeHP = EventDispatcher<HPChangeEvent>()
     private val letterPressed = EventDispatcher<LetterPressedEvent>()
+    private val wtfMode = EventDispatcher<WTFModeEvent>()
 
     private val screenSwitch = EventDispatcher<SwitchScreenEvent>()
     private val scrollInventory= EventDispatcher<ScrollInventoryEvent>()
@@ -30,12 +31,14 @@ class EventBus {
             is LetterPressedEvent -> letterPressed.run(event)
             is SwitchScreenEvent -> screenSwitch.run(event)
             is ScrollInventoryEvent -> scrollInventory.run(event)
+            is WTFModeEvent -> wtfMode.run(event)
         }
     }
 
     fun registerGameHandlers(world: World, panelControllers: PanelControllers) {
         move.register(MoveEventHandler(world))
         buff.register(BuffEventHandler(world))
+        wtfMode.register(WTFModeEventHandler(world, panelControllers.spellsPanelController))
         createSpell.register(CastSpellEventHandler(world, this))
         changeHP.register(
             HPChangeHandler(

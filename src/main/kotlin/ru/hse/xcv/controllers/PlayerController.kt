@@ -5,6 +5,7 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
+import ru.hse.xcv.events.WTFModeEvent
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.book.WtfSpellBook
 import ru.hse.xcv.input.GameInputManager
@@ -29,14 +30,17 @@ class PlayerController(
     private fun handleWtfMode() = input.zxc.let {
         if (it && !wtfMode) {
             hero.moveSpeed *= 2
+            eventBus.fire(WTFModeEvent(true, wtfSpellBook))
         } else if (!it && wtfMode) {
             hero.moveSpeed /= 2
+            eventBus.fire(WTFModeEvent(false, hero.spellBook))
         }
         wtfMode = it
     }
 
     private fun handleMovement() {
-        val (x, y) = input.currentMovementKeys.map {
+        val currentPressedKeys = input.currentMovementKeys
+        val (x, y) = currentPressedKeys.map {
             when (it) {
                 UP -> 0 to -1
                 DOWN -> 0 to 1
