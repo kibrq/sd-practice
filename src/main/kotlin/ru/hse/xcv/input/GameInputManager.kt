@@ -91,7 +91,7 @@ class GameInputManager(override val eventBus: EventBus): InputManager {
             previousMovementKeys.addAll(toAdd)
             toAdd = nextToAdd.toSet()
             nextToAdd.clear()
-            return previousMovementKeys
+            return previousMovementKeys.toSet()
         }
 
     val readySpell: String?

@@ -1,11 +1,13 @@
 package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
+import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.HPChangeEvent
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.spells.*
 import ru.hse.xcv.util.possibleDirections
 import ru.hse.xcv.world.World
@@ -26,8 +28,12 @@ class CastSpellEventHandler(
         return listOf(direction, secondPriority) + otherPositions
     }
 
-    private fun useChainLightning(spell: ChainLightningSpell, power: Int, pos: Position, directions: List<Position>) {
-        
+    private fun useChainLightning(spell: ChainLightningSpell) {
+        val mob = world.nearestVisibleObjectInRectangle(hero.position, Size.create(spell.range, spell.range), Mob::class) ?: return
+        mob.isConfused.incrementAndGet()
+        world.delayed(spell.durationMillis) {
+            mob.isConfused.decrementAndGet()
+        }
     }
 
     private fun useFireballSpell(spell: FireballSpell, power: Int, pos: Position, directions: List<Position>) {
@@ -70,7 +76,7 @@ class CastSpellEventHandler(
         }
         val directions = getDirectionsPrioritized(event.direction)
         when (event.spell) {
-            is ChainLightningSpell -> useChainLightning(event.spell, event.power, event.position, directions)
+            is ChainLightningSpell -> useChainLightning(event.spell)
             is FireballSpell -> useFireballSpell(event.spell, event.power, event.position, directions)
             is HealSpell -> useHealSpell(event.spell, event.power)
             is SpeedBoostSpell -> useSpeedBoostSpell(event.spell)
