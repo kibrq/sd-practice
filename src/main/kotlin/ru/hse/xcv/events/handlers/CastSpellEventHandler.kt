@@ -1,7 +1,6 @@
 package ru.hse.xcv.events.handlers
 
 import org.hexworks.zircon.api.data.Position
-import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.HPChangeEvent
@@ -29,7 +28,7 @@ class CastSpellEventHandler(
     }
 
     private fun useChainLightning(spell: ChainLightningSpell) {
-        val mob = world.nearestVisibleObjectInRectangle(hero.position, Size.create(spell.range, spell.range), Mob::class) ?: return
+        val mob = world.nearestVisibleObjectInRectangle(hero.position, spell.range, Mob::class) ?: return
         mob.isConfused.incrementAndGet()
         world.delayed(spell.durationMillis) {
             mob.isConfused.decrementAndGet()

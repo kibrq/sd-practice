@@ -29,8 +29,7 @@ val SPELL_CAST = KeyCode.SPACE
 /*
  * Very complicated logic for smooth movement.
  */
-class GameInputManager(override val eventBus: EventBus): InputManager {
-
+class GameInputManager(override val eventBus: EventBus) : InputManager {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     var zxc: Boolean = false
@@ -121,6 +120,5 @@ class GameInputManager(override val eventBus: EventBus): InputManager {
         private val ZXC_KEYS = setOf(WTF_Z, WTF_X, WTF_C)
         private val MOVE_KEYS = setOf(UP, DOWN, LEFT, RIGHT)
         private val SPELL_KEYS = setOf(SPELL_H, SPELL_J, SPELL_K, SPELL_L, SPELL_CAST)
-        val SUPPORTED_KEYS = ZXC_KEYS + MOVE_KEYS + SPELL_KEYS
     }
 }

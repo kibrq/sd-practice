@@ -7,20 +7,17 @@ import ru.hse.xcv.view.InventoryItemList
 
 class ScrollInventoryEventHandler(
     override val inventoryItemList: InventoryItemList
-): InventoryEventHandler<ScrollInventoryEvent> {
-
+) : InventoryEventHandler<ScrollInventoryEvent> {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun handle(event: ScrollInventoryEvent) {
-        logger.debug("Handling")
+        logger.debug("Handling scroll")
 
-        val (_, _, scrollbar) = inventoryItemList
-        val (dPos) = event
-        if (dPos < 0) {
+        val scrollbar = inventoryItemList.scrollbar
+        if (event.dPos < 0) {
             scrollbar.decrementValues()
         } else {
             scrollbar.incrementValues()
         }
     }
-    
 }

@@ -1,4 +1,4 @@
-package ru.hse.xcv.strategies
+package ru.hse.xcv.controllers.strategies
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import ru.hse.xcv.events.Event
@@ -11,7 +11,5 @@ class PassiveMobStrategy(
 ) : MobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun takeAction(): Event? {
-        return null
-    }
+    override fun takeAction(): Event? = null
 }

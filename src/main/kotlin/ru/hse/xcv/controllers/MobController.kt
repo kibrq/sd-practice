@@ -2,8 +2,8 @@ package ru.hse.xcv.controllers
 
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
+import ru.hse.xcv.controllers.strategies.MobStrategy
 import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.strategies.MobStrategy
 
 class MobController(
     private val strategy: MobStrategy,

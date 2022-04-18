@@ -10,7 +10,6 @@ import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.readRect
 
-
 fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
     val (x, y, width, height) = rect
 
@@ -24,7 +23,6 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
         rect.splitHorizontal(width / 2)
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
-
 
 class RandomPatternFieldGenerationStrategy(
     private val size: Size,
@@ -55,7 +53,6 @@ class RandomPatternFieldGenerationStrategy(
         recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             val mobCount = (hardness * floors.count()) / threshold.height / threshold.width + 1
-//            val mobCount = 0
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key)
             }
