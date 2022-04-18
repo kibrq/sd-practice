@@ -29,6 +29,7 @@ private val FIELD_SIZE = Size.create(100, 100)
 fun startGame(
     view: FieldView,
     panelControllers: PanelControllers,
+    inventoryList: InventoryItemList,
     inputManager: GameInputManager,
     strategy: FieldGenerationStrategy,
     eventBus: EventBus
@@ -41,6 +42,8 @@ fun startGame(
     )
 
     eventBus.registerGameHandlers(world, panelControllers)
+
+    eventBus.registerInventoryEventHandlers(world, inventoryList)
 
     world.hero.let {
         view.makeCentered(it.position)
@@ -69,13 +72,10 @@ fun main() {
         listOf(gameState, inventoryState)
     )
 
-    eventBus.registerInventoryEventHandlers(
-        inventoryList
-    )
-
     startGame(
         gameView,
         panelControllers,
+        inventoryList,
         gameState.input,
         RandomPatternFieldGenerationStrategy(FIELD_SIZE),
         eventBus

@@ -1,6 +1,5 @@
 package ru.hse.xcv.world
 
-
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -12,6 +11,7 @@ import ru.hse.xcv.controllers.ActionControllerFactory
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.OnMapObject
 import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.debug
@@ -41,14 +41,16 @@ class World(
         model.rect.fetchPositions().forEach { position ->
             val (tile, obj) = model.byPosition(position)
 
-            if (tile != null) {
-                view.setBlockAt(position.toPosition3D(0), graphics.staticLayerTransform(tile))
+            tile?.let {
+                view.setBlockAt(position.toPosition3D(0), graphics.staticLayerTransform(it))
             }
 
-            if (obj != null) {
-                val controller = controllerFactory.create(obj, this)
-                controllers[obj] = controller
-                view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
+            obj?.let {
+                view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(it))
+                if (it is DynamicObject) {
+                    val controller = controllerFactory.create(it, this)
+                    controllers[it] = controller
+                }
             }
         }
         logger.debug("world initialized")
@@ -62,19 +64,12 @@ class World(
         block()
     }
 
-    fun getDynamicLayer(position: Position): DynamicObject? = model.dynamicLayer[position]
+    fun getDynamicLayer(position: Position): OnMapObject? = model.dynamicLayer[position]
 
     fun getStaticLayer(position: Position): FieldTile? = model.staticLayer[position]
 
     fun isEmpty(position: Position) =
         model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
-
-    fun <T : DynamicObject> getAllObjectsOfType(clazz: KClass<T>): Map<T, ActionController> =
-        controllers.mapNotNull { (obj, controller) ->
-            clazz.safeCast(obj)?.let {
-                it to controller
-            }
-        }.toMap()
 
     fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
@@ -107,7 +102,7 @@ class World(
         return true
     }
 
-    fun createObject(obj: DynamicObject, position: Position): Boolean {
+    fun createObject(obj: OnMapObject, position: Position): Boolean {
         val onCurrent = lock.read {
             model.byPosition(position)
         }
@@ -118,25 +113,25 @@ class World(
 
         logger.debug("Put $obj on map")
 
-        val controller = controllerFactory.create(obj, this)
-
         lock.write {
             obj.position = position
             model.dynamicLayer[position] = obj
-            controllers[obj] = controller
             view.setBlockAt(position.toPosition3D(1), graphics.dynamicLayerTransform(obj))
-        }
+            if (obj is DynamicObject) {
+                val controller = controllerFactory.create(obj, this)
+                controllers[obj] = controller
+                scope.launch {
+                    do {
+                        delay(5000 / obj.moveSpeed.toLong())
+                    } while (controller.action())
+                }
 
-        scope.launch {
-            do {
-                delay(5000 / obj.moveSpeed.toLong())
-            } while (controller.action())
+            }
         }
-
         return true
     }
 
-    fun deleteObject(obj: DynamicObject) {
+    fun deleteObject(obj: OnMapObject) {
         val onCurrent = lock.read {
             model.byPosition(obj.position)
         }
@@ -146,8 +141,10 @@ class World(
 
         lock.write {
             model.dynamicLayer.remove(obj.position)
-            controllers.remove(obj)
             view.setBlockAt(obj.position.toPosition3D(1), NULL_BLOCK)
+            if (obj is DynamicObject) {
+                controllers.remove(obj)
+            }
         }
     }
 
@@ -162,6 +159,23 @@ class World(
         }
     }
 
+    fun <T : OnMapObject> nearestVisibleObjectInRectangle(center: Position, size: Size, clazz: KClass<T>): T? =
+        readNeighbourhood(center, size).second.values
+            .mapNotNull { clazz.safeCast(it) }
+            .filter { isVisibleFrom(it.position, center) }
+            .minByOrNull {
+                val distance = it.position - center
+                distance.x * distance.x + distance.y * distance.y
+            }
+
+    private fun <T : OnMapObject> getAllObjectsOfType(clazz: KClass<T>): Map<T, ActionController> = lock.read {
+        controllers.mapNotNull { (obj, controller) ->
+            clazz.safeCast(obj)?.let {
+                it to controller
+            }
+        }.toMap()
+    }
+
     private fun isVisibleFrom(position: Position, other: Position): Boolean = lock.read {
         position.straightPathTo(other).all {
             model.staticLayer[it] == FieldTile.FLOOR
@@ -173,15 +187,6 @@ class World(
         val rect = Rect.create(center - shift, size)
         model.staticLayer.readRect(rect) to model.dynamicLayer.readRect(rect)
     }
-
-    fun <T : DynamicObject> nearestVisibleObjectInRectangle(center: Position, size: Size, clazz: KClass<T>): T? =
-        readNeighbourhood(center, size).second.values
-            .mapNotNull { clazz.safeCast(it) }
-            .filter { isVisibleFrom(it.position, center) }
-            .minByOrNull {
-                val distance = it.position - center
-                distance.x * distance.x + distance.y * distance.y
-            }
 
     companion object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()

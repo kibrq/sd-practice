@@ -2,22 +2,23 @@ package ru.hse.xcv.controllers
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.events.CastSpellEvent
-import ru.hse.xcv.events.EventBus
-import ru.hse.xcv.events.MoveEvent
-import ru.hse.xcv.events.SpellBookChangeEvent
+import ru.hse.xcv.events.*
 import ru.hse.xcv.input.*
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.PickableItem
 import ru.hse.xcv.model.spells.book.WtfSpellBook
 import ru.hse.xcv.util.sum
+import ru.hse.xcv.world.World
 import kotlin.math.abs
 
 class PlayerController(
-    private val hero: Hero,
+    private val world: World,
     private val input: GameInputManager,
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private val hero: Hero
+        get() = world.hero
     private var wtfSpellBook = WtfSpellBook()
     private var wtfMode = false
 
@@ -46,7 +47,15 @@ class PlayerController(
 
         if (abs(x) + abs(y) > 0) {
             hero.direction = Position.create(x, y)
-            val event = MoveEvent(hero, hero.direction, moveWorld = true)
+            val newPosition = hero.position + hero.direction
+            val obj = world.getDynamicLayer(newPosition)
+            val event = if (obj is PickableItem) {
+                hero.inventory.add(obj.item)
+                world.deleteObject(obj)
+                UpdateInventoryEvent(hero.inventory, hero.equippedItems)
+            } else {
+                MoveEvent(hero, hero.direction, moveWorld = true)
+            }
             eventBus.fire(event)
         }
     }

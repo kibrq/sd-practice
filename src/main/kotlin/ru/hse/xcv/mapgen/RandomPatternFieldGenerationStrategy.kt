@@ -3,11 +3,12 @@ package ru.hse.xcv.mapgen
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
-import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.OnMapObject
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
+import ru.hse.xcv.model.entities.PickableItem
 import ru.hse.xcv.util.readRect
 
 fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
@@ -47,14 +48,22 @@ class RandomPatternFieldGenerationStrategy(
             }
         }
 
-        val dynamicLayer = mutableMapOf<Position, DynamicObject>()
+        val dynamicLayer = mutableMapOf<Position, OnMapObject>()
 
-        val threshold = Size.create(20, 20)
-        recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
+        val mobThreshold = Size.create(20, 20)
+        recursiveSplit(Rect.create(Position.zero(), size), mobThreshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
-            val mobCount = (hardness * floors.count()) / threshold.height / threshold.width + 1
-            floors.asSequence().shuffled().take(mobCount).forEach {
-                dynamicLayer[it.key] = Mob.getRandomMob(it.key)
+            val mobCount = (hardness * floors.count()) / mobThreshold.height / mobThreshold.width + 1
+            floors.keys.shuffled().take(mobCount).forEach {
+                dynamicLayer[it] = Mob.getRandomMob(it)
+            }
+        }
+
+        val itemThreshold = Size.create(20, 20)
+        recursiveSplit(Rect.create(Position.zero(), size), itemThreshold).forEach { rect ->
+            val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
+            floors.keys.random().let {
+                dynamicLayer[it] = PickableItem.getRandomPickableItem(it)
             }
         }
 

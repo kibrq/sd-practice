@@ -7,13 +7,13 @@ import ru.hse.xcv.view.State
 
 class SwitchScreenEventHandler(
     private val window: MainScreen,
-    private val states: List<State>,
+    private val states: List<State>
 ) : EventHandler<SwitchScreenEvent> {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun handle(event: SwitchScreenEvent) {
         val (newType) = event
-        val state = states.first { it.type == newType }
+        val state = states.firstOrNull { it.type == newType } ?: return
         window.screen.detachAllComponents()
         window.screen.addComponent(state.component)
         window.input = state.input

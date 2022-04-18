@@ -12,7 +12,7 @@ enum class FieldTile {
 
 class FieldModel(
     val staticLayer: Map<Position, FieldTile>,
-    val dynamicLayer: MutableMap<Position, DynamicObject>,
+    val dynamicLayer: MutableMap<Position, OnMapObject>,
     val rect: Rect
 ) : HasSize {
     override val size = rect.size

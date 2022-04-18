@@ -11,8 +11,11 @@ import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.stats.Stats
 
 class Hero(position: Position) : Entity(position) {
+    private var maxEquippedItems: Int = 3
     val spellBook: HeroSpellBook = HeroSpellBook()
-    val inventory: List<Item> = ArrayList()
+    val inventory: MutableList<Item> = mutableListOf()
+    val equippedItems: MutableList<Item> = mutableListOf()
+
     val experience: Experience = Experience()
     val power
         get() = stats.power
@@ -44,5 +47,21 @@ class Hero(position: Position) : Entity(position) {
         if (levels > 0) {
             stats += statsPerLevel * levels
         }
+    }
+
+    fun equipItem(item: Item): Boolean {
+        return if (item in inventory && equippedItems.size < maxEquippedItems) {
+            equippedItems.add(item)
+            stats += item.bonusStats
+            true
+        } else false
+    }
+
+    fun unequipItem(item: Item): Boolean {
+        return if (equippedItems.contains(item)) {
+            equippedItems.remove(item)
+            stats -= item.bonusStats
+            true
+        } else false
     }
 }

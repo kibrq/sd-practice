@@ -16,7 +16,7 @@ class AggressiveMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun takeAction(): Event? {
-        val hero = world.nearestVisibleObjectInRectangle(mob.position, mob.fieldOfView, Hero::class) ?: return null
+        val hero = mob.findHero(world) ?: return null
         val offset = (hero.position - mob.position).normalize()
         val newPosition = mob.position + offset
         val entity = world.getDynamicLayer(newPosition)

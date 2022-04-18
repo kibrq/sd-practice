@@ -7,7 +7,7 @@ import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.world.World
 
 class MoveEventHandler(
-    override val world: World,
+    override val world: World
 ) : GameEventHandler<MoveEvent> {
     override fun handle(event: MoveEvent) {
         val (obj, offset, needMoveWorld) = event

@@ -1,18 +1,21 @@
 package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
-import kotlin.random.Random
+import ru.hse.xcv.world.World
 
 abstract class Mob(position: Position) : Entity(position) {
     abstract val experienceGain: Int
 
+    fun findHero(world: World): Hero? = world.nearestVisibleObjectInRectangle(position, fieldOfView, Hero::class)
+
     companion object {
-        fun getRandomMob(position: Position) =
-            when (Random.nextInt(0, 3)) {
-                0 -> Zombie(position)
-                1 -> Maxim(position)
-                2 -> Dragon(position)
-                else -> throw IllegalStateException()
-            }
+        private val allMobs = listOf<(Position) -> Mob>(
+            { Dragon(it) },
+            { Maxim(it) },
+            { Zombie(it) },
+            { Microchel(it) }
+        )
+
+        fun getRandomMob(position: Position) = allMobs.random().invoke(position)
     }
 }

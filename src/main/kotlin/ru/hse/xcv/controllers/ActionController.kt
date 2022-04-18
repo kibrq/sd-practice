@@ -18,7 +18,7 @@ interface ActionController {
 
 class ActionControllerFactory(
     private val eventBus: EventBus,
-    private val inputManager: GameInputManager,
+    private val inputManager: GameInputManager
 ) {
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
@@ -27,7 +27,7 @@ class ActionControllerFactory(
             is Maxim -> MobController(CanBeConfusedMobStrategy(AggressiveMobStrategy(obj, world)), eventBus)
             is Microchel -> MobController(CanBeConfusedMobStrategy(CowardMobStrategy(obj, world)), eventBus)
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
-            is Hero -> PlayerController(obj, inputManager, eventBus)
+            is Hero -> PlayerController(world, inputManager, eventBus)
             else -> throw IllegalStateException()
         }
     }

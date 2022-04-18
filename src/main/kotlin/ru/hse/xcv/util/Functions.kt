@@ -53,6 +53,9 @@ fun Position.straightPathTo(other: Position): List<Position> {
     return (xList + yList).distinct().map { Position.create(it.first, it.second) }
 }
 
+val Position.isAdjacentDirection: Boolean
+    get() = abs(x) + abs(y) == 1
+
 operator fun Pair<Int, Int>.plus(other: Pair<Int, Int>) = (first + other.first) to (second + other.second)
 
 fun List<Pair<Int, Int>>.sum(): Pair<Int, Int> = fold(0 to 0) { acc, cur -> acc + cur }
