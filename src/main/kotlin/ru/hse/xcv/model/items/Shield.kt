@@ -7,4 +7,3 @@ class Shield : Item {
     override val description: String = "Shield"
     override val bonusStats: Stats = Stats(armor = 5)
 }
-

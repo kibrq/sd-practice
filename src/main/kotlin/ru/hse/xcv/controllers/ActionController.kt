@@ -1,14 +1,14 @@
 package ru.hse.xcv.controllers
 
+import ru.hse.xcv.controllers.strategies.AggressiveMobStrategy
+import ru.hse.xcv.controllers.strategies.CanBeConfusedMobStrategy
+import ru.hse.xcv.controllers.strategies.CowardMobStrategy
+import ru.hse.xcv.controllers.strategies.PassiveMobStrategy
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.*
 import ru.hse.xcv.model.spells.FireballSpell
-import ru.hse.xcv.strategies.AggressiveMobStrategy
-import ru.hse.xcv.strategies.CanBeConfusedMobStrategy
-import ru.hse.xcv.strategies.CowardMobStrategy
-import ru.hse.xcv.strategies.PassiveMobStrategy
 import ru.hse.xcv.world.World
 
 interface ActionController {

@@ -1,4 +1,4 @@
-package ru.hse.xcv.strategies
+package ru.hse.xcv.controllers.strategies
 
 import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.MoveEvent

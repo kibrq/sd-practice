@@ -1,4 +1,4 @@
-package ru.hse.xcv.strategies
+package ru.hse.xcv.controllers.strategies
 
 import org.hexworks.cobalt.logging.api.LoggerFactory
 import ru.hse.xcv.events.Event

@@ -2,11 +2,10 @@ package ru.hse.xcv.view
 
 
 import org.hexworks.zircon.api.ComponentDecorations.box
-import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
-import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
+import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.component.Label
 import org.hexworks.zircon.api.component.Panel
 import org.hexworks.zircon.api.component.ProgressBar
@@ -17,21 +16,17 @@ import org.hexworks.zircon.api.game.GameArea
 import org.hexworks.zircon.api.game.ProjectionMode
 import org.hexworks.zircon.api.game.base.BaseGameArea
 import org.hexworks.zircon.api.graphics.BoxType
-import org.hexworks.zircon.api.screen.Screen
-import ru.hse.xcv.model.spells.Spell
-import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.events.EventBus
-
+import ru.hse.xcv.input.GameInputManager
+import ru.hse.xcv.model.spells.Spell
 import kotlin.math.min
-
 
 class GameState(
     override val component: Component,
-    override val input: GameInputManager,
-): State {
+    override val input: GameInputManager
+) : State {
     override val type = State.Type.GAME
 }
-
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -43,7 +38,6 @@ class CustomGameArea(
     initialActualSize = actualSize.toSize3D(100),
     initialFilters = listOf()
 )
-
 
 data class GameScreen(
     val state: GameState,
@@ -64,7 +58,6 @@ class HealthPanelController(
         panel.progress = 100 * (hp.toDouble() / maxHP)
     }
 }
-
 
 class LevelPanelController(
     private val panel: Label
@@ -120,7 +113,6 @@ class SpellsPanelController(
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
 fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
-
     val (width, height) = config.size
     val gameAreaVisibleSize = Size.create((width * GAME_SCREEN_SPLIT_RATIO).toInt(), height)
     val gameAreaTotalSize = Size.create(Int.MAX_VALUE, Int.MAX_VALUE)
@@ -207,7 +199,7 @@ fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
 
     val gameState = GameState(
         component = horizontalSplit,
-        input = GameInputManager(eventBus),
+        input = GameInputManager(eventBus)
     )
 
     return GameScreen(

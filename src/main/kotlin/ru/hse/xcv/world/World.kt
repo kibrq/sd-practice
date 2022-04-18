@@ -54,7 +54,8 @@ class World(
         logger.debug("world initialized")
     }
 
-    val hero: Hero = getAllObjectsOfType(Hero::class).keys.first()
+    val hero: Hero
+        get() = getAllObjectsOfType(Hero::class).keys.first()
 
     fun delayed(millis: Long, block: () -> Unit) = scope.launch {
         delay(millis)
@@ -182,9 +183,7 @@ class World(
                 distance.x * distance.x + distance.y * distance.y
             }
 
-    companion
-
-    object {
+    companion object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()
             .withContent(Tile.empty())
             .withEmptyTile(Tile.empty())

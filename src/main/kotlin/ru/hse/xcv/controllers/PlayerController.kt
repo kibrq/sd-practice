@@ -5,17 +5,11 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
-import ru.hse.xcv.events.WTFModeEvent
+import ru.hse.xcv.events.SpellBookChangeEvent
+import ru.hse.xcv.input.*
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.spells.book.WtfSpellBook
-import ru.hse.xcv.input.GameInputManager
-
-import ru.hse.xcv.input.UP
-import ru.hse.xcv.input.DOWN
-import ru.hse.xcv.input.LEFT
-import ru.hse.xcv.input.RIGHT
-
-import ru.hse.xcv.util.*
+import ru.hse.xcv.util.sum
 import kotlin.math.abs
 
 class PlayerController(
@@ -30,10 +24,10 @@ class PlayerController(
     private fun handleWtfMode() = input.zxc.let {
         if (it && !wtfMode) {
             hero.moveSpeed *= 2
-            eventBus.fire(WTFModeEvent(true, wtfSpellBook))
+            eventBus.fire(SpellBookChangeEvent(wtfSpellBook))
         } else if (!it && wtfMode) {
             hero.moveSpeed /= 2
-            eventBus.fire(WTFModeEvent(false, hero.spellBook))
+            eventBus.fire(SpellBookChangeEvent(hero.spellBook))
         }
         wtfMode = it
     }

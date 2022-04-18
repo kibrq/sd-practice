@@ -10,7 +10,6 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
-
 class FromFileFieldGenerationStrategy(
     private val fileName: String
 ) : FieldGenerationStrategy {
