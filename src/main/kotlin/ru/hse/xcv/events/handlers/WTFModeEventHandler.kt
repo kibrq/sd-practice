@@ -7,7 +7,7 @@ import ru.hse.xcv.world.World
 class WTFModeEventHandler(
     override val world: World,
     private val spellsPanelController: SpellsPanelController
-) : EventHandler<WTFModeEvent> {
+) : GameEventHandler<WTFModeEvent> {
     override fun handle(event: WTFModeEvent) {
         spellsPanelController.clearSpells()
         event.spellBook.allSpells().forEach { spell ->
