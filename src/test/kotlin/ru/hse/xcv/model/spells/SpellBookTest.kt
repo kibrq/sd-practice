@@ -1,6 +1,7 @@
 package ru.hse.xcv.model.spells
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
+import ru.hse.xcv.model.spells.book.HeroSpellBook
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
@@ -8,7 +9,7 @@ import kotlin.test.assertNull
 internal class SpellBookTest {
     @Test
     fun `test search`() {
-        val book = SpellBook()
+        val book = HeroSpellBook()
         val healSpell = HealSpell()
         val fireballSpell = FireballSpell()
         book.addSpell(healSpell)
@@ -19,7 +20,7 @@ internal class SpellBookTest {
 
     @Test
     fun `test prefix search`() {
-        val book = SpellBook()
+        val book = HeroSpellBook()
         val healSpell = HealSpell()
         val chainLightningSpell = ChainLightningSpell()
         val fireballSpell = FireballSpell()

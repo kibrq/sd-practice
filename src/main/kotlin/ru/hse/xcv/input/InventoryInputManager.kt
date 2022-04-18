@@ -22,6 +22,7 @@ class InventoryInputManager(
             DOWN -> eventBus.fire(ScrollInventoryEvent(1))
             KeyCode.SPACE -> {}
             KeyCode.ESCAPE -> eventBus.fire(SwitchScreenEvent(State.Type.GAME))
+            else -> return
         }
     }
 
