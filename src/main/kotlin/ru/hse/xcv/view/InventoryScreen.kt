@@ -5,7 +5,7 @@ import org.hexworks.zircon.api.application.AppConfig
 import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.component.ScrollBar
 import org.hexworks.zircon.api.uievent.ComponentEventType
-import org.hexworks.zircon.api.uievent.UIEventResponse
+import org.hexworks.zircon.api.uievent.Processed
 import ru.hse.xcv.events.EquipItemEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.input.InventoryInputManager
@@ -28,26 +28,30 @@ data class InventoryItemList(
 
 fun itemToComponent(item: Item, status: Boolean, eventBus: EventBus): Component {
     val itemPanel = Components.panel()
-        .withPreferredSize(30, 4).build()
+        .withPreferredSize(30, 4)
+        .build()
+
     val itemName = Components.label()
         .withPreferredSize(min(15, item.name.length), 4)
         .withText(item.name)
         .withPosition(0, 0)
         .build()
 
-    val buttonText = if(status) "Equipped" else "Unequipped"
+    val buttonText = if (status) "Equipped" else "Unequipped"
     val itemsStatus = Components.button()
         .withPreferredSize(buttonText.length + 2, 1)
         .withText(buttonText)
         .withPosition(15, 0)
         .build()
+
     itemsStatus.handleComponentEvents(ComponentEventType.ACTIVATED) {
         eventBus.fire(EquipItemEvent(item, !status))
-        UIEventResponse.processed()
+        Processed
     }
 
     itemPanel.addComponent(itemName)
     itemPanel.addComponent(itemsStatus)
+
     return itemPanel
 }
 
@@ -79,7 +83,7 @@ fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): Pair<Invent
 
         val end = minOf(items.size, event.newValue + scrollbar.itemsShownAtOnce)
         items.subList(event.newValue, end)
-            .map { itemToComponent(it, equippedItems.contains(it), eventBus) }
+            .map { itemToComponent(it, it in equippedItems, eventBus) }
             .forEach { panel -> vbox.addComponent(panel) }
         itemsRootPanel.addComponent(vbox)
     }
