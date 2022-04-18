@@ -4,12 +4,10 @@ import org.junit.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
-
-class StatsTest {
-
+internal class StatsTest {
     @Test
     fun `test stats creation with illegal args`() {
-        assertFailsWith(java.lang.IllegalArgumentException::class) {
+        assertFailsWith(IllegalArgumentException::class) {
             Stats(
                 armor = -1,
                 power = 1,
@@ -17,7 +15,7 @@ class StatsTest {
             )
         }
 
-        assertFailsWith(java.lang.IllegalArgumentException::class) {
+        assertFailsWith(IllegalArgumentException::class) {
             Stats(
                 armor = 1,
                 power = 1,

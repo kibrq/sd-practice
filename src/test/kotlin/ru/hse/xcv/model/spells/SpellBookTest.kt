@@ -5,8 +5,7 @@ import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
 
-
-class SpellBookTest {
+internal class SpellBookTest {
     @Test
     fun `test search`() {
         val book = SpellBook()

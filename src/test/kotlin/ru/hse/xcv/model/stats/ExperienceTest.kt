@@ -3,7 +3,7 @@ package ru.hse.xcv.model.stats
 import org.junit.Test
 import kotlin.test.assertEquals
 
-class ExperienceTest {
+internal class ExperienceTest {
     @Test
     fun `test add experience`() {
         val exp = Experience()
@@ -17,5 +17,4 @@ class ExperienceTest {
         assertEquals(1, exp.experience)
         assertEquals(12, exp.level)
     }
-
 }
