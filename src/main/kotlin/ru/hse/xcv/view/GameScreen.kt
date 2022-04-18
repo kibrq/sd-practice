@@ -2,10 +2,12 @@ package ru.hse.xcv.view
 
 
 import org.hexworks.zircon.api.ComponentDecorations.box
+import org.hexworks.zircon.api.component.Component
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
 import org.hexworks.zircon.api.SwingApplications
 import org.hexworks.zircon.api.application.AppConfig
+import org.hexworks.zircon.api.component.Label
 import org.hexworks.zircon.api.component.Panel
 import org.hexworks.zircon.api.component.ProgressBar
 import org.hexworks.zircon.api.data.Position
@@ -17,7 +19,19 @@ import org.hexworks.zircon.api.game.base.BaseGameArea
 import org.hexworks.zircon.api.graphics.BoxType
 import org.hexworks.zircon.api.screen.Screen
 import ru.hse.xcv.model.spells.Spell
+import ru.hse.xcv.input.GameInputManager
+import ru.hse.xcv.events.EventBus
+
 import kotlin.math.min
+
+
+class GameState(
+    override val component: Component,
+    override val input: GameInputManager,
+): State {
+    override val type = State.Type.GAME
+}
+
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
@@ -30,14 +44,16 @@ class CustomGameArea(
     initialFilters = listOf()
 )
 
+
 data class GameScreen(
-    val window: Screen,
+    val state: GameState,
     val view: FieldView,
     val panelControllers: PanelControllers
 )
 
 data class PanelControllers(
     val healthPanelController: HealthPanelController,
+    val levelPanelController: LevelPanelController,
     val spellsPanelController: SpellsPanelController
 )
 
@@ -49,31 +65,46 @@ class HealthPanelController(
     }
 }
 
+
+class LevelPanelController(
+    private val panel: Label
+) {
+    fun setLevel(level: Int) {
+        panel.text = level.toString()
+    }
+}
+
 class SpellsPanelController(
     private val panel: Panel
 ) {
     private var spellsNumber = 0
+
+    fun clearSpells() {
+        panel.detachAllComponents()
+        spellsNumber = 0
+    }
+
     fun addSpell(spell: Spell) {
         val spellPanel = Components.panel()
-            .withPreferredSize(panel.width, 6)
-            .withPosition(0, 6 * spellsNumber)
+            .withPreferredSize(panel.width, 2)
+            .withPosition(0, 3 * spellsNumber)
             .build()
 
         val spellsNamePanel = Components.header()
             .withText(spell.name)
-            .withPreferredSize(min(spellPanel.width, spell.name.length), 2)
+            .withPreferredSize(min(spellPanel.width, spell.name.length), 1)
             .withPosition(0, 0)
             .build()
 
         val spellsCombinationPanel = Components.panel()
-            .withPreferredSize(spellPanel.width, spellPanel.height - spellsNamePanel.height)
+            .withPreferredSize(spellPanel.width, 1)
             .withPosition(0, spellsNamePanel.height)
             .build()
 
         for ((i, c) in spell.combination.withIndex()) {
             val keyNamePanel = Components.label()
                 .withText(c.uppercaseChar().toString())
-                .withPreferredSize(2, 3)
+                .withPreferredSize(2, 1)
                 .withPosition(2 * i + (spellsCombinationPanel.width / 2 - spell.combination.length), 0)
                 .build()
             spellsCombinationPanel.addComponent(keyNamePanel)
@@ -81,7 +112,6 @@ class SpellsPanelController(
 
         spellPanel.addComponent(spellsNamePanel)
         spellPanel.addComponent(spellsCombinationPanel)
-
         panel.addComponent(spellPanel)
         spellsNumber++
     }
@@ -89,8 +119,7 @@ class SpellsPanelController(
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
-fun createGameScreen(config: AppConfig): GameScreen {
-    val screen = Screen.create(SwingApplications.startTileGrid(config))
+fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
 
     val (width, height) = config.size
     val gameAreaVisibleSize = Size.create((width * GAME_SCREEN_SPLIT_RATIO).toInt(), height)
@@ -98,11 +127,11 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     val infoPanelSize = Size.create((width * (1 - GAME_SCREEN_SPLIT_RATIO)).toInt(), height)
 
-    val gameArea = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
+    val gameView = CustomGameArea(gameAreaVisibleSize, gameAreaTotalSize)
 
     val gamePanel = Components.panel()
         .withPreferredSize(gameAreaVisibleSize)
-        .withComponentRenderer(GameComponents.newGameAreaComponentRenderer(gameArea, ProjectionMode.TOP_DOWN))
+        .withComponentRenderer(GameComponents.newGameAreaComponentRenderer(gameView, ProjectionMode.TOP_DOWN))
         .build()
 
     val infoPanel = Components.panel()
@@ -115,10 +144,30 @@ fun createGameScreen(config: AppConfig): GameScreen {
         .withPosition(infoPanelSize.width / 2 - 1, 0)
         .build()
 
+    val levelPanel = Components.panel()
+        .withPreferredSize(infoPanelSize.width, 1)
+        .withPosition(0, 2)
+        .build()
+
+    val levelNamePanel = Components.header()
+        .withText("Level:")
+        .withPreferredSize(6, 1)
+        .withPosition(0, 0)
+        .build()
+
+    val levelValuePanel = Components.label()
+        .withText("1")
+        .withPreferredSize(infoPanelSize.width - 6, 1)
+        .withPosition(6, 0)
+        .build()
+
+    levelPanel.addComponent(levelNamePanel)
+    levelPanel.addComponent(levelValuePanel)
+
     val hpNamePanel = Components.header()
         .withText("HP:")
         .withPreferredSize(3, 2)
-        .withPosition(0, 2)
+        .withPosition(0, 4)
         .build()
 
     val healthPanel = Components.progressBar()
@@ -133,16 +182,17 @@ fun createGameScreen(config: AppConfig): GameScreen {
 
     val spellsNamePanel = Components.header()
         .withText("Spells:")
-        .withPreferredSize(7, 2)
-        .withPosition(infoPanelSize.width / 2 - 3, 4)
+        .withPreferredSize(7, 1)
+        .withPosition(infoPanelSize.width / 2 - 3, 7)
         .build()
 
     val spellsPanel = Components.panel()
-        .withPreferredSize(infoPanelSize.width, infoPanelSize.height - 6)
-        .withPosition(0, 6)
+        .withPreferredSize(infoPanelSize.width, infoPanelSize.height - 8)
+        .withPosition(0, 8)
         .build()
 
     infoPanel.addComponent(xcvNamePanel)
+    infoPanel.addComponent(levelPanel)
     infoPanel.addComponent(hpNamePanel)
     infoPanel.addComponent(healthPanel)
     infoPanel.addComponent(spellsNamePanel)
@@ -155,13 +205,17 @@ fun createGameScreen(config: AppConfig): GameScreen {
     horizontalSplit.addComponent(gamePanel)
     horizontalSplit.addComponent(infoPanel)
 
-    screen.addComponent(horizontalSplit)
+    val gameState = GameState(
+        component = horizontalSplit,
+        input = GameInputManager(eventBus),
+    )
 
     return GameScreen(
-        screen,
-        gameArea,
+        gameState,
+        gameView,
         PanelControllers(
             HealthPanelController(healthPanel),
+            LevelPanelController(levelValuePanel),
             SpellsPanelController(spellsPanel)
         )
     )

@@ -16,6 +16,7 @@ import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.util.debug
 import ru.hse.xcv.util.readRect
+import ru.hse.xcv.util.straightPathTo
 import ru.hse.xcv.view.FieldView
 import ru.hse.xcv.view.Graphics
 import java.util.concurrent.locks.ReentrantReadWriteLock
@@ -54,6 +55,11 @@ class World(
     }
 
     val hero: Hero = getAllObjectsOfType(Hero::class).keys.first()
+
+    fun delayed(millis: Long, block: () -> Unit) = scope.launch {
+        delay(millis)
+        block()
+    }
 
     fun getDynamicLayer(position: Position): DynamicObject? = model.dynamicLayer[position]
 
@@ -155,22 +161,30 @@ class World(
         }
     }
 
-    fun readNeighbourhood(center: Position, size: Size) = lock.read {
+    private fun isVisibleFrom(position: Position, other: Position): Boolean = lock.read {
+        position.straightPathTo(other).all {
+            model.staticLayer[it] == FieldTile.FLOOR
+        }
+    }
+
+    private fun readNeighbourhood(center: Position, size: Size) = lock.read {
         val shift = Position.create(size.width / 2, size.height / 2)
         val rect = Rect.create(center - shift, size)
         model.staticLayer.readRect(rect) to model.dynamicLayer.readRect(rect)
     }
 
-    fun <T : DynamicObject> nearestObjectInNeighbourhood(center: Position, size: Size, clazz: KClass<T>): T? =
+    fun <T : DynamicObject> nearestVisibleObjectInRectangle(center: Position, size: Size, clazz: KClass<T>): T? =
         readNeighbourhood(center, size).second.values
             .mapNotNull { clazz.safeCast(it) }
+            .filter { isVisibleFrom(it.position, center) }
             .minByOrNull {
                 val distance = it.position - center
                 distance.x * distance.x + distance.y * distance.y
             }
 
+    companion
 
-    companion object {
+    object {
         private val NULL_BLOCK = Block.newBuilder<Tile>()
             .withContent(Tile.empty())
             .withEmptyTile(Tile.empty())

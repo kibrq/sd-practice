@@ -1,7 +1,9 @@
-package ru.hse.xcv.model.spells
+package ru.hse.xcv.model.spells.book
 
-class SpellBook {
-    private val spells = mutableListOf<Spell>()
+import ru.hse.xcv.model.spells.Spell
+
+abstract class SpellBook {
+    protected abstract val spells: MutableList<Spell>
 
     fun addSpell(spell: Spell) = spells.add(spell)
 

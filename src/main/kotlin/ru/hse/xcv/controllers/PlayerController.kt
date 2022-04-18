@@ -5,19 +5,42 @@ import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CastSpellEvent
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.MoveEvent
+import ru.hse.xcv.events.WTFModeEvent
 import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.spells.book.WtfSpellBook
+import ru.hse.xcv.input.GameInputManager
+
+import ru.hse.xcv.input.UP
+import ru.hse.xcv.input.DOWN
+import ru.hse.xcv.input.LEFT
+import ru.hse.xcv.input.RIGHT
+
 import ru.hse.xcv.util.*
 import kotlin.math.abs
 
 class PlayerController(
     private val hero: Hero,
-    private val input: InputManager,
+    private val input: GameInputManager,
     override val eventBus: EventBus
 ) : ActionController {
     private val logger = LoggerFactory.getLogger(javaClass)
+    private var wtfSpellBook = WtfSpellBook()
+    private var wtfMode = false
+
+    private fun handleWtfMode() = input.zxc.let {
+        if (it && !wtfMode) {
+            hero.moveSpeed *= 2
+            eventBus.fire(WTFModeEvent(true, wtfSpellBook))
+        } else if (!it && wtfMode) {
+            hero.moveSpeed /= 2
+            eventBus.fire(WTFModeEvent(false, hero.spellBook))
+        }
+        wtfMode = it
+    }
 
     private fun handleMovement() {
-        val (x, y) = input.currentMovementKeys.map {
+        val currentPressedKeys = input.currentMovementKeys
+        val (x, y) = currentPressedKeys.map {
             when (it) {
                 UP -> 0 to -1
                 DOWN -> 0 to 1
@@ -36,13 +59,15 @@ class PlayerController(
 
     private fun handleSpellCast() {
         val combination = input.readySpell ?: return
-        val spell = hero.spellBook.search(combination) ?: return
+        val spellBook = if (wtfMode) wtfSpellBook else hero.spellBook
+        val spell = spellBook.search(combination) ?: return
         logger.debug("${spell.name} was casted!")
         val event = CastSpellEvent(spell, hero.position, hero.direction, hero.power)
         eventBus.fire(event)
     }
 
     override fun action(): Boolean {
+        handleWtfMode()
         handleMovement()
         handleSpellCast()
         return true

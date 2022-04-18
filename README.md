@@ -2,7 +2,12 @@
 
 Use WASD to move. Press a combination of HJKL keys and then SPACE to cast a spell:
 * `J` - Fireball spell
+* `HJKL` - Chain lightning
 * `HH` - Heal spell
+* `L` - Speed boost spell
+* `ZXC` - Enter WTF mode
+
+In WTF mode speed is increased and all cooldowns are set to zero.
 
 ### Run game
 
