@@ -15,7 +15,7 @@ class ScrollInventoryEventHandler(
         val scrollbar = inventoryItemList.scrollbar
         if (event.dPos < 0) {
             scrollbar.decrementValues()
-        } else if (event.dPos > 0 && scrollbar.currentValue < inventoryItemList.items.size) {
+        } else if (event.dPos > 0 && scrollbar.currentValue < inventoryItemList.items.size - scrollbar.itemsShownAtOnce) {
             scrollbar.incrementValues()
         }
     }
