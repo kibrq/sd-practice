@@ -39,7 +39,7 @@ class CastSpellEventHandler(
         for (direction in directions) {
             val fireball = spell.createFireball(power, pos + direction, direction)
             if (world.createObject(fireball, fireball.position)) {
-                break
+                return
             }
         }
         for (direction in directions) {
