@@ -30,7 +30,7 @@ data class CreateInventoryScreenReturn(
 
 fun itemToComponent(item: Item) =
     Components.label()
-        .withPreferredSize(10, 2)
+        .withPreferredSize(20, 4)
         .withText(item.name)
         .build()
 
@@ -42,7 +42,7 @@ fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): CreateInven
         .build()
 
     val items = (0..10).map { Helmet().apply { name = "Helmet${it}" } }.toMutableList()
-    val scrollbar = Components.verticalScrollbar().withItemsShownAtOnce(3).build()
+    val scrollbar = Components.verticalScrollbar().withItemsShownAtOnce(5).build()
 
     scrollbar.onValueChange { event ->
         itemsRootPanel.detachAllComponents()
