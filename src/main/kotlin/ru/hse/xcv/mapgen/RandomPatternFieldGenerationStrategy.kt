@@ -3,9 +3,9 @@ package ru.hse.xcv.mapgen
 import org.hexworks.zircon.api.data.Position
 import org.hexworks.zircon.api.data.Rect
 import org.hexworks.zircon.api.data.Size
-import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.OnMapObject
 import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.entities.PickableItem
@@ -48,7 +48,7 @@ class RandomPatternFieldGenerationStrategy(
             }
         }
 
-        val dynamicLayer = mutableMapOf<Position, DynamicObject>()
+        val dynamicLayer = mutableMapOf<Position, OnMapObject>()
 
         val mobThreshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), mobThreshold).forEach { rect ->

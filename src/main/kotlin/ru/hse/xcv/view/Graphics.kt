@@ -5,8 +5,8 @@ import org.hexworks.zircon.api.color.TileColor
 import org.hexworks.zircon.api.data.Block
 import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.graphics.Symbols
-import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.FieldTile
+import ru.hse.xcv.model.OnMapObject
 import ru.hse.xcv.model.entities.*
 import ru.hse.xcv.model.spells.FireballSpell
 import kotlin.reflect.KClass
@@ -27,7 +27,7 @@ fun worldTileOfSymbolAndColor(char: Char, color: TileColor) =
 
 interface Graphics {
     fun staticLayerTransform(tile: FieldTile): WorldTile
-    fun dynamicLayerTransform(obj: DynamicObject): WorldTile
+    fun dynamicLayerTransform(obj: OnMapObject): WorldTile
 
     companion object {
         fun default() = FromMapGraphics(
@@ -56,9 +56,8 @@ interface Graphics {
 
 class FromMapGraphics(
     private val staticLayerTransformMap: Map<FieldTile, WorldTile>,
-    private val dynamicLayerTransformMap: Map<KClass<out DynamicObject>, WorldTile>
+    private val dynamicLayerTransformMap: Map<KClass<out OnMapObject>, WorldTile>
 ) : Graphics {
     override fun staticLayerTransform(tile: FieldTile) = staticLayerTransformMap.getValue(tile)
-
-    override fun dynamicLayerTransform(obj: DynamicObject) = dynamicLayerTransformMap.getValue(obj::class)
+    override fun dynamicLayerTransform(obj: OnMapObject) = dynamicLayerTransformMap.getValue(obj::class)
 }

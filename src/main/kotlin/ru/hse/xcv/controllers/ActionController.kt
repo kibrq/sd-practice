@@ -27,7 +27,6 @@ class ActionControllerFactory(
             is Maxim -> MobController(CanBeConfusedMobStrategy(AggressiveMobStrategy(obj, world)), eventBus)
             is Microchel -> MobController(CanBeConfusedMobStrategy(CowardMobStrategy(obj, world)), eventBus)
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
-            is PickableItem -> PickableItemController(eventBus)
             is Hero -> PlayerController(world, inputManager, eventBus)
             else -> throw IllegalStateException()
         }
