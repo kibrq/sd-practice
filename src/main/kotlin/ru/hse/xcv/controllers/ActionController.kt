@@ -18,7 +18,7 @@ interface ActionController {
 
 class ActionControllerFactory(
     private val eventBus: EventBus,
-    private val inputManager: GameInputManager,
+    private val inputManager: GameInputManager
 ) {
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {

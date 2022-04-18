@@ -16,7 +16,7 @@ interface InputManager {
 }
 
 class DefaultInputManager(
-    override val eventBus: EventBus,
+    override val eventBus: EventBus
 ) : InputManager {
     override fun keyPressed(code: KeyCode) = Unit
     override fun keyReleased(code: KeyCode) = Unit

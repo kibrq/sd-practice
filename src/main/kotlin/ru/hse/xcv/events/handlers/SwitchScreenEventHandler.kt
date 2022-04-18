@@ -7,7 +7,7 @@ import ru.hse.xcv.view.State
 
 class SwitchScreenEventHandler(
     private val window: MainScreen,
-    private val states: List<State>,
+    private val states: List<State>
 ) : EventHandler<SwitchScreenEvent> {
     private val logger = LoggerFactory.getLogger(javaClass)
 

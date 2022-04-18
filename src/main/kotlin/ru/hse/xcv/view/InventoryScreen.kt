@@ -12,7 +12,7 @@ import ru.hse.xcv.model.items.Item
 
 class InventoryState(
     override val component: Component,
-    override val input: InventoryInputManager,
+    override val input: InventoryInputManager
 ) : State {
     override val type = State.Type.INVENTORY
 }
@@ -20,12 +20,12 @@ class InventoryState(
 data class InventoryItemList(
     val items: List<Item>,
     val itemsRootPanel: ComponentContainer,
-    val scrollbar: ScrollBar,
+    val scrollbar: ScrollBar
 )
 
 data class CreateInventoryScreenReturn(
     val state: InventoryState,
-    val itemList: InventoryItemList,
+    val itemList: InventoryItemList
 )
 
 fun itemToComponent(item: Item) =
