@@ -9,7 +9,6 @@ Use WASD to move. Press a combination of HJKL keys and then SPACE to cast a spel
 
 In WTF mode speed is increased and all cooldowns are set to zero.
 
-
 ### Run game
 
 ```bash

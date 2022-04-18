@@ -2,7 +2,10 @@ package ru.hse.xcv.controllers
 
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.model.DynamicObject
-import ru.hse.xcv.model.entities.*
+import ru.hse.xcv.model.entities.Dragon
+import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.Maxim
+import ru.hse.xcv.model.entities.Zombie
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.strategies.AggressiveMobStrategy

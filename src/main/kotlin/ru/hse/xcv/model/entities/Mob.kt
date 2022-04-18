@@ -8,11 +8,10 @@ abstract class Mob(position: Position) : Entity(position) {
 
     companion object {
         fun getRandomMob(position: Position) =
-            when (Random.nextInt(0, 4)) {
+            when (Random.nextInt(0, 3)) {
                 0 -> Zombie(position)
                 1 -> Maxim(position)
                 2 -> Dragon(position)
-                3 -> Microchel(position)
                 else -> throw IllegalStateException()
             }
     }
