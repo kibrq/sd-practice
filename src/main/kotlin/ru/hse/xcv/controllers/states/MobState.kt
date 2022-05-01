@@ -9,5 +9,5 @@ interface MobState {
 
     fun takeAction(): Event? = strategy.takeAction()
 
-    fun handle(controller: MobController)
+    fun handleMobHealth(controller: MobController)
 }

@@ -9,7 +9,7 @@ class PanicMobState(override val strategy: MobStrategy) : MobState {
 
     override fun takeAction() = cowardStrategy.takeAction()
 
-    override fun handle(controller: MobController) {
+    override fun handleMobHealth(controller: MobController) {
         val mob = strategy.mob
         if (mob.currentHealth > mob.panicHealthThreshold) {
             controller.state = NormalMobState(strategy)
