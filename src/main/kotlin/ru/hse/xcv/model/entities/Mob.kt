@@ -15,7 +15,8 @@ abstract class Mob(position: Position) : Entity(position) {
             { Dragon(it) },
             { Maxim(it) },
             { Zombie(it) },
-            { Microchel(it) }
+            { Microchel(it) },
+            { PoisonousMold(it) }
         )
 
         fun getRandomMob(position: Position) = allMobs.random().invoke(position)

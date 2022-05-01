@@ -10,12 +10,16 @@ import ru.hse.xcv.world.World
 class CowardMobStrategy(
     override val mob: Mob,
     override val world: World
-) : MobStrategy {
+) : SingleEventMobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun takeAction(): Event? {
+    override fun takeSingleAction(): Event? {
         val hero = mob.findHero(world) ?: return null
         val offset = (mob.position - hero.position).normalize()
         return MoveEvent(mob, offset, moveWorld = false)
     }
+}
+
+class CowardMobStrategyBuilder: MobStrategyBuilder {
+    override fun build(mob: Mob, world: World) = CowardMobStrategy(mob, world)
 }

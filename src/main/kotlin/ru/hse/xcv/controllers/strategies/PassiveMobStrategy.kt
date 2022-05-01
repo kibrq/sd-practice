@@ -10,16 +10,14 @@ import ru.hse.xcv.world.World
 class PassiveMobStrategy(
     override val mob: Mob,
     override val world: World
-) : MobStrategy {
+) : SingleEventMobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
-    override fun takeAction(): Event? {
-        val hero = mob.findHero(world) ?: return null
-        val offset = hero.position - mob.position
-        return if (offset.isAdjacentDirection) {
-            HPChangeEvent.createDamageEvent(hero, mob.damage)
-        } else {
-            null
-        }
+    override fun takeSingleAction(): Event? {
+        return null
     }
+}
+
+class PassiveMobStrategyBuilder : MobStrategyBuilder {
+    override fun build(mob: Mob, world: World) = PassiveMobStrategy(mob, world)
 }

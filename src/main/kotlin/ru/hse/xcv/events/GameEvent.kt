@@ -3,6 +3,7 @@ package ru.hse.xcv.events
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.Entity
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.spells.Spell
 import ru.hse.xcv.model.spells.book.SpellBook
 import ru.hse.xcv.model.stats.Stats
@@ -44,4 +45,10 @@ data class LetterPressedEvent(
 
 data class SpellBookChangeEvent(
     val spellBook: SpellBook
+) : GameEvent
+
+data class CreateMobEvent(
+    val mob: Mob,
+    val refer: Entity?,
+    val cooldown: Int = 0
 ) : GameEvent

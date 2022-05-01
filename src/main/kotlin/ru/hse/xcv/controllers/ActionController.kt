@@ -22,10 +22,35 @@ class ActionControllerFactory(
 
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
-            is Dragon -> normalMobController(AggressiveMobStrategy(obj, world))
-            is Zombie -> normalMobController(CanBeConfusedMobStrategy(PassiveMobStrategy(obj, world)))
-            is Maxim -> normalMobController(CanBeConfusedMobStrategy(AggressiveMobStrategy(obj, world)))
-            is Microchel -> normalMobController(CanBeConfusedMobStrategy(CowardMobStrategy(obj, world)))
+            is Dragon -> normalMobController(CompositeMobStrategyBuilder(
+                    AttackMobStrategyBuilder(), 
+                    AggressiveMobStrategyBuilder()
+                ).build(obj, world)),
+                eventBus
+            )
+            is Zombie -> normalMobController(
+                CanBeConfusedMobStrategyBuilder(
+                    CompositeMobStrategyBuilder(AttackMobStrategyBuilder(), PassiveMobStrategyBuilder())
+                ).build(obj, world),
+                eventBus
+            )
+            is Maxim -> normalMobController(
+                CanBeConfusedMobStrategyBuilder(
+                    CompositeMobStrategyBuilder(AttackMobStrategyBuilder(), AggressiveMobStrategyBuilder())
+                ).build(obj, world),
+                eventBus
+            )
+            is Microchel -> normalMobController(
+                CanBeConfusedMobStrategyBuilder(CowardMobStrategyBuilder()).build(obj, world),
+                eventBus
+            )
+            is PoisonousMold -> MobController(
+                CompositeMobStrategyBuilder(
+                    AttackMobStrategyBuilder(),
+                    ReproducibleMobStrategyBuilder()
+                ).build(obj, world),
+                eventBus
+            )
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
             is Hero -> PlayerController(world, inputManager, eventBus)
             else -> throw IllegalStateException()

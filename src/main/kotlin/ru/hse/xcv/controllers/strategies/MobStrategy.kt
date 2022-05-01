@@ -8,5 +8,9 @@ interface MobStrategy {
     val mob: Mob
     val world: World
 
-    fun takeAction(): Event?
+    fun takeAction(): List<Event>
+}
+
+interface MobStrategyBuilder {
+    fun build(mob: Mob, world: World): MobStrategy
 }

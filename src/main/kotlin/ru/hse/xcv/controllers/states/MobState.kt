@@ -7,7 +7,7 @@ import ru.hse.xcv.events.Event
 interface MobState {
     val strategy: MobStrategy
 
-    fun takeAction(): Event? = strategy.takeAction()
+    fun takeAction(): List<Event> = strategy.takeAction()
 
     fun handleMobHealth(controller: MobController)
 }

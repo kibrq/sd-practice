@@ -48,6 +48,10 @@ interface Graphics {
                 FireballSpell.Fireball::class to worldTileOfSymbolAndColor(
                     Symbols.SOLAR_SYMBOL,
                     ANSITileColor.BRIGHT_RED
+                ),
+                PoisonousMold::class to worldTileOfSymbolAndColor(
+                    Symbols.BLOCK_MIDDLE,
+                    ANSITileColor.RED
                 )
             )
         )

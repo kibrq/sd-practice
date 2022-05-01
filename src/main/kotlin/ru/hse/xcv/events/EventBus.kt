@@ -15,6 +15,7 @@ class EventBus {
     private val changeHP = EventDispatcher<HPChangeEvent>()
     private val letterPressed = EventDispatcher<LetterPressedEvent>()
     private val spellBookChange = EventDispatcher<SpellBookChangeEvent>()
+    private val createMob = EventDispatcher<CreateMobEvent>()
 
     private val screenSwitch = EventDispatcher<SwitchScreenEvent>()
     private val scrollInventory = EventDispatcher<ScrollInventoryEvent>()
@@ -35,6 +36,7 @@ class EventBus {
             is ScrollInventoryEvent -> scrollInventory.run(event)
             is UpdateInventoryEvent -> updateInventory.run(event)
             is EquipItemEvent -> equipItem.run(event)
+            is CreateMobEvent -> createMob.run(event)
         }
     }
 
@@ -51,6 +53,7 @@ class EventBus {
             )
         )
         letterPressed.register(LetterPressedEventHandler(world))
+        createMob.register(CreateMobEventHandler(world))
     }
 
     fun registerScreenEventHandlers(screen: MainScreen, states: List<State>) {
