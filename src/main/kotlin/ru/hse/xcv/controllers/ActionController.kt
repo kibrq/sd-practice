@@ -25,31 +25,26 @@ class ActionControllerFactory(
             is Dragon -> normalMobController(CompositeMobStrategyBuilder(
                     AttackMobStrategyBuilder(), 
                     AggressiveMobStrategyBuilder()
-                ).build(obj, world)),
-                eventBus
+                ).build(obj, world)
             )
             is Zombie -> normalMobController(
                 CanBeConfusedMobStrategyBuilder(
                     CompositeMobStrategyBuilder(AttackMobStrategyBuilder(), PassiveMobStrategyBuilder())
-                ).build(obj, world),
-                eventBus
+                ).build(obj, world)
             )
             is Maxim -> normalMobController(
                 CanBeConfusedMobStrategyBuilder(
                     CompositeMobStrategyBuilder(AttackMobStrategyBuilder(), AggressiveMobStrategyBuilder())
-                ).build(obj, world),
-                eventBus
+                ).build(obj, world)
             )
             is Microchel -> normalMobController(
-                CanBeConfusedMobStrategyBuilder(CowardMobStrategyBuilder()).build(obj, world),
-                eventBus
+                CanBeConfusedMobStrategyBuilder(CowardMobStrategyBuilder()).build(obj, world)
             )
-            is PoisonousMold -> MobController(
+            is PoisonousMold -> normalMobController(
                 CompositeMobStrategyBuilder(
                     AttackMobStrategyBuilder(),
                     ReproducibleMobStrategyBuilder()
-                ).build(obj, world),
-                eventBus
+                ).build(obj, world)
             )
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
             is Hero -> PlayerController(world, inputManager, eventBus)

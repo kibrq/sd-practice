@@ -11,7 +11,7 @@ class MobController(
     private val logger = LoggerFactory.getLogger(javaClass)
     override fun action(): Boolean {
         state.handleMobHealth(this)
-        strategy.takeAction().forEach { eventBus.fire(it) }
+        state.takeAction().forEach { eventBus.fire(it) }
         return true
     }
 }
