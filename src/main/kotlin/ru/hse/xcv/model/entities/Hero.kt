@@ -22,7 +22,7 @@ class Hero(position: Position) : Entity(position) {
 
     override var direction = Position.create(0, 1)
     override var moveSpeed = 25
-    override var stats = Stats(
+    override val stats = Stats(
         power = 3,
         armor = 3,
         maxHealth = 100

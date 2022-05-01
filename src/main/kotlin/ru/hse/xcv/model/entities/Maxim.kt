@@ -6,7 +6,7 @@ import ru.hse.xcv.model.stats.Stats
 class Maxim(position: Position) : Mob(position) {
     override var moveSpeed = 20
     override val experienceGain = 40
-    override var stats = Stats(
+    override val stats = Stats(
         power = 2,
         armor = 5,
         maxHealth = 50

@@ -6,7 +6,7 @@ import ru.hse.xcv.model.stats.Stats
 class Dragon(position: Position) : Mob(position) {
     override var moveSpeed = 10
     override var experienceGain = 200
-    override var stats = Stats(
+    override val stats = Stats(
         power = 10,
         armor = 10,
         maxHealth = 200

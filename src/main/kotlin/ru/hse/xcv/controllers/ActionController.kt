@@ -1,9 +1,7 @@
 package ru.hse.xcv.controllers
 
-import ru.hse.xcv.controllers.strategies.AggressiveMobStrategy
-import ru.hse.xcv.controllers.strategies.CanBeConfusedMobStrategy
-import ru.hse.xcv.controllers.strategies.CowardMobStrategy
-import ru.hse.xcv.controllers.strategies.PassiveMobStrategy
+import ru.hse.xcv.controllers.states.NormalMobState
+import ru.hse.xcv.controllers.strategies.*
 import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.model.DynamicObject
@@ -20,12 +18,14 @@ class ActionControllerFactory(
     private val eventBus: EventBus,
     private val inputManager: GameInputManager
 ) {
+    private fun normalMobController(strategy: MobStrategy) = MobController(NormalMobState(strategy), eventBus)
+
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
-            is Dragon -> MobController(AggressiveMobStrategy(obj, world), eventBus)
-            is Zombie -> MobController(CanBeConfusedMobStrategy(PassiveMobStrategy(obj, world)), eventBus)
-            is Maxim -> MobController(CanBeConfusedMobStrategy(AggressiveMobStrategy(obj, world)), eventBus)
-            is Microchel -> MobController(CanBeConfusedMobStrategy(CowardMobStrategy(obj, world)), eventBus)
+            is Dragon -> normalMobController(AggressiveMobStrategy(obj, world))
+            is Zombie -> normalMobController(CanBeConfusedMobStrategy(PassiveMobStrategy(obj, world)))
+            is Maxim -> normalMobController(CanBeConfusedMobStrategy(AggressiveMobStrategy(obj, world)))
+            is Microchel -> normalMobController(CanBeConfusedMobStrategy(CowardMobStrategy(obj, world)))
             is FireballSpell.Fireball -> FireballController(obj, world, eventBus)
             is Hero -> PlayerController(world, inputManager, eventBus)
             else -> throw IllegalStateException()

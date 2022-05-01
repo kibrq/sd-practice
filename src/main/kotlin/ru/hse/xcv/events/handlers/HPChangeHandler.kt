@@ -24,7 +24,7 @@ class HPChangeHandler(
             }
         }
         if (entity is Hero) {
-            healthPanelController.setHealth(entity.stats.currentHealth, entity.stats.maxHealth)
+            healthPanelController.setHealth(entity.currentHealth, entity.stats.maxHealth)
         }
     }
 }
