@@ -27,9 +27,9 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
 
 class RandomPatternFieldGenerationStrategy(
     private val size: Size,
-    private val smoothTimes: Int = 5,
-    private val hardness: Int = 1,
-    private val floorPercentage: Double = 0.55
+    private val smoothTimes: Int,
+    private val hardness: Int,
+    private val floorPercentage: Double
 ) : FieldGenerationStrategy {
 
     override fun generate(): FieldModel {

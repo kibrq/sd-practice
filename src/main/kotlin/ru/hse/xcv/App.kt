@@ -8,8 +8,8 @@ import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.events.SpellBookChangeEvent
 import ru.hse.xcv.events.SwitchScreenEvent
 import ru.hse.xcv.input.GameInputManager
-import ru.hse.xcv.mapgen.FieldGenerationStrategy
-import ru.hse.xcv.mapgen.RandomPatternFieldGenerationStrategy
+import ru.hse.xcv.mapgen.FieldGenerationBuilder
+import ru.hse.xcv.mapgen.RandomFieldGenerationBuilder
 import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.view.*
 import ru.hse.xcv.world.World
@@ -31,11 +31,11 @@ fun startGame(
     panelControllers: PanelControllers,
     inventoryList: InventoryItemList,
     inputManager: GameInputManager,
-    strategy: FieldGenerationStrategy,
+    fieldBuilder: FieldGenerationBuilder,
     eventBus: EventBus
 ) {
     val world = World(
-        strategy.generate(),
+        fieldBuilder.build(),
         view,
         Graphics.default(),
         ActionControllerFactory(eventBus, inputManager)
@@ -77,7 +77,7 @@ fun main() {
         panelControllers,
         inventoryList,
         gameState.input,
-        RandomPatternFieldGenerationStrategy(FIELD_SIZE),
+        RandomFieldGenerationBuilder().setSize(FIELD_SIZE),
         eventBus
     )
 
