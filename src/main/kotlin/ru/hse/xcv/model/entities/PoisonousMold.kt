@@ -5,14 +5,15 @@ import ru.hse.xcv.model.stats.Stats
 
 class PoisonousMold(
     override var position: Position,
-    override val reproducityCooldown: Int = 10
-): ReproducibleMob(position) {
-    override var experienceGain = 1
-    override var moveSpeed = 5000
+    override val reproduceCoolDown: Int = 15
+) : ReproducibleMob(position) {
+    override var experienceGain = 10
+    override var moveSpeed = 10
     override var stats = Stats(
-        power = 10,
-        armor = 10,
-        maxHealth = 200
+        power = 5,
+        armor = 5,
+        maxHealth = 10
     )
-    override fun clone(newPosition: Position, reproducityCooldown: Int) = PoisonousMold(newPosition, reproducityCooldown)
+
+    override fun clone(position: Position, coolDown: Int) = PoisonousMold(position, coolDown)
 }

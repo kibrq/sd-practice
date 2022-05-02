@@ -5,7 +5,7 @@ import ru.hse.xcv.model.stats.Stats
 
 class Zombie(position: Position) : Mob(position) {
     override var moveSpeed = 15
-    override val experienceGain = 20
+    override val experienceGain = 30
     override val stats = Stats(
         power = 2,
         armor = 2,

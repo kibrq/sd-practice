@@ -50,5 +50,5 @@ data class SpellBookChangeEvent(
 data class CreateMobEvent(
     val mob: Mob,
     val refer: Entity?,
-    val cooldown: Int = 0
+    val coolDown: Int = 0
 ) : GameEvent
