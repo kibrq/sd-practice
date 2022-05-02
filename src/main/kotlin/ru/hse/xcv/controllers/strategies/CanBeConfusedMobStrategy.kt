@@ -1,11 +1,10 @@
 package ru.hse.xcv.controllers.strategies
 
-import ru.hse.xcv.world.World
-import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.events.Event
 import ru.hse.xcv.events.MoveEvent
+import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.possibleDirections
-
+import ru.hse.xcv.world.World
 
 class CanBeConfusedMobStrategy(
     override val mob: Mob,
@@ -24,6 +23,6 @@ class CanBeConfusedMobStrategy(
 
 class CanBeConfusedMobStrategyBuilder(
     private val inner: MobStrategyBuilder
-): MobStrategyBuilder {
+) : MobStrategyBuilder {
     override fun build(mob: Mob, world: World) = CanBeConfusedMobStrategy(mob, world, inner.build(mob, world))
 }

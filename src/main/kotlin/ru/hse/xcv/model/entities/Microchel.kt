@@ -5,7 +5,7 @@ import ru.hse.xcv.model.stats.Stats
 
 class Microchel(position: Position) : Mob(position) {
     override var moveSpeed = 10
-    override val experienceGain = 30
+    override val experienceGain = 35
     override val stats = Stats(
         power = 1,
         armor = 1,

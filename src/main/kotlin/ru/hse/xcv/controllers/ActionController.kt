@@ -22,8 +22,9 @@ class ActionControllerFactory(
 
     fun create(obj: DynamicObject, world: World): ActionController {
         return when (obj) {
-            is Dragon -> normalMobController(CompositeMobStrategyBuilder(
-                    AttackMobStrategyBuilder(), 
+            is Dragon -> normalMobController(
+                CompositeMobStrategyBuilder(
+                    AttackMobStrategyBuilder(),
                     AggressiveMobStrategyBuilder()
                 ).build(obj, world)
             )

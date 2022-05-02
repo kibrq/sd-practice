@@ -20,6 +20,6 @@ class CowardMobStrategy(
     }
 }
 
-class CowardMobStrategyBuilder: MobStrategyBuilder {
+class CowardMobStrategyBuilder : MobStrategyBuilder {
     override fun build(mob: Mob, world: World) = CowardMobStrategy(mob, world)
 }
