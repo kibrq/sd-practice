@@ -1,0 +1,1 @@
+![Class diagram](diagrams/img/class-diagram.drawio.svg)
