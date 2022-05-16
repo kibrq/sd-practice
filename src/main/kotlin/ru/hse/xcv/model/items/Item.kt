@@ -10,14 +10,13 @@ interface Item {
     val bonusStats: Stats
 
     companion object {
-        fun getRandomItem(): Item {
-            return when (Random.nextInt(0, 4)) {
-                0 -> Sword()
-                1 -> Helmet()
-                2 -> BodyArmor()
-                3 -> Shield()
-                else -> throw IllegalStateException()
-            }
-        }
+        private val allItems = listOf(
+            { Sword() },
+            { Helmet() },
+            { BodyArmor() },
+            { Shield() }
+        )
+
+        fun getRandomItem() = allItems.random().invoke()
     }
 }
