@@ -5,7 +5,7 @@ Use WASD to move. Press a combination of HJKL keys and then SPACE to cast a spel
 * `HJKL` - Chain lightning
 * `HH` - Heal spell
 * `L` - Speed boost spell
-* `ZXC` - Enter WTF mode
+* `ZXC` - Enter WTF mode: 2x speed, no cooldowns, single-key spells
 
 In WTF mode speed is increased and all cooldowns are set to zero.
 
