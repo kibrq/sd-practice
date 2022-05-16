@@ -1,9 +1,7 @@
 package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
-import org.junit.Test
-import ru.hse.xcv.model.items.Shield
-import ru.hse.xcv.model.items.Sword
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class HeroTest {

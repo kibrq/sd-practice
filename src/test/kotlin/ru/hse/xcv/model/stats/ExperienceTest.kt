@@ -1,6 +1,6 @@
 package ru.hse.xcv.model.stats
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class ExperienceTest {

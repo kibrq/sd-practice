@@ -1,6 +1,6 @@
 package ru.hse.xcv.model.spells
 
-import org.junit.Test
+import org.junit.jupiter.api.Test
 import kotlin.test.assertContains
 import kotlin.test.assertEquals
 import kotlin.test.assertNull
