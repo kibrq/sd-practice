@@ -1,6 +1,6 @@
 # XCV
 
-Use WASD to move. Press a combination of HJKL keys and then SPACE to cast a spell:
+Use WASD to move. Press `I` to open inventory. Press a combination of HJKL keys and then SPACE to cast a spell:
 * `J` - Fireball spell
 * `HJKL` - Chain lightning
 * `HH` - Heal spell
