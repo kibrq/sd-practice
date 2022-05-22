@@ -15,10 +15,8 @@ class Submission private constructor(
         val taskId: Long,
         val repositoryUrl: URL
     ) {
-        private val calendar: Calendar = Calendar.getInstance()
-
         fun task() = Submission(
-            id = 1,
+            id = idCounter++,
             date = calendar.time,
             result = null,
             taskId = taskId,
@@ -32,6 +30,11 @@ class Submission private constructor(
         dateString = date.toString(),
         verdict = result?.verdict
     )
+
+    companion object {
+        private val calendar: Calendar = Calendar.getInstance()
+        private var idCounter = 0L
+    }
 }
 
 data class SubmissionView(

@@ -16,10 +16,8 @@ class Task private constructor(
         val deadlineDate: Date,
         val checkerIdentifier: String,
     ) {
-        private val calendar: Calendar = Calendar.getInstance()
-
         fun task() = Task(
-            id = 1,
+            id = idCounter++,
             publishedDate = calendar.time,
             name = name,
             description = description,
@@ -33,6 +31,11 @@ class Task private constructor(
         name = name,
         deadlineDateString = deadlineDate.toString()
     )
+
+    companion object {
+        private val calendar: Calendar = Calendar.getInstance()
+        private var idCounter = 0L
+    }
 }
 
 data class TaskView(
