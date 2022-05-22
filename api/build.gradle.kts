@@ -1,30 +1,39 @@
-val ktor_version: String by project
-val kotlin_version: String by project
-val logback_version: String by project
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    application
+    id("org.springframework.boot") version "2.7.0"
+    id("io.spring.dependency-management") version "1.0.11.RELEASE"
     kotlin("jvm") version "1.6.21"
+    kotlin("plugin.spring") version "1.6.21"
+    application
 }
 
-group = "com.maxim"
-version = "0.0.1"
 application {
-    mainClass.set("com.maxim.ApplicationKt")
-
-    val isDevelopment: Boolean = project.ext.has("development")
-    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
+    mainClass.set("ru.hse.hwproj.HwprojApplication")
 }
+
+group = "ru.hse"
+version = "0.0.1-SNAPSHOT"
+java.sourceCompatibility = JavaVersion.VERSION_11
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
 }
 
 dependencies {
-    implementation("io.ktor:ktor-server-core-jvm:$ktor_version")
-    implementation("io.ktor:ktor-server-netty-jvm:$ktor_version")
-    implementation("ch.qos.logback:logback-classic:$logback_version")
-    testImplementation("io.ktor:ktor-server-tests-jvm:$ktor_version")
-    testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
+    implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        freeCompilerArgs = listOf("-Xjsr305=strict")
+        jvmTarget = "11"
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
 }
