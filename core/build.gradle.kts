@@ -16,9 +16,9 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.0")
-    implementation("org.jooq.jooq:3.16.6")
-    implementation("org.jooq.jooq-meta:3.16.6")
-    implementation("org.jooq.jooq-codegen:3.16.6")
+    //implementation("org.jooq.jooq:3.16.6")
+    //implementation("org.jooq.jooq-meta:3.16.6")
+    //implementation("org.jooq.jooq-codegen:3.16.6")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
 }

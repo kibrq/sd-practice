@@ -13,7 +13,11 @@ repositories {
 }
 
 dependencies {
+    implementation("com.rabbitmq:amqp-client:5.14.2")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+
+    implementation(project(":core"))
+
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
 }
 
