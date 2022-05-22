@@ -9,7 +9,7 @@ class SubmissionService(
     private val submissionRepository: SubmissionRepository,
     private val checkerRequestsService: CheckerRequestsService
 ) {
-    fun uploadSubmission(prototype: Submission.Prototype): Submission = submissionRepository.uploadSubmission(prototype)
+    fun uploadSubmission(prototype: Submission.SubmissionPrototype) = submissionRepository.uploadSubmission(prototype)
 
     fun getSubmission(submissionId: Long): Submission = submissionRepository.getSubmissionById(submissionId)
 

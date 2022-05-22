@@ -10,7 +10,7 @@ import ru.hse.core.task.TaskRepository
 class TaskService(
     private val taskRepository: TaskRepository
 ) {
-    fun uploadTask(prototype: Task.Prototype): Task = taskRepository.uploadTask(prototype)
+    fun uploadTask(prototype: Task.TaskPrototype): Task = taskRepository.uploadTask(prototype)
 
     fun getTask(taskId: Long): Task = taskRepository.getTaskById(taskId)
 

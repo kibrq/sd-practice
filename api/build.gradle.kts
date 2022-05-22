@@ -28,8 +28,8 @@ dependencies {
 
     implementation("org.springframework.boot:spring-boot-starter:2.7.0")
     implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
-    implementation("org.springdoc:springdoc-openapi-kotlin:1.5.12")
-    implementation("org.springdoc:springdoc-openapi-ui:1.5.12")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.8")
+    implementation("org.springdoc:springdoc-openapi-ui:1.6.8")
 
     testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.0")
 }

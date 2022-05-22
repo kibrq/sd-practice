@@ -11,7 +11,7 @@ class Submission private constructor(
     val taskId: Long,
     val repositoryUrl: URL
 ) {
-    data class Prototype(
+    data class SubmissionPrototype(
         val taskId: Long,
         val repositoryUrl: URL
     ) {

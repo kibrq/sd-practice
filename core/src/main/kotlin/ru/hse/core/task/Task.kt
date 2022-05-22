@@ -8,13 +8,13 @@ class Task private constructor(
     val name: String,
     val description: String,
     val deadlineDate: Date,
-    val checkerIdentifier: String,
+    val checkerIdentifier: String
 ) {
-    data class Prototype(
+    data class TaskPrototype(
         val name: String,
         val description: String,
         val deadlineDate: Date,
-        val checkerIdentifier: String,
+        val checkerIdentifier: String
     ) {
         fun task() = Task(
             id = idCounter++,

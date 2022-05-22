@@ -1,6 +1,6 @@
-# Software design practice HSE-2022
+## Swagger
 
-Homeworks can be found in the appropriate branches.
+http://localhost:8080/swagger-ui.html
 
 ## Contributors
 

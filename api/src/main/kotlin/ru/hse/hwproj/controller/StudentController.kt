@@ -13,12 +13,12 @@ class StudentController(
     private val taskService: TaskService
 ) {
     @PostMapping("/submissions/upload")
-    fun uploadSubmission(@RequestBody prototype: Submission.Prototype) {
+    fun uploadSubmission(@RequestBody prototype: Submission.SubmissionPrototype) {
         submissionService.uploadSubmission(prototype)
     }
 
     @GetMapping("/submissions")
-    fun viewSubmission(@RequestBody submissionId: Long): Submission {
+    fun viewSubmission(@RequestParam submissionId: Long): Submission {
         return submissionService.getSubmission(submissionId)
     }
 
@@ -28,7 +28,7 @@ class StudentController(
     }
 
     @GetMapping("/tasks")
-    fun viewTask(@RequestBody taskId: Long): Task {
+    fun viewTask(@RequestParam taskId: Long): Task {
         return taskService.getTask(taskId)
     }
 
