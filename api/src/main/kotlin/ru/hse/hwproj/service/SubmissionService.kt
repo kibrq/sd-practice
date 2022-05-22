@@ -1,12 +1,17 @@
 package ru.hse.hwproj.service
 
 import org.springframework.stereotype.Service
+import ru.hse.core.submission.Submission
+import ru.hse.core.submission.SubmissionRepository
 
 @Service
-class SubmissionService {
-    // fun getAllSubmissions(): List<Submission> {}
+class SubmissionService(
+    private val submissionRepository: SubmissionRepository,
+    private val checkerRequestsService: CheckerRequestsService
+) {
+    fun createSubmission(prototype: Submission.Prototype): Submission = submissionRepository.createSubmission(prototype)
 
-    // fun getSubmission(submissionId: Long): Submission {}
+    fun getSubmission(submissionId: Long): Submission = submissionRepository.getSubmissionById(submissionId)
 
-    // fun uploadSubmission(prototype: SubmissionPrototype) {}
+    fun getAllSubmissions(): List<Submission> = submissionRepository.getAllSubmissions()
 }

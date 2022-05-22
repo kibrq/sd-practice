@@ -21,11 +21,17 @@ repositories {
 }
 
 dependencies {
-    implementation("org.springframework.boot:spring-boot-starter")
+    implementation(project(":core"))
+
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
-    implementation("org.springframework.boot:spring-boot-starter-web")
-    testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("org.springframework.boot:spring-boot-starter:2.7.0")
+    implementation("org.springframework.boot:spring-boot-starter-web:2.7.0")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.5.12")
+    implementation("org.springdoc:springdoc-openapi-ui:1.5.12")
+
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.0")
 }
 
 tasks.withType<KotlinCompile> {

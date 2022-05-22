@@ -1,9 +1,8 @@
 package ru.hse.core.checker
 
+import org.springframework.stereotype.Repository
+
+@Repository
 class CheckerRepository {
-    fun uploadChecker(prototype: CheckerPrototype) = true
-
-    fun getAllCheckers() = listOf<Checker>()
-
-    fun getCheckerById(checkerId: Long) = Checker()
+    fun createChecker(dockerfile: String): Checker = TODO()
 }

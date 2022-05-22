@@ -1,9 +1,12 @@
 package ru.hse.core.submission
 
+import org.springframework.stereotype.Repository
+
+@Repository
 class SubmissionRepository {
-    fun uploadSubmission(prototype: SubmissionPrototype) = true
+    fun createSubmission(prototype: Submission.Prototype): Submission = TODO()
 
-    fun getAllTasks() = listOf<Submission>()
+    fun getSubmissionById(submissionId: Long): Submission = TODO()
 
-    fun getTaskById(submissionId: Long) = Submission()
+    fun getAllSubmissions(): List<Submission> = TODO()
 }

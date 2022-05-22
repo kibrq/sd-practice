@@ -1,6 +1,11 @@
 package ru.hse.core.checker
 
-class Checker {}
+enum class CheckerVerdict {
+    YES,
+    NO
+}
 
-class CheckerPrototype {}
-
+data class Checker(
+    val dockerfile: String,
+    val imageIdentifier: String
+)

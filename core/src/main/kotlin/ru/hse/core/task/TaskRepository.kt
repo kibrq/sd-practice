@@ -1,9 +1,12 @@
 package ru.hse.core.task
 
+import org.springframework.stereotype.Repository
+
+@Repository
 class TaskRepository {
-    fun uploadTask(prototype: TaskPrototype) = true
+    fun uploadTask(prototype: Task.Prototype): Task = TODO()
 
-    fun getAllTasks() = listOf<Task>()
+    fun getTaskById(taskId: Long): Task = TODO()
 
-    fun getTaskById(taskId: Long) = Task()
+    fun getAllTasks(): List<Task> = TODO()
 }
