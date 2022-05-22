@@ -9,4 +9,6 @@ class SubmissionRepository {
     fun getSubmissionById(submissionId: Long): Submission = TODO()
 
     fun getAllSubmissions(): List<Submission> = TODO()
+
+    fun updateSubmissionResult(submissionId: Long, feedback: SubmissionFeedback): Nothing = TODO()
 }

@@ -2,19 +2,12 @@ package ru.hse.runner
 
 import ru.hse.core.checker.CheckerVerdict
 import ru.hse.core.submission.SubmissionFeedback
-import ru.hse.core.submission.SubmissionRepository
-import ru.hse.core.task.TaskRepository
 import java.net.URL
 
 class Runner {
-    private val submissionRepository = SubmissionRepository()
-    private val taskRepository = TaskRepository()
 
-
-    fun run(submissionId: Long): SubmissionFeedback {
-        val submission = submissionRepository.getSubmissionById(submissionId)
-        val task = taskRepository.getTaskById(submission.taskId)
-        val process = runProcess(task.checkerIdentifier, submission.repositoryUrl)
+    fun run(checkerIdentifier: String, repositoryUrl: URL): SubmissionFeedback {
+        val process = runProcess(checkerIdentifier, repositoryUrl)
         return process.getResult()
     }
 
