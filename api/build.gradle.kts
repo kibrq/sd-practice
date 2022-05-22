@@ -9,7 +9,7 @@ plugins {
 }
 
 application {
-    mainClass.set("ru.hse.hwproj.HwprojApplication")
+    mainClass.set("ru.hse.hwproj.HwprojApi")
 }
 
 group = "ru.hse"

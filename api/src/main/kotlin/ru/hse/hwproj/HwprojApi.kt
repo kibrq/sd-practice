@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class HwprojApplication
+class HwprojApi
 
 fun main(args: Array<String>) {
-    runApplication<HwprojApplication>(*args)
+    runApplication<HwprojApi>(*args)
 }
