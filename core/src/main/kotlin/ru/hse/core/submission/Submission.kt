@@ -1,29 +1,22 @@
 package ru.hse.core.submission
 
+import org.springframework.stereotype.Component
 import ru.hse.core.checker.CheckerVerdict
 import java.net.URL
-import java.util.*
+import java.time.LocalDateTime
+import java.util.concurrent.atomic.AtomicLong
 
-class Submission private constructor(
+
+object SubmissionIdHolder {
+    val currentId = AtomicLong(0)
+}
+class Submission(
     val id: Long,
-    val date: Date,
+    val date: LocalDateTime,
     val result: SubmissionFeedback?,
     val taskId: Long,
     val repositoryUrl: URL
 ) {
-    data class SubmissionPrototype(
-        val taskId: Long,
-        val repositoryUrl: URL
-    ) {
-        fun task() = Submission(
-            id = idCounter++,
-            date = calendar.time,
-            result = null,
-            taskId = taskId,
-            repositoryUrl = repositoryUrl
-        )
-    }
-
     fun view() = SubmissionView(
         id = id,
         taskId = taskId,
@@ -31,11 +24,21 @@ class Submission private constructor(
         verdict = result?.verdict
     )
 
-    companion object {
-        private val calendar: Calendar = Calendar.getInstance()
-        private var idCounter = 0L
-    }
 }
+
+data class SubmissionPrototype(
+    val taskId: Long,
+    val repositoryUrl: URL
+) {
+    fun task() = Submission(
+        id = SubmissionIdHolder.currentId.incrementAndGet(),
+        date = LocalDateTime.now(),
+        result = null,
+        taskId = taskId,
+        repositoryUrl = repositoryUrl
+    )
+}
+
 
 data class SubmissionView(
     val id: Long,
@@ -48,3 +51,16 @@ data class SubmissionFeedback(
     val verdict: CheckerVerdict,
     val comments: String
 )
+
+
+@Component
+class SubmissionRepository {
+    fun uploadSubmission(prototype: SubmissionPrototype): Submission = TODO(prototype.toString())
+
+    fun getSubmissionById(submissionId: Long): Submission = TODO(submissionId.toString())
+
+    fun getAllSubmissions(): List<Submission> = TODO()
+
+    fun updateSubmissionResult(submissionId: Long, feedback: SubmissionFeedback): Nothing = TODO()
+}
+

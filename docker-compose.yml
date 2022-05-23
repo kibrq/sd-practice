@@ -1,0 +1,36 @@
+version: '3.9'
+
+
+services:
+    database:
+        build:
+            context: .
+            dockerfile: ./docker/database/Dockerfile
+        environment:
+            POSTGRES_PASSWORD: 'hwproj'
+            POSTGRES_USER: 'hwproj'
+            POSTGRES_DB: 'hwproj'
+        ports:
+            - '5432:5432'
+        expose:
+            - '5432'
+
+    # api:
+    #     build:
+    #         context: .
+    #         dockerfile: ./docker/api/Dockerfile
+    #     ports:
+    #         - '8080:8080'
+    #     volumes:
+    #         - .:/app
+    #     depends_on:
+    #         - database
+
+    # runner:
+    #     build:
+    #         context: .
+    #         dockerfile: ./docker/runner/Dockerfile
+    #     ports:
+    #         - "8888:8888"
+    #     volumes:
+    #         - .:/app

@@ -17,6 +17,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
     implementation(project(":core"))
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.0")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
 }

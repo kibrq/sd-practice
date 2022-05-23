@@ -2,13 +2,15 @@ package ru.hse.runner
 
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
+import org.springframework.stereotype.Service
 import ru.hse.core.submission.SubmissionRepository
 import ru.hse.core.task.TaskRepository
 
-class CheckerService : AutoCloseable {
-    private val submissionRepository = SubmissionRepository()
-    private val taskRepository = TaskRepository()
-
+@Service
+class CheckerService(
+    private val submissionRepository: SubmissionRepository,
+    private val taskRepository: TaskRepository
+) : AutoCloseable {
     private val runner = Runner()
 
     private val connectionFactory by lazy {
@@ -40,7 +42,7 @@ class CheckerService : AutoCloseable {
     private fun receiveSubmission(consumerTag: String, message: Delivery) {
         val submissionId = String(message.body).toLong()
         val submission = submissionRepository.getSubmissionById(submissionId)
-        val task = taskRepository.getTaskById(submission.taskId)
+        val task = taskRepository.getTaskById(submission.taskId) ?: return
         val submissionFeedback = runner.run(task.checkerIdentifier, submission.repositoryUrl)
         submissionRepository.updateSubmissionResult(submissionId, submissionFeedback)
     }
