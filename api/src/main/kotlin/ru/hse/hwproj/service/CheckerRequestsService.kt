@@ -9,7 +9,7 @@ class CheckerRequestsService(
     private val checkerRepository: CheckerRepository
 ) {
     fun sendCreateCheckerRequest(dockerfile: String) {
-        val checker = checkerRepository.upload(CheckerPrototype(dockerfile))
+        val checker = checkerRepository.uploadChecker(CheckerPrototype(dockerfile))
     }
 
     fun sendSubmissionCheckRequest(submissionId: Long) {

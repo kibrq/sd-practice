@@ -1,8 +1,9 @@
 package ru.hse.core.task
 
 import org.jooq.DSLContext
+import org.jooq.impl.DefaultDSLContext
+import org.springframework.beans.factory.annotation.Qualifier
 import ru.hse.core.Tables
-import ru.hse.core.tables.records.TasksRecord
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicLong
 
@@ -46,8 +47,7 @@ data class TaskView(
     val deadlineDateString: String, // "EEE MMM dd HH:mm:ss zzz yyyy"
 )
 
-class TaskRepository(private val dsl: DSLContext) {
-
+class TaskRepository(private val dsl: DefaultDSLContext) {
     fun upload(prototype: TaskPrototype): Boolean {
         return dsl.insertInto(Tables.TASKS)
             .columns(Tables.TASKS.fields().asList())

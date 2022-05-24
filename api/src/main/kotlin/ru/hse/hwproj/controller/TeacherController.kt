@@ -26,7 +26,7 @@ class TeacherController(
     }
 
     @GetMapping("/submissions")
-    fun viewSubmission(@RequestParam submissionId: Long): Submission {
+    fun viewSubmission(@RequestParam submissionId: Long): Submission? {
         return submissionService.getSubmission(submissionId)
     }
 

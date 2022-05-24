@@ -41,7 +41,7 @@ class CheckerService(
     @Suppress("UNUSED_PARAMETER")
     private fun receiveSubmission(consumerTag: String, message: Delivery) {
         val submissionId = String(message.body).toLong()
-        val submission = submissionRepository.getSubmissionById(submissionId)
+        val submission = submissionRepository.getSubmissionById(submissionId) ?: return
         val task = taskRepository.getTaskById(submission.taskId) ?: return
         val submissionFeedback = runner.run(task.checkerIdentifier, submission.repositoryUrl)
         submissionRepository.updateSubmissionResult(submissionId, submissionFeedback)

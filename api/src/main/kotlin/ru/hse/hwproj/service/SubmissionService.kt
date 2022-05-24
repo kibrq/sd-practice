@@ -12,7 +12,7 @@ class SubmissionService(
 ) {
     fun uploadSubmission(prototype: SubmissionPrototype) = submissionRepository.uploadSubmission(prototype)
 
-    fun getSubmission(submissionId: Long): Submission = submissionRepository.getSubmissionById(submissionId)
+    fun getSubmission(submissionId: Long): Submission? = submissionRepository.getSubmissionById(submissionId)
 
     fun getAllSubmissions(): List<Submission> = submissionRepository.getAllSubmissions()
 }

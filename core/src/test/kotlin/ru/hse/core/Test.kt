@@ -6,10 +6,5 @@ import ru.hse.core.utils.testDSL
 import kotlin.test.Test
 
 class Test {
-    @Test
-    fun testDatabase() {
-        val repository = CheckerRepository(testDSL())
-        repository.upload(CheckerPrototype("as"))
-        repository.getAll().forEach{ println(it.dockerfile) }
-    }
+
 }
