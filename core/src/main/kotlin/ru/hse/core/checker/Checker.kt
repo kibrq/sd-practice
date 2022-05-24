@@ -32,7 +32,6 @@ data class Checker(
 
 data class CheckerPrototype(val dockerfile: String)
 
-@Component
 class CheckerRepository(private val dsl: DefaultDSLContext) {
     fun uploadChecker(prototype: CheckerPrototype): Boolean {
         return dsl.insertInto(Tables.CHECKERS)

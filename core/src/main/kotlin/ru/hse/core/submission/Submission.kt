@@ -56,7 +56,6 @@ data class SubmissionFeedback(
 )
 
 
-@Component
 class SubmissionRepository(private val dsl: DefaultDSLContext) {
     fun uploadSubmission(prototype: SubmissionPrototype) = dsl.insertInto(Tables.SUBMISSIONS)
             .columns(Tables.SUBMISSIONS.fields().asList())

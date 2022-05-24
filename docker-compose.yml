@@ -1,5 +1,10 @@
 version: '3.9'
 
+networks:
+    queue_network:
+        driver: 'bridge'
+    database_network:
+
 services:
     database:
         build:
@@ -11,6 +16,17 @@ services:
             POSTGRES_DB: 'hwproj'
         ports:
             - '5432:5432'
+        networks:
+            - database_network
+
+    rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+            - '5672:5672'
+            - '15672:15672'
+        networks:
+            - queue_network
+
     api:
         build:
             context: .
@@ -19,5 +35,10 @@ services:
             - '8080:8080'
         volumes:
             - .:/app
+        networks:
+            - queue_network
+            - database_network
         depends_on:
             - database
+            - rabbitmq
+

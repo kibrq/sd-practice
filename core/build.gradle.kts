@@ -24,6 +24,7 @@ dependencies {
     testImplementation(group = "com.h2database", name = "h2", version = "1.3.148")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-test:2.7.0")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
 }
 

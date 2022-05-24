@@ -1,19 +1,22 @@
 package ru.hse.core.task
 
 import org.jooq.DSLContext
+import org.jooq.exception.DataAccessException
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.beans.factory.annotation.Qualifier
+import org.springframework.stereotype.Component
 import ru.hse.core.Tables
+import ru.hse.core.tables.records.TasksRecord
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicLong
 
 object TaskIdHolder {
     var currentId = AtomicLong(0)
 }
-class Task(
+data class Task(
     val id: Long,
-    val publishedDate: LocalDateTime,
     val name: String,
+    val publishedDate: LocalDateTime,
     val description: String,
     val deadlineDate: LocalDateTime,
     val checkerIdentifier: String
@@ -31,13 +34,13 @@ data class TaskPrototype(
     val deadlineDate: LocalDateTime,
     val checkerIdentifier: String
 ) {
-    fun task() = Task(
-        id = TaskIdHolder.currentId.incrementAndGet(),
-        publishedDate = LocalDateTime.now(),
-        name = name,
-        description = description,
-        deadlineDate = deadlineDate,
-        checkerIdentifier = checkerIdentifier
+    fun task() = TasksRecord(
+        TaskIdHolder.currentId.incrementAndGet().toInt(),
+        name,
+        LocalDateTime.now(),
+        description,
+        deadlineDate,
+        checkerIdentifier
     )
 }
 
@@ -49,10 +52,15 @@ data class TaskView(
 
 class TaskRepository(private val dsl: DefaultDSLContext) {
     fun upload(prototype: TaskPrototype): Boolean {
-        return dsl.insertInto(Tables.TASKS)
-            .columns(Tables.TASKS.fields().asList())
-            .values(prototype.task())
-            .execute().let { it == 0 }
+        return try {
+            dsl.insertInto(Tables.TASKS)
+                .columns(Tables.TASKS.fields().asList())
+                .values(prototype.task())
+                .execute()
+            true
+        } catch (e: Exception) {
+            false
+        }
     }
 
     fun getAll(): Collection<Task> {
