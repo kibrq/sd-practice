@@ -21,8 +21,8 @@ class TeacherController(
     }
 
     @PostMapping("/checkers/upload")
-    fun uploadChecker(@RequestBody dockerfile: String) {
-        checkerRequestsService.sendCreateCheckerRequest(dockerfile)
+    fun uploadChecker(@RequestBody dockerfile: String): Boolean {
+        return checkerRequestsService.sendCreateCheckerRequest(dockerfile)
     }
 
     @GetMapping("/submissions")

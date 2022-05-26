@@ -8,8 +8,8 @@ import ru.hse.core.checker.CheckerRepository
 class CheckerRequestsService(
     private val checkerRepository: CheckerRepository
 ) {
-    fun sendCreateCheckerRequest(dockerfile: String) {
-        val checker = checkerRepository.uploadChecker(CheckerPrototype(dockerfile))
+    fun sendCreateCheckerRequest(dockerfile: String): Boolean {
+        return checkerRepository.uploadChecker(CheckerPrototype(dockerfile))
     }
 
     fun sendSubmissionCheckRequest(submissionId: Long) {

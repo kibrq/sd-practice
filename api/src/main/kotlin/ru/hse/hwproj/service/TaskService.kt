@@ -15,5 +15,5 @@ class TaskService(
 
     fun getTask(taskId: Long): Task? = taskRepository.getTaskById(taskId)
 
-    fun getAllTasks(): List<Task> = taskRepository.getAll() as List<Task>
+    fun getAllTasks(): List<Task> = taskRepository.getAll().toList()
 }

@@ -7,8 +7,7 @@ import ru.hse.core.submission.SubmissionRepository
 
 @Service
 class SubmissionService(
-    private val submissionRepository: SubmissionRepository,
-    private val checkerRequestsService: CheckerRequestsService
+    private val submissionRepository: SubmissionRepository
 ) {
     fun uploadSubmission(prototype: SubmissionPrototype) = submissionRepository.uploadSubmission(prototype)
 
