@@ -3,6 +3,7 @@ package ru.hse.repository.task
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.stereotype.Component
 import ru.hse.repository.Tables
+import ru.hse.repository.utils.withinTry
 import java.time.LocalDateTime
 
 data class Task(
@@ -38,12 +39,14 @@ class TaskRepository(
     private val dsl: DefaultDSLContext
 ) {
     fun upload(prototype: TaskPrototype): Int? {
-        return dsl.insertInto(Tables.SUBMISSION_FEEDBACKS)
+        return withinTry {
+            dsl.insertInto(Tables.SUBMISSION_FEEDBACKS)
             .columns(Tables.TASKS.fields("NAME", "PUBLISHED_DATE", "DESCRIPTION", "DEADLINE_DATE", "CHECKER_IDENTIFIER")?.asList())
             .values(prototype.name, LocalDateTime.now(), prototype.description, prototype.deadlineDate, prototype.checkerIdentifier)
             .returningResult(Tables.SUBMISSION_FEEDBACKS.ID)
             .fetchOne()
             ?.value1()
+        }
     }
 
     fun getByIds(ids: List<Int>): List<Task> {

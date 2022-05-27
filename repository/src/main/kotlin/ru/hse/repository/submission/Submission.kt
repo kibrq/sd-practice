@@ -1,9 +1,12 @@
 package ru.hse.repository.submission
 
+import org.jooq.impl.DSL
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.stereotype.Component
+import ru.hse.repository.Sequences
 import ru.hse.repository.Tables
 import ru.hse.repository.checker.CheckerVerdict
+import ru.hse.repository.utils.withinTry
 import java.net.URL
 import java.time.LocalDateTime
 
@@ -43,7 +46,7 @@ data class SubmissionFeedback(
 
 data class SubmissionFeedbackPrototype(
     val verdict: CheckerVerdict,
-    val comments: String
+    val comments: String,
 )
 
 @Component
@@ -76,12 +79,26 @@ class SubmissionRepository(
     private val dsl: DefaultDSLContext,
 ) {
     fun upload(prototype: SubmissionPrototype): Int? {
-        return dsl.insertInto(Tables.SUBMISSIONS)
-            .columns(Tables.SUBMISSIONS.TASK_ID, Tables.SUBMISSIONS.DATE, Tables.SUBMISSIONS.RESULT_ID, Tables.SUBMISSIONS.REPOSITORY_URL)
-            .values(prototype.taskId, LocalDateTime.now(), null, prototype.repositoryUrl.toString())
-            .returningResult(Tables.SUBMISSIONS.ID)
-            .fetchOne()
-            ?.value1()
+        return withinTry {
+            dsl.insertInto(Tables.SUBMISSIONS)
+                .columns(
+                    Tables.SUBMISSIONS.ID,
+                    Tables.SUBMISSIONS.TASK_ID,
+                    Tables.SUBMISSIONS.DATE,
+                    Tables.SUBMISSIONS.RESULT_ID,
+                    Tables.SUBMISSIONS.REPOSITORY_URL
+                )
+                .values(
+                    Sequences.SUBMISSION_ID_SEQ.nextval().cast(Int::class.java),
+                    DSL.value(prototype.taskId),
+                    DSL.value(LocalDateTime.now()),
+                    null,
+                    DSL.value(prototype.repositoryUrl.toString())
+                )
+                .returningResult(Tables.SUBMISSIONS.ID)
+                .fetchOne()
+                ?.value1()
+        }
     }
 
     fun getByIds(ids: List<Int>): List<Submission> {

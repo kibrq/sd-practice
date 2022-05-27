@@ -102,7 +102,7 @@ class TaskRepositoryTest(
                 it.checkerIdentifier == prototype.checkerIdentifier
         })
         val expectedTask = tasks.stream().findFirst().get()
-        val task = taskRepository.getTaskById(expectedTask.id)
+        val task = taskRepository.getById(expectedTask.id)
         assertEquals(task, expectedTask)
     }
 }

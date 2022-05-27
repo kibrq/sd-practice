@@ -6,8 +6,10 @@ CREATE TABLE IF NOT EXISTS checkers (
 );
 
 
+CREATE SEQUENCE IF NOT EXISTS task_id_seq;
+
 CREATE TABLE IF NOT EXISTS tasks (
-    id             SERIAL,
+    id             INTEGER NOT NULL,
     name           VARCHAR(255) NOT NULL,
     published_date TIMESTAMP NOT NULL,
     description    VARCHAR(255) NOT NULL,
@@ -18,9 +20,10 @@ CREATE TABLE IF NOT EXISTS tasks (
     FOREIGN KEY (checker_id) REFERENCES checkers (id)
 );
 
+CREATE SEQUENCE IF NOT EXISTS submission_feedback_id_seq;
 
 CREATE TABLE IF NOT EXISTS submission_feedbacks (
-    id          SERIAL,
+    id          INTEGER NOT NULL,
     verdict     VARCHAR(255) NOT NULL,
     comments    VARCHAR(255) NOT NULL,
 
@@ -28,9 +31,10 @@ CREATE TABLE IF NOT EXISTS submission_feedbacks (
     CHECK (verdict IN ('yes', 'no'))
 );
 
+CREATE SEQUENCE IF NOT EXISTS submission_id_seq;
 
 CREATE TABLE IF NOT EXISTS submissions (
-    id              SERIAL,
+    id              INTEGER NOT NULL,
     task_id         INTEGER NOT NULL,
     date            TIMESTAMP NOT NULL,
     result_id       INTEGER,

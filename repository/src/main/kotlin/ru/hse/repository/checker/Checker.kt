@@ -3,6 +3,7 @@ package ru.hse.repository.checker
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.stereotype.Component
 import ru.hse.repository.Tables
+import ru.hse.repository.utils.withinTry
 
 
 enum class CheckerVerdict(val value: Boolean) {
@@ -28,11 +29,13 @@ data class CheckerPrototype(val imageIdentifier: String, val dockerfile: String)
 class CheckerRepository(private val dsl: DefaultDSLContext) {
 
     fun upload(prototype: CheckerPrototype): Boolean {
-        return dsl.insertInto(Tables.CHECKERS)
-            .columns(Tables.CHECKERS.fields().asList())
-            .values(prototype.imageIdentifier, prototype.dockerfile)
-            .returningResult(Tables.CHECKERS.ID)
-            .fetchOne().let { it != null }
+        return withinTry {
+            dsl.insertInto(Tables.CHECKERS)
+                .columns(Tables.CHECKERS.fields().asList())
+                .values(prototype.imageIdentifier, prototype.dockerfile)
+                .returningResult(Tables.CHECKERS.ID)
+                .fetchOne().let { it != null }
+        }.let { it != null }
     }
 
     fun getAll(): Collection<Checker> {
