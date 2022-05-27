@@ -5,6 +5,7 @@ import com.rabbitmq.client.MessageProperties
 import org.springframework.stereotype.Service
 import ru.hse.repository.checker.CheckerPrototype
 import ru.hse.repository.checker.CheckerRepository
+import java.util.*
 
 @Service
 class CheckerRequestsService(
@@ -28,11 +29,17 @@ class CheckerRequestsService(
         connection.close()
     }
 
-    fun sendCreateCheckerRequest(dockerfile: String): String {
-        return checkerRepository.uploadChecker(CheckerPrototype(dockerfile))
+    fun sendCreateCheckerRequest(dockerfile: String): String? {
+        val id = UUID.randomUUID().toString()
+        val prototype = CheckerPrototype(id, dockerfile)
+        return if (checkerRepository.upload(prototype)) {
+            id
+        } else {
+            null
+        }
     }
 
-    fun sendSubmissionCheckRequest(submissionId: Long) {
+    fun sendSubmissionCheckRequest(submissionId: Int) {
         val message = submissionId.toString().toByteArray()
         channel.basicPublish("", "submissions_queue", MessageProperties.TEXT_PLAIN, message)
     }

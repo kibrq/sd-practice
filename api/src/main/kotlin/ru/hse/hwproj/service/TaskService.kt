@@ -13,7 +13,7 @@ class TaskService(
 ) {
     fun uploadTask(prototype: TaskPrototype): Int? = taskRepository.upload(prototype)
 
-    fun getTask(taskId: Long): Task? = taskRepository.getTaskById(taskId)
+    fun getTask(taskId: Int): Task? = taskRepository.getById(taskId)
 
     fun getAllTasks(): List<Task> = taskRepository.getAll()
 }

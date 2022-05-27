@@ -103,7 +103,7 @@ class SubmissionRepository(
             .into(Submission::class.java)
     }
 
-    fun update(submissionId: Long, feedback: SubmissionFeedback) {
+    fun update(submissionId: Int, feedback: SubmissionFeedback) {
         println("$submissionId is ${feedback.verdict}")
     }
 }
