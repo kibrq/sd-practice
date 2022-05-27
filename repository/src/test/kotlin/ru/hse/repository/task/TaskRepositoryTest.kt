@@ -8,6 +8,7 @@ import ru.hse.repository.Tables
 import ru.hse.repository.TestDataSourceConfiguration
 import ru.hse.repository.tables.records.CheckersRecord
 import java.time.LocalDateTime
+import java.util.*
 import kotlin.test.*
 
 @SpringBootTest(
@@ -30,11 +31,13 @@ class TaskRepositoryTest(
             .execute()
     }
 
-    private fun addChecker(checkerIdentifier: String) {
+    private fun addRandomChecker(): String {
+        val checkerId = UUID.randomUUID().toString()
         dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())
-            .values(CheckersRecord(checkerIdentifier, "dockerfile"))
+            .values(CheckersRecord(checkerId, "dockerfile"))
             .execute()
+        return checkerId
     }
 
     @Test
@@ -45,31 +48,31 @@ class TaskRepositoryTest(
             deadlineDate = LocalDateTime.of(2022, 12, 12, 0, 0),
             checkerIdentifier = "not exists"
         )
-        assertFalse(taskRepository.upload(prototype) != null)
+        assertNull(taskRepository.upload(prototype))
     }
 
     @Test
-    fun `Upload should return true with existing checker`() {
-        addChecker("checker")
+    fun `Upload should return id with existing checker`() {
+        val checkerId = addRandomChecker()
         val prototype = TaskPrototype(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = "checker"
+            checkerIdentifier = checkerId
         )
-        assertTrue(taskRepository.upload(prototype) != null)
+        assertNotNull(taskRepository.upload(prototype))
     }
 
     @Test
     fun `Get all should contain added task`() {
-        addChecker("checker")
+        val checkerId = addRandomChecker()
         val prototype = TaskPrototype(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = "checker"
+            checkerIdentifier = checkerId
         )
-        assertTrue(taskRepository.upload(prototype) != null)
+        assertNotNull(taskRepository.upload(prototype))
 
         val tasks = taskRepository.getAll()
         assertTrue(tasks.any {
@@ -82,14 +85,14 @@ class TaskRepositoryTest(
 
     @Test
     fun `Get by id should return added task`() {
-        addChecker("checker")
+        val checkerId = addRandomChecker()
         val prototype = TaskPrototype(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = "checker"
+            checkerIdentifier = checkerId
         )
-        assertTrue(taskRepository.upload(prototype) != null)
+        assertNotNull(taskRepository.upload(prototype))
 
         val tasks = taskRepository.getAll()
         assertTrue(tasks.any {
