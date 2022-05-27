@@ -1,12 +1,12 @@
 import nu.studer.gradle.jooq.JooqEdition
 
-val h2Version:   String by project
+val h2Version: String by project
 val jooqVersion: String by project
-val sqlRoot:     String by project
+val sqlRoot: String by project
 
 plugins {
     id("nu.studer.jooq")
-    id("java")
+    java
 }
 
 repositories {
@@ -14,7 +14,7 @@ repositories {
 }
 
 dependencies {
-    jooqGenerator("com.h2database:h2:${h2Version}")
+    jooqGenerator("com.h2database:h2:$h2Version")
 }
 
 jooq {
@@ -27,7 +27,7 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc.apply {
                     driver = "org.h2.Driver"
-                    url = "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${project.rootDir}/${sqlRoot}/init.sql'"
+                    url = "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${project.rootDir}/$sqlRoot/init.sql'"
                     user = "sa"
                     password = ""
                 }
