@@ -11,7 +11,7 @@ import ru.hse.repository.task.TaskRepository
 class TaskService(
     private val taskRepository: TaskRepository
 ) {
-    fun uploadTask(prototype: TaskPrototype): Boolean = taskRepository.upload(prototype)
+    fun uploadTask(prototype: TaskPrototype): Int? = taskRepository.upload(prototype)
 
     fun getTask(taskId: Long): Task? = taskRepository.getTaskById(taskId)
 

@@ -17,10 +17,11 @@ class Runner {
         return SubmissionFeedback(CheckerVerdict.valueOf(code == 0), message)
     }
 
-    private fun runProcess(checker_Identifier: String, url: URL): Process {
+    private fun runProcess(checkerIdentifier: String, url: URL): Process {
         return ProcessBuilder().apply {
+            val repoName = url.toString().substringAfterLast('/')
             val gitClone = "git clone $url"
-            val dockerRun = "docker run -v ${url.toString().substringAfterLast('/')}:/solution $checker_Identifier"
+            val dockerRun = "docker run -v $repoName:/solution $checkerIdentifier"
             val mainCommand = "$gitClone && $dockerRun"
 
             val isWindows = System.getProperty("os.name").startsWith("Win")

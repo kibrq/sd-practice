@@ -67,7 +67,7 @@ class SubmissionRepository(private val dsl: DefaultDSLContext) {
         dsl.insertInto(Tables.SUBMISSIONS)
             .columns(Tables.SUBMISSIONS.fields().asList())
             .values(record)
-            .execute().let { it == 0 }
+            .execute()
         return submissionId
     }
 

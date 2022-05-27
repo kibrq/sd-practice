@@ -52,15 +52,16 @@ data class TaskView(
 class TaskRepository(
     private val dsl: DefaultDSLContext
 ) {
-    fun upload(prototype: TaskPrototype): Boolean {
+    fun upload(prototype: TaskPrototype): Int? {
         return try {
+            val task = prototype.task()
             dsl.insertInto(Tables.TASKS)
                 .columns(Tables.TASKS.fields().asList())
-                .values(prototype.task())
+                .values(task)
                 .execute()
-            true
+            task.id
         } catch (e: Exception) {
-            false
+            null
         }
     }
 

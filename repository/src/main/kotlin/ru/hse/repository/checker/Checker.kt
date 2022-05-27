@@ -33,15 +33,17 @@ data class CheckerPrototype(val dockerfile: String)
 
 @Component
 class CheckerRepository(private val dsl: DefaultDSLContext) {
-    fun uploadChecker(prototype: CheckerPrototype): Boolean {
+    fun uploadChecker(prototype: CheckerPrototype): String {
+        val checkerId = CheckerIdentifierHolder.newIdentifier()
         val record = CheckersRecord(
-            CheckerIdentifierHolder.newIdentifier(),
+            checkerId,
             prototype.dockerfile
         )
-        return dsl.insertInto(Tables.CHECKERS)
+        dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())
             .values(record)
-            .execute().let { it == 0 }
+            .execute()
+        return checkerId
     }
 
     fun getAllCheckers(): Collection<Checker> {

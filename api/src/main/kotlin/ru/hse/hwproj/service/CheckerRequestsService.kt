@@ -28,12 +28,12 @@ class CheckerRequestsService(
         connection.close()
     }
 
-    fun sendCreateCheckerRequest(dockerfile: String): Boolean {
+    fun sendCreateCheckerRequest(dockerfile: String): String {
         return checkerRepository.uploadChecker(CheckerPrototype(dockerfile))
     }
 
     fun sendSubmissionCheckRequest(submissionId: Long) {
         val message = submissionId.toString().toByteArray()
-        channel.basicPublish("", "submission_queue", MessageProperties.TEXT_PLAIN, message)
+        channel.basicPublish("", "submissions_queue", MessageProperties.TEXT_PLAIN, message)
     }
 }

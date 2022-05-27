@@ -45,7 +45,7 @@ class TaskRepositoryTest(
             deadlineDate = LocalDateTime.of(2022, 12, 12, 0, 0),
             checkerIdentifier = "not exists"
         )
-        assertFalse(taskRepository.upload(prototype))
+        assertFalse(taskRepository.upload(prototype) != null)
     }
 
     @Test
@@ -57,7 +57,7 @@ class TaskRepositoryTest(
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
             checkerIdentifier = "checker"
         )
-        assertTrue(taskRepository.upload(prototype))
+        assertTrue(taskRepository.upload(prototype) != null)
     }
 
     @Test
@@ -69,7 +69,7 @@ class TaskRepositoryTest(
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
             checkerIdentifier = "checker"
         )
-        assertTrue(taskRepository.upload(prototype))
+        assertTrue(taskRepository.upload(prototype) != null)
 
         val tasks = taskRepository.getAll()
         assertTrue(tasks.any {
@@ -89,7 +89,7 @@ class TaskRepositoryTest(
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
             checkerIdentifier = "checker"
         )
-        assertTrue(taskRepository.upload(prototype))
+        assertTrue(taskRepository.upload(prototype) != null)
 
         val tasks = taskRepository.getAll()
         assertTrue(tasks.any {
