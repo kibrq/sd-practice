@@ -1,4 +1,4 @@
-# Travel-map-client
+# Hwproj-client
 ## Initialize
 ```
 npm install
