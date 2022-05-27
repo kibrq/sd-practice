@@ -1,6 +1,7 @@
 val kotlinVersion: String by project
 val springBootVersion: String by project
 val openApiVersion: String by project
+val rabbitMqVersion: String by project
 
 plugins {
     kotlin("jvm")
@@ -21,6 +22,7 @@ dependencies {
     implementation(project(":repository"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.rabbitmq:amqp-client:$rabbitMqVersion")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
     implementation("org.springdoc:springdoc-openapi-kotlin:$openApiVersion")
     implementation("org.springdoc:springdoc-openapi-ui:$openApiVersion")

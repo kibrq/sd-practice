@@ -7,9 +7,14 @@ import ru.hse.repository.submission.SubmissionRepository
 
 @Service
 class SubmissionService(
-    private val submissionRepository: SubmissionRepository
+    private val submissionRepository: SubmissionRepository,
+    private val checkerRequestsService: CheckerRequestsService
 ) {
-    fun uploadSubmission(prototype: SubmissionPrototype): Boolean = submissionRepository.uploadSubmission(prototype)
+    fun uploadSubmission(prototype: SubmissionPrototype): Long {
+        val submissionId = submissionRepository.uploadSubmission(prototype)
+        checkerRequestsService.sendSubmissionCheckRequest(submissionId)
+        return submissionId
+    }
 
     fun getSubmission(submissionId: Long): Submission? = submissionRepository.getSubmissionById(submissionId)
 

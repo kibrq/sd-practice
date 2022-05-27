@@ -55,18 +55,20 @@ data class SubmissionFeedback(
 
 @Component
 class SubmissionRepository(private val dsl: DefaultDSLContext) {
-    fun uploadSubmission(prototype: SubmissionPrototype): Boolean {
+    fun uploadSubmission(prototype: SubmissionPrototype): Long {
+        val submissionId = SubmissionIdHolder.currentId.incrementAndGet().toInt()
         val record = SubmissionsRecord(
-            SubmissionIdHolder.currentId.incrementAndGet().toInt(),
+            submissionId,
             prototype.taskId.toInt(),
             LocalDateTime.now(),
             null,
             prototype.repositoryUrl.toString(),
         )
-        return dsl.insertInto(Tables.SUBMISSIONS)
+        dsl.insertInto(Tables.SUBMISSIONS)
             .columns(Tables.SUBMISSIONS.fields().asList())
             .values(record)
             .execute().let { it == 0 }
+        return submissionId
     }
 
     fun getSubmissionById(submissionId: Long): Submission? {
