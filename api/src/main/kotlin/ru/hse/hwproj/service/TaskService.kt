@@ -1,11 +1,13 @@
 package ru.hse.hwproj.service
 
+import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Service
 import ru.hse.repository.task.Task
 import ru.hse.repository.task.TaskPrototype
 import ru.hse.repository.task.TaskRepository
 
 @Service
+@ComponentScan("ru.hse.repository")
 class TaskService(
     private val taskRepository: TaskRepository
 ) {
