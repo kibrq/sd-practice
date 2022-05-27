@@ -33,6 +33,8 @@ services:
             dockerfile: ./docker/api/Dockerfile
         ports:
             - '8080:8080'
+        expose:
+            - '8080'
         volumes:
             - .:/app
         networks:

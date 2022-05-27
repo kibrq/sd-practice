@@ -3,16 +3,10 @@ package ru.hse.repository.task
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.stereotype.Component
 import ru.hse.repository.Tables
-import ru.hse.repository.tables.records.TasksRecord
 import java.time.LocalDateTime
-import java.util.concurrent.atomic.AtomicLong
-
-object TaskIdHolder {
-    var currentId = AtomicLong(0)
-}
 
 data class Task(
-    val id: Long,
+    val id: Int,
     val name: String,
     val publishedDate: LocalDateTime,
     val description: String,
@@ -31,19 +25,10 @@ data class TaskPrototype(
     val description: String,
     val deadlineDate: LocalDateTime,
     val checkerIdentifier: String
-) {
-    fun task() = TasksRecord(
-        TaskIdHolder.currentId.incrementAndGet().toInt(),
-        name,
-        LocalDateTime.now(),
-        description,
-        deadlineDate,
-        checkerIdentifier
-    )
-}
+)
 
 data class TaskView(
-    val id: Long,
+    val id: Int,
     val name: String,
     val deadlineDateString: String, // "EEE MMM dd HH:mm:ss zzz yyyy"
 )
@@ -53,16 +38,24 @@ class TaskRepository(
     private val dsl: DefaultDSLContext
 ) {
     fun upload(prototype: TaskPrototype): Int? {
-        return try {
-            val task = prototype.task()
-            dsl.insertInto(Tables.TASKS)
-                .columns(Tables.TASKS.fields().asList())
-                .values(task)
-                .execute()
-            task.id
-        } catch (e: Exception) {
-            null
-        }
+        return dsl.insertInto(Tables.SUBMISSION_FEEDBACKS)
+            .columns(Tables.TASKS.fields("NAME", "PUBLISHED_DATE", "DESCRIPTION", "DEADLINE_DATE", "CHECKER_IDENTIFIER")?.asList())
+            .values(prototype.name, LocalDateTime.now(), prototype.description, prototype.deadlineDate, prototype.checkerIdentifier)
+            .returningResult(Tables.SUBMISSION_FEEDBACKS.ID)
+            .fetchOne()
+            ?.value1()
+    }
+
+    fun getByIds(ids: List<Int>): List<Task> {
+        return dsl.select()
+            .from(Tables.TASKS)
+            .where(Tables.TASKS.ID.`in`(ids))
+            .fetch()
+            .into(Task::class.java)
+    }
+
+    fun getById(id: Int): Task? {
+        return getByIds(listOf(id)).getOrNull(0)
     }
 
     fun getAll(): List<Task> {
@@ -70,13 +63,5 @@ class TaskRepository(
             .from(Tables.TASKS)
             .fetch()
             .into(Task::class.java)
-    }
-
-    fun getTaskById(id: Long): Task? {
-        return dsl.select()
-            .from(Tables.TASKS)
-            .where(Tables.TASKS.ID.eq(id.toInt()))
-            .fetchOne()
-            ?.into(Task::class.java)
     }
 }

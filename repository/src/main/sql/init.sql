@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS checkers (
 
 
 CREATE TABLE IF NOT EXISTS tasks (
-    id             INTEGER NOT NULL,
+    id             SERIAL,
     name           VARCHAR(255) NOT NULL,
     published_date TIMESTAMP NOT NULL,
     description    VARCHAR(255) NOT NULL,
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS tasks (
 
 
 CREATE TABLE IF NOT EXISTS submission_feedbacks (
-    id          INTEGER NOT NULL,
+    id          SERIAL,
     verdict     VARCHAR(255) NOT NULL,
     comments    VARCHAR(255) NOT NULL,
 
@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS submission_feedbacks (
 
 
 CREATE TABLE IF NOT EXISTS submissions (
-    id              INTEGER NOT NULL,
+    id              SERIAL,
     task_id         INTEGER NOT NULL,
     date            TIMESTAMP NOT NULL,
     result_id       INTEGER,

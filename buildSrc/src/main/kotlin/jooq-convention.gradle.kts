@@ -38,6 +38,7 @@ jooq {
                         inputSchema = "PUBLIC"
                     }
                     generate.apply {
+                        isImmutablePojos = true
                         isRecords = true
                     }
                 }
