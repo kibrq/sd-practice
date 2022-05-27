@@ -29,8 +29,10 @@ class CheckerService(
 
     private val connectionFactory by lazy {
         ConnectionFactory().apply {
-            host = "localhost"
+            host = "rabbitmq-container"
             port = 5672
+            username = "maxim"
+            password = "maxim"
         }
     }
 

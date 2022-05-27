@@ -10,4 +10,4 @@ RUN bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && \
 
 WORKDIR runner/
 
-ENTRYPOINT bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && ./gradlew :runner:bootRun'
+ENTRYPOINT bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && ./gradlew :runner:run'

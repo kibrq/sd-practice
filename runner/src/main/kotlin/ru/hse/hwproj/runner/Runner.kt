@@ -19,7 +19,7 @@ class Runner {
         return ProcessBuilder().apply {
             val repoName = url.toString().substringAfterLast('/')
             val gitClone = "git clone $url"
-            val dockerRun = "docker run -v $repoName:/solution $checkerIdentifier"
+            val dockerRun = "docker run -v -v /var/run/docker.sock/$repoName:/solution $checkerIdentifier"
             val mainCommand = "$gitClone && $dockerRun"
 
             val isWindows = System.getProperty("os.name").startsWith("Win")

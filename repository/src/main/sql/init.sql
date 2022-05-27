@@ -1,6 +1,3 @@
-CREATE SCHEMA IF NOT EXISTS public;
-SET SCHEMA public;
-
 CREATE TABLE IF NOT EXISTS checkers (
     id         VARCHAR(255) NOT NULL,
     dockerfile VARCHAR(255) NOT NULL,

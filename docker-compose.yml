@@ -21,6 +21,10 @@ services:
 
     rabbitmq:
         image: rabbitmq:3-management
+        hostname: rabbitmq-container
+        environment:
+            - RABBITMQ_DEFAULT_USER=maxim
+            - RABBITMQ_DEFAULT_PASS=maxim
         ports:
             - '5672:5672'
             - '15672:15672'
@@ -43,6 +47,7 @@ services:
         depends_on:
             - database
             - rabbitmq
+            - runner
 
     runner:
         build:
