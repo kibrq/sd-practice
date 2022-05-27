@@ -5,6 +5,9 @@ import com.rabbitmq.client.Delivery
 import org.springframework.context.annotation.ComponentScan
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
+import ru.hse.repository.checker.CheckerVerdict
+import ru.hse.repository.submission.SubmissionFeedbackPrototype
+import ru.hse.repository.submission.SubmissionFeedbackRepository
 import ru.hse.repository.submission.SubmissionRepository
 import ru.hse.repository.task.TaskRepository
 import java.util.concurrent.atomic.AtomicInteger
@@ -18,7 +21,8 @@ object CheckerServiceIdHolder {
 @ComponentScan("ru.hse.repository")
 class CheckerService(
     private val submissionRepository: SubmissionRepository,
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val submissionFeedbackRepository: SubmissionFeedbackRepository
 ) : AutoCloseable {
     val id = CheckerServiceIdHolder.currentId.incrementAndGet()
     private val runner = Runner()
@@ -53,7 +57,7 @@ class CheckerService(
         val submissionId = String(message.body).toInt()
         val submission = submissionRepository.getById(submissionId) ?: return
         val task = taskRepository.getById(submission.taskId) ?: return
-        val submissionFeedback = runner.run(task.checkerIdentifier, submission.repositoryUrl)
-        submissionRepository.update(submissionId, submissionFeedback)
+        val (code, resultMessage) = runner.run(task.checkerIdentifier, submission.repositoryUrl)
+        submissionFeedbackRepository.upload(SubmissionFeedbackPrototype(CheckerVerdict.valueOf(code == 0), resultMessage))
     }
 }
