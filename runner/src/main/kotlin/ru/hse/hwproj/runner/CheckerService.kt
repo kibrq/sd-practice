@@ -1,16 +1,26 @@
-package ru.hse.runner
+package ru.hse.hwproj.runner
 
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
-import org.springframework.stereotype.Service
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 import ru.hse.repository.submission.SubmissionRepository
 import ru.hse.repository.task.TaskRepository
+import java.util.concurrent.atomic.AtomicInteger
 
-@Service
+object CheckerServiceIdHolder {
+    val currentId = AtomicInteger(0)
+}
+
+@Component
+@Scope("prototype")
+@ComponentScan("ru.hse.repository")
 class CheckerService(
     private val submissionRepository: SubmissionRepository,
     private val taskRepository: TaskRepository
 ) : AutoCloseable {
+    val id = CheckerServiceIdHolder.currentId.incrementAndGet()
     private val runner = Runner()
 
     private val connectionFactory by lazy {

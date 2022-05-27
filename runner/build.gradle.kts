@@ -4,6 +4,13 @@ val rabbitMqVersion: String by project
 
 plugins {
     kotlin("jvm")
+    kotlin("plugin.spring")
+    id("org.springframework.boot")
+    application
+}
+
+application {
+    mainClass.set("ru.hse.hwproj.RunnerApplicationKt")
 }
 
 group = "ru.hse"

@@ -1,11 +1,10 @@
-package ru.hse.runner
+package ru.hse.hwproj.runner
 
 import ru.hse.repository.checker.CheckerVerdict
 import ru.hse.repository.submission.SubmissionFeedback
 import java.net.URL
 
 class Runner {
-
     fun run(checkerIdentifier: String, repositoryUrl: URL): SubmissionFeedback {
         val process = runProcess(checkerIdentifier, repositoryUrl)
         return process.getResult()
@@ -20,16 +19,17 @@ class Runner {
 
     private fun runProcess(checker_Identifier: String, url: URL): Process {
         return ProcessBuilder().apply {
-            if (System.getProperty("os.name").startsWith("Win")) command(
-                "cmd",
-                "/c",
-                "git clone $url " +
-                    "&& docker run -v ${url.toString().substringAfterLast('/')}:/solution $checker_Identifier"
-            )
-            else command(
-                "git clone $url " +
-                    "&& docker run -v ${url.toString().substringAfterLast('/')}:/solution $checker_Identifier"
-            )
+            val gitClone = "git clone $url"
+            val dockerRun = "docker run -v ${url.toString().substringAfterLast('/')}:/solution $checker_Identifier"
+            val mainCommand = "$gitClone && $dockerRun"
+
+            val isWindows = System.getProperty("os.name").startsWith("Win")
+
+            if (isWindows) {
+                command("cmd", "/c", mainCommand)
+            } else {
+                command(mainCommand)
+            }
         }.start()
     }
 }

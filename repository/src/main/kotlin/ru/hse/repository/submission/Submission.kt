@@ -56,9 +56,9 @@ data class SubmissionFeedback(
 @Component
 class SubmissionRepository(private val dsl: DefaultDSLContext) {
     fun uploadSubmission(prototype: SubmissionPrototype): Long {
-        val submissionId = SubmissionIdHolder.currentId.incrementAndGet().toInt()
+        val submissionId = SubmissionIdHolder.currentId.incrementAndGet()
         val record = SubmissionsRecord(
-            submissionId,
+            submissionId.toInt(),
             prototype.taskId.toInt(),
             LocalDateTime.now(),
             null,
@@ -86,5 +86,7 @@ class SubmissionRepository(private val dsl: DefaultDSLContext) {
             .into(Submission::class.java)
     }
 
-    fun updateSubmissionResult(submissionId: Long, feedback: SubmissionFeedback): Nothing = TODO()
+    fun updateSubmissionResult(submissionId: Long, feedback: SubmissionFeedback) {
+        println("$submissionId is ${feedback.verdict}")
+    }
 }
