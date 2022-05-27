@@ -1,7 +1,7 @@
 package ru.hse.runner
 
-import ru.hse.core.checker.CheckerVerdict
-import ru.hse.core.submission.SubmissionFeedback
+import ru.hse.repository.checker.CheckerVerdict
+import ru.hse.repository.submission.SubmissionFeedback
 import java.net.URL
 
 class Runner {

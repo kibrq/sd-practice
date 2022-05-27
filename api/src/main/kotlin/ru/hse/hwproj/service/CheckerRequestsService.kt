@@ -1,8 +1,8 @@
 package ru.hse.hwproj.service
 
 import org.springframework.stereotype.Service
-import ru.hse.core.checker.CheckerPrototype
-import ru.hse.core.checker.CheckerRepository
+import ru.hse.repository.checker.CheckerPrototype
+import ru.hse.repository.checker.CheckerRepository
 
 @Service
 class CheckerRequestsService(

@@ -1,30 +1,25 @@
-package ru.hse.core.task
+package ru.hse.repository.task
 
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
-import ru.hse.core.JooqConfiguration
-import ru.hse.core.RepositoryConfiguration
-import ru.hse.core.Tables
-import ru.hse.core.TestDataSourceConfiguration
-import ru.hse.core.tables.records.CheckersRecord
+import ru.hse.repository.JooqConfiguration
+import ru.hse.repository.Tables
+import ru.hse.repository.TestDataSourceConfiguration
+import ru.hse.repository.tables.records.CheckersRecord
 import java.time.LocalDateTime
 import kotlin.test.*
 
-@ActiveProfiles("test")
-@SpringBootTest(classes = [
-    TestDataSourceConfiguration::class,
-    JooqConfiguration::class,
-    RepositoryConfiguration::class
-])
-class TaskRepositoryTest {
-    @Autowired
-    lateinit var dsl: DefaultDSLContext
-
-    @Autowired
-    lateinit var taskRepository: TaskRepository
-
+@SpringBootTest(
+    classes = [
+        JooqConfiguration::class,
+        TestDataSourceConfiguration::class
+    ]
+)
+class TaskRepositoryTest(
+    @Autowired private val dsl: DefaultDSLContext
+) {
+    private val taskRepository = TaskRepository(dsl)
 
     @AfterTest
     @BeforeTest
@@ -34,6 +29,7 @@ class TaskRepositoryTest {
         dsl.delete(Tables.CHECKERS)
             .execute()
     }
+
     private fun addChecker(checkerIdentifier: String) {
         dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())

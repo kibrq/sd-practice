@@ -1,18 +1,16 @@
-package ru.hse.core.task
+package ru.hse.repository.task
 
-import org.jooq.DSLContext
-import org.jooq.exception.DataAccessException
 import org.jooq.impl.DefaultDSLContext
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
-import ru.hse.core.Tables
-import ru.hse.core.tables.records.TasksRecord
+import ru.hse.repository.Tables
+import ru.hse.repository.tables.records.TasksRecord
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicLong
 
 object TaskIdHolder {
     var currentId = AtomicLong(0)
 }
+
 data class Task(
     val id: Long,
     val name: String,
@@ -50,7 +48,10 @@ data class TaskView(
     val deadlineDateString: String, // "EEE MMM dd HH:mm:ss zzz yyyy"
 )
 
-class TaskRepository(private val dsl: DefaultDSLContext) {
+@Component
+class TaskRepository(
+    private val dsl: DefaultDSLContext
+) {
     fun upload(prototype: TaskPrototype): Boolean {
         return try {
             dsl.insertInto(Tables.TASKS)
@@ -63,7 +64,7 @@ class TaskRepository(private val dsl: DefaultDSLContext) {
         }
     }
 
-    fun getAll(): Collection<Task> {
+    fun getAll(): List<Task> {
         return dsl.select()
             .from(Tables.TASKS)
             .fetch()
@@ -77,5 +78,4 @@ class TaskRepository(private val dsl: DefaultDSLContext) {
             .fetchOne()
             ?.into(Task::class.java)
     }
-
 }

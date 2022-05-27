@@ -1,12 +1,10 @@
 package ru.hse.hwproj.service
 
-import org.springframework.context.annotation.ComponentScan
 import org.springframework.stereotype.Service
-import ru.hse.core.task.Task
-import ru.hse.core.task.TaskPrototype
-import ru.hse.core.task.TaskRepository
+import ru.hse.repository.task.Task
+import ru.hse.repository.task.TaskPrototype
+import ru.hse.repository.task.TaskRepository
 
-@ComponentScan(basePackages = ["ru.hse.core"])
 @Service
 class TaskService(
     private val taskRepository: TaskRepository
@@ -15,5 +13,5 @@ class TaskService(
 
     fun getTask(taskId: Long): Task? = taskRepository.getTaskById(taskId)
 
-    fun getAllTasks(): List<Task> = taskRepository.getAll().toList()
+    fun getAllTasks(): List<Task> = taskRepository.getAll()
 }

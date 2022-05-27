@@ -3,8 +3,8 @@ package ru.hse.runner
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
 import org.springframework.stereotype.Service
-import ru.hse.core.submission.SubmissionRepository
-import ru.hse.core.task.TaskRepository
+import ru.hse.repository.submission.SubmissionRepository
+import ru.hse.repository.task.TaskRepository
 
 @Service
 class CheckerService(

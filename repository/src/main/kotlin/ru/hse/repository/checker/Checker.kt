@@ -1,11 +1,9 @@
-package ru.hse.core.checker
+package ru.hse.repository.checker
 
-import org.jooq.DSLContext
 import org.jooq.impl.DefaultDSLContext
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
-import ru.hse.core.Tables
-import ru.hse.core.tables.records.CheckersRecord
+import ru.hse.repository.Tables
+import ru.hse.repository.tables.records.CheckersRecord
 import java.util.concurrent.atomic.AtomicLong
 
 object CheckerIdentifierHolder {
@@ -13,6 +11,7 @@ object CheckerIdentifierHolder {
 
     fun newIdentifier() = "Image${currentIdentifier.incrementAndGet()}"
 }
+
 enum class CheckerVerdict(val value: Boolean) {
     YES(true),
     NO(false);
@@ -32,14 +31,16 @@ data class Checker(
 
 data class CheckerPrototype(val dockerfile: String)
 
+@Component
 class CheckerRepository(private val dsl: DefaultDSLContext) {
     fun uploadChecker(prototype: CheckerPrototype): Boolean {
+        val record = CheckersRecord(
+            CheckerIdentifierHolder.newIdentifier(),
+            prototype.dockerfile
+        )
         return dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())
-            .values(CheckersRecord(
-                CheckerIdentifierHolder.newIdentifier(),
-                prototype.dockerfile
-            ))
+            .values(record)
             .execute().let { it == 0 }
     }
 

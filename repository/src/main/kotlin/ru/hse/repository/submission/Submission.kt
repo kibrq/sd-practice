@@ -1,20 +1,18 @@
-package ru.hse.core.submission
+package ru.hse.repository.submission
 
-import org.jooq.DSLContext
 import org.jooq.impl.DefaultDSLContext
-import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.stereotype.Component
-import ru.hse.core.Tables
-import ru.hse.core.checker.CheckerVerdict
-import ru.hse.core.tables.records.SubmissionsRecord
+import ru.hse.repository.Tables
+import ru.hse.repository.checker.CheckerVerdict
+import ru.hse.repository.tables.records.SubmissionsRecord
 import java.net.URL
 import java.time.LocalDateTime
 import java.util.concurrent.atomic.AtomicLong
 
-
 object SubmissionIdHolder {
     val currentId = AtomicLong(0)
 }
+
 class Submission(
     val id: Long,
     val date: LocalDateTime,
@@ -55,30 +53,36 @@ data class SubmissionFeedback(
     val comments: String
 )
 
-
+@Component
 class SubmissionRepository(private val dsl: DefaultDSLContext) {
-    fun uploadSubmission(prototype: SubmissionPrototype) = dsl.insertInto(Tables.SUBMISSIONS)
+    fun uploadSubmission(prototype: SubmissionPrototype): Boolean {
+        val record = SubmissionsRecord(
+            SubmissionIdHolder.currentId.incrementAndGet().toInt(),
+            prototype.taskId.toInt(),
+            LocalDateTime.now(),
+            null,
+            prototype.repositoryUrl.toString(),
+        )
+        return dsl.insertInto(Tables.SUBMISSIONS)
             .columns(Tables.SUBMISSIONS.fields().asList())
-            .values(SubmissionsRecord(
-                SubmissionIdHolder.currentId.incrementAndGet().toInt(),
-                prototype.taskId.toInt(),
-                LocalDateTime.now(),
-                null,
-                prototype.repositoryUrl.toString(),
-            ))
+            .values(record)
             .execute().let { it == 0 }
+    }
 
-    fun getSubmissionById(submissionId: Long): Submission? = dsl.select()
+    fun getSubmissionById(submissionId: Long): Submission? {
+        return dsl.select()
             .from(Tables.SUBMISSIONS)
             .where(Tables.SUBMISSIONS.ID.eq(submissionId.toInt()))
             .fetchOne()
             ?.into(Submission::class.java)
+    }
 
-    fun getAllSubmissions(): List<Submission> = dsl.select()
-        .from(Tables.SUBMISSIONS)
-        .fetch()
-        .into(Submission::class.java)
+    fun getAllSubmissions(): List<Submission> {
+        return dsl.select()
+            .from(Tables.SUBMISSIONS)
+            .fetch()
+            .into(Submission::class.java)
+    }
 
     fun updateSubmissionResult(submissionId: Long, feedback: SubmissionFeedback): Nothing = TODO()
 }
-

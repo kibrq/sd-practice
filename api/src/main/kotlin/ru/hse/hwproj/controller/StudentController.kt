@@ -1,9 +1,9 @@
 package ru.hse.hwproj.controller
 
 import org.springframework.web.bind.annotation.*
-import ru.hse.core.submission.Submission
-import ru.hse.core.submission.SubmissionPrototype
-import ru.hse.core.task.Task
+import ru.hse.repository.submission.Submission
+import ru.hse.repository.submission.SubmissionPrototype
+import ru.hse.repository.task.Task
 import ru.hse.hwproj.service.SubmissionService
 import ru.hse.hwproj.service.TaskService
 

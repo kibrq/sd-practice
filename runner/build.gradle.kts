@@ -1,34 +1,20 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+val kotlinVersion: String by project
+val springBootVersion: String by project
+val rabbitMqVersion: String by project
 
 plugins {
-    kotlin("jvm") version "1.6.10"
+    kotlin("jvm")
 }
 
 group = "ru.hse"
 version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
-repositories {
-    mavenCentral()
-}
-
 dependencies {
-    implementation("com.rabbitmq:amqp-client:5.14.2")
+    implementation(project(":repository"))
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("com.rabbitmq:amqp-client:$rabbitMqVersion")
+    implementation("org.springframework.boot:spring-boot-starter:$springBootVersion")
 
-    implementation(project(":core"))
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa:2.7.0")
-
-    testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.10")
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "11"
-    }
-}
-
-tasks.withType<Test> {
-    useJUnitPlatform()
+    testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
 }
