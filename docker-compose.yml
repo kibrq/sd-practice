@@ -11,20 +11,19 @@ services:
         build:
             context: .
             dockerfile: ./docker/database/Dockerfile
+        hostname: database
         environment:
             POSTGRES_PASSWORD: 'hwproj'
             POSTGRES_USER: 'hwproj'
             POSTGRES_DB: 'hwproj'
         ports:
             - '5432:5432'
-        expose:
-            - '5432'
         networks:
             - database_network
 
     rabbitmq:
         image: rabbitmq:3-management
-        hostname: rabbitmq-container
+        hostname: rabbitmq
         environment:
             - RABBITMQ_DEFAULT_USER=maxim
             - RABBITMQ_DEFAULT_PASS=maxim
