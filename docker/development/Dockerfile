@@ -8,3 +8,5 @@ RUN tar -xf ideaIC-2022.1.1.tar.gz
 RUN rm ideaIC-2022.1.1.tar.gz
 
 RUN apt install -y libxtst6 libxrender1 libxi6 libfreetype6 fontconfig
+
+ENTRYPOINT bash -c 'cd $(ls -d */ | grep "idea" --) && bin/idea.sh'

@@ -1,5 +1,5 @@
 rootProject.name = "hwproj"
-include("api", "repository", "runner")
+include("api", "common:repository", "common:rabbitmq", "runner")
 
 pluginManagement {
     val kotlinVersion: String by settings

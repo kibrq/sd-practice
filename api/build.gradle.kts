@@ -19,7 +19,8 @@ version = "0.0.1-SNAPSHOT"
 java.sourceCompatibility = JavaVersion.VERSION_11
 
 dependencies {
-    implementation(project(":repository"))
+    implementation(project(":common:repository"))
+    implementation(project(":common:rabbitmq"))
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.rabbitmq:amqp-client:$rabbitMqVersion")

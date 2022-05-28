@@ -1,0 +1,42 @@
+package ru.hse.hwproj.api.controller
+
+import org.springframework.web.bind.annotation.*
+import ru.hse.hwproj.api.service.SubmissionService
+import ru.hse.hwproj.api.service.TaskService
+import ru.hse.hwproj.common.repository.submission.Submission
+import ru.hse.hwproj.common.repository.submission.SubmissionPrototype
+import ru.hse.hwproj.common.repository.submission.SubmissionView
+import ru.hse.hwproj.common.repository.task.Task
+import ru.hse.hwproj.common.repository.task.TaskView
+
+@RestController
+@RequestMapping("/api/student")
+class StudentController(
+    private val submissionService: SubmissionService,
+    private val taskService: TaskService
+) {
+    @PostMapping("/submissions/upload")
+    fun uploadSubmission(@RequestBody prototype: SubmissionPrototype): Int? {
+        return submissionService.uploadSubmission(prototype)
+    }
+
+    @GetMapping("/submissions")
+    fun viewSubmission(@RequestParam submissionId: Int): Submission? {
+        return submissionService.getSubmission(submissionId)
+    }
+
+    @GetMapping("/submissions/all")
+    fun viewAllSubmissions(): List<SubmissionView> {
+        return submissionService.getAllSubmissions().map { it.view() }
+    }
+
+    @GetMapping("/tasks")
+    fun viewTask(@RequestParam taskId: Int): Task? {
+        return taskService.getTask(taskId)
+    }
+
+    @GetMapping("/tasks/all")
+    fun viewAllTasks(): List<TaskView> {
+        return taskService.getAllTasks().map { it.view() }
+    }
+}
