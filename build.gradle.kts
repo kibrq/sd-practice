@@ -4,6 +4,10 @@ plugins {
     kotlin("jvm")
 }
 
+tasks.register<GradleBuild>("buildApiAndRunner") {
+    tasks = listOf("clean", ":api:build", ":runner:build")
+}
+
 allprojects {
     repositories {
         mavenCentral()

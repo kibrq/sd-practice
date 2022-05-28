@@ -1,7 +1,11 @@
 package ru.hse.hwproj.runner
 
+import org.springframework.context.annotation.Scope
+import org.springframework.stereotype.Component
 import java.net.URL
 
+@Component
+@Scope("prototype")
 class Runner {
     fun run(checkerIdentifier: String, repositoryUrl: URL): Pair<Int, String> {
         val process = runProcess(checkerIdentifier, repositoryUrl)

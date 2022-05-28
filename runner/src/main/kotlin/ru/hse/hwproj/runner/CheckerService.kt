@@ -22,16 +22,14 @@ class CheckerService(
     private val taskRepository: TaskRepository,
     private val submissionFeedbackRepository: SubmissionFeedbackRepository,
     private val connectionFactory: ConnectionFactory,
+    private val runner: Runner
 ) : AutoCloseable {
     val id = CheckerServiceIdHolder.currentId.incrementAndGet()
-    private val runner = Runner()
+    private val connection = connectionFactory.newConnection()
+    private val channel = connection.createChannel()
 
-    private val connection by lazy {
-        connectionFactory.newConnection()
-    }
-
-    private val channel by lazy {
-        connection.createChannel()
+    init {
+        channel.queueDeclare("submissions_queue", false, false, false, null)
     }
 
     override fun close() {
@@ -40,7 +38,6 @@ class CheckerService(
     }
 
     fun receiveTasks() {
-        channel.queueDeclare("submissions_queue", false, false, false, null)
         channel.basicConsume("submissions_queue", true, ::receiveSubmission) { _ -> }
     }
 
@@ -50,6 +47,11 @@ class CheckerService(
         val submission = submissionRepository.getById(submissionId) ?: return
         val task = taskRepository.getById(submission.taskId) ?: return
         val (code, resultMessage) = runner.run(task.checkerIdentifier, submission.repositoryUrl)
-        submissionFeedbackRepository.upload(SubmissionFeedbackPrototype(CheckerVerdict.valueOf(code == 0), resultMessage))
+        submissionFeedbackRepository.upload(
+            SubmissionFeedbackPrototype(
+                CheckerVerdict.valueOf(code == 0),
+                resultMessage
+            )
+        )
     }
 }

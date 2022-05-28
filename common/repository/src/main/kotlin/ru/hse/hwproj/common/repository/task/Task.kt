@@ -36,10 +36,10 @@ data class TaskView(
 )
 
 @Component
-class TaskRepository(
+class TaskRepositoryImpl(
     private val dsl: DefaultDSLContext
-) {
-    fun upload(prototype: TaskPrototype): Int? {
+) : TaskRepository {
+    override fun upload(prototype: TaskPrototype): Int? {
         return withinTry {
             dsl.insertInto(Tables.TASKS)
                 .columns(Tables.TASKS.fields().asList())
@@ -57,7 +57,7 @@ class TaskRepository(
         }
     }
 
-    fun getByIds(ids: List<Int>): List<Task> {
+    override fun getByIds(ids: List<Int>): List<Task> {
         return dsl.select()
             .from(Tables.TASKS)
             .where(Tables.TASKS.ID.`in`(ids))
@@ -65,11 +65,11 @@ class TaskRepository(
             .into(Task::class.java)
     }
 
-    fun getById(id: Int): Task? {
+    override fun getById(id: Int): Task? {
         return getByIds(listOf(id)).getOrNull(0)
     }
 
-    fun getAll(): List<Task> {
+    override fun getAll(): List<Task> {
         return dsl.select()
             .from(Tables.TASKS)
             .fetch()

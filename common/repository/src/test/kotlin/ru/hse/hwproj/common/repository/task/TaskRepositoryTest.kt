@@ -6,17 +6,19 @@ import org.springframework.boot.test.context.SpringBootTest
 import ru.hse.hwproj.common.repository.JooqConfiguration
 import ru.hse.hwproj.common.repository.RepositoryConfiguration
 import ru.hse.hwproj.common.repository.Tables
-import ru.hse.hwproj.common.repository.TestDataSourceConfiguration
 import ru.hse.hwproj.common.repository.tables.records.CheckersRecord
+import ru.hse.hwproj.testutils.TestDataSourceConfiguration
 import java.time.LocalDateTime
 import java.util.*
 import kotlin.test.*
 
-@SpringBootTest(classes = [
-    JooqConfiguration::class,
-    TestDataSourceConfiguration::class,
-    RepositoryConfiguration::class,
-])
+@SpringBootTest(
+    classes = [
+        JooqConfiguration::class,
+        TestDataSourceConfiguration::class,
+        RepositoryConfiguration::class,
+    ]
+)
 class TaskRepositoryTest(
     @Autowired private val dsl: DefaultDSLContext,
     @Autowired private val repository: TaskRepository,

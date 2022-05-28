@@ -6,18 +6,25 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.testng.annotations.AfterTest
 import org.testng.annotations.BeforeTest
-import ru.hse.hwproj.common.repository.*
+import ru.hse.hwproj.common.repository.JooqConfiguration
+import ru.hse.hwproj.common.repository.RepositoryConfiguration
+import ru.hse.hwproj.common.repository.Sequences
+import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.tables.records.CheckersRecord
+import ru.hse.hwproj.testutils.TestDataSourceConfiguration
 import java.net.URL
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.test.*
+import kotlin.test.assertNotNull
+import kotlin.test.assertNull
 
-@SpringBootTest(classes = [
-    JooqConfiguration::class,
-    TestDataSourceConfiguration::class,
-    RepositoryConfiguration::class
-])
+@SpringBootTest(
+    classes = [
+        JooqConfiguration::class,
+        TestDataSourceConfiguration::class,
+        RepositoryConfiguration::class,
+    ]
+)
 class SubmissionRepositoryTest(
     @Autowired private val dsl: DefaultDSLContext,
     @Autowired private val repository: SubmissionRepository,

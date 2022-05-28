@@ -11,6 +11,7 @@ plugins {
 
 application {
     mainClass.set("ru.hse.hwproj.RunnerApplicationKt")
+    applicationDefaultJvmArgs = listOf("-Dspring.profiles.active=development")
 }
 
 group = "ru.hse"

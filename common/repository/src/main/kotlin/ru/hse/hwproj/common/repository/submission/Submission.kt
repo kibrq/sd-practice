@@ -50,8 +50,8 @@ data class SubmissionFeedbackPrototype(
 )
 
 @Component
-class SubmissionFeedbackRepository(private val dsl: DefaultDSLContext) {
-    fun upload(prototype: SubmissionFeedbackPrototype): Int? {
+class SubmissionFeedbackRepositoryImpl(private val dsl: DefaultDSLContext) : SubmissionFeedbackRepository {
+    override fun upload(prototype: SubmissionFeedbackPrototype): Int? {
         return dsl.insertInto(Tables.SUBMISSION_FEEDBACKS)
             .columns(Tables.SUBMISSION_FEEDBACKS.VERDICT, Tables.SUBMISSION_FEEDBACKS.COMMENTS)
             .values(prototype.verdict.toString().lowercase(), prototype.comments)
@@ -60,11 +60,7 @@ class SubmissionFeedbackRepository(private val dsl: DefaultDSLContext) {
             ?.value1()
     }
 
-    fun getById(id: Int): SubmissionFeedback? {
-        return getByIds(listOf(id)).getOrNull(0)
-    }
-
-    fun getByIds(ids: List<Int>): List<SubmissionFeedback> {
+    override fun getByIds(ids: List<Int>): List<SubmissionFeedback> {
         return dsl.select()
             .from(Tables.SUBMISSION_FEEDBACKS)
             .where(Tables.SUBMISSIONS.ID.`in`(ids))
@@ -75,10 +71,10 @@ class SubmissionFeedbackRepository(private val dsl: DefaultDSLContext) {
 
 
 @Component
-class SubmissionRepository(
+class SubmissionRepositoryImpl(
     private val dsl: DefaultDSLContext,
-) {
-    fun upload(prototype: SubmissionPrototype): Int? {
+) : SubmissionRepository {
+    override fun upload(prototype: SubmissionPrototype): Int? {
         return withinTry {
             dsl.insertInto(Tables.SUBMISSIONS)
                 .columns(Tables.SUBMISSIONS.fields().asList())
@@ -95,7 +91,7 @@ class SubmissionRepository(
         }
     }
 
-    fun getByIds(ids: List<Int>): List<Submission> {
+    override fun getByIds(ids: List<Int>): List<Submission> {
         return dsl.select()
             .from(Tables.SUBMISSIONS)
             .where(Tables.SUBMISSIONS.ID.`in`(ids))
@@ -103,18 +99,14 @@ class SubmissionRepository(
             .into(Submission::class.java)
     }
 
-    fun getById(submissionId: Int): Submission? {
-        return getByIds(listOf(submissionId)).getOrNull(0)
-    }
-
-    fun getAll(): List<Submission> {
+    override fun getAll(): List<Submission> {
         return dsl.select()
             .from(Tables.SUBMISSIONS)
             .fetch()
             .into(Submission::class.java)
     }
 
-    fun update(submissionId: Int, feedback: SubmissionFeedback) {
+    override fun update(submissionId: Int, feedback: SubmissionFeedback) {
         println("$submissionId is ${feedback.verdict}")
     }
 }

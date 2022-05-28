@@ -5,7 +5,6 @@ import org.postgresql.ds.PGSimpleDataSource
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
-import org.springframework.context.annotation.PropertySources
 import org.springframework.core.env.Environment
 import javax.sql.DataSource
 

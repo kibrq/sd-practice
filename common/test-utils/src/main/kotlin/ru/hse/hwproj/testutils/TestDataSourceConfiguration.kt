@@ -1,4 +1,4 @@
-package ru.hse.hwproj.common.repository
+package ru.hse.hwproj.testutils
 
 import org.h2.jdbcx.JdbcDataSource
 import org.jooq.SQLDialect
@@ -13,7 +13,7 @@ import javax.sql.DataSource
 @PropertySource("classpath:database-test.properties")
 open class TestDataSourceConfiguration(
     @Autowired private val environment: Environment,
-){
+) {
     @Bean
     open fun dataSource(): DataSource {
         return JdbcDataSource().apply {

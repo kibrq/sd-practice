@@ -27,9 +27,9 @@ data class Checker(
 data class CheckerPrototype(val dockerfile: String)
 
 @Component
-class CheckerRepository(private val dsl: DefaultDSLContext) {
+class CheckerRepositoryImpl(private val dsl: DefaultDSLContext) : CheckerRepository {
 
-    fun upload(prototype: CheckerPrototype): String? {
+    override fun upload(prototype: CheckerPrototype): String? {
         val imageIdentifier = UUID.randomUUID().toString()
         return withinTry {
             dsl.insertInto(Tables.CHECKERS)
@@ -41,18 +41,14 @@ class CheckerRepository(private val dsl: DefaultDSLContext) {
         }
     }
 
-    fun getAll(): List<Checker> {
+    override fun getAll(): List<Checker> {
         return dsl.select(Tables.CHECKERS.ID, Tables.CHECKERS.DOCKERFILE)
             .from(Tables.CHECKERS)
             .fetch()
             .into(Checker::class.java)
     }
 
-    fun getById(id: String): Checker? {
-        return getByIds(listOf(id)).getOrNull(0)
-    }
-
-    fun getByIds(ids: List<String>): List<Checker> {
+    override fun getByIds(ids: List<String>): List<Checker> {
         return dsl.select(Tables.CHECKERS.ID, Tables.CHECKERS.DOCKERFILE)
             .from(Tables.CHECKERS)
             .where(Tables.CHECKERS.ID.`in`(ids))

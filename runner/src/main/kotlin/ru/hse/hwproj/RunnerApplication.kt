@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
         JooqConfiguration::class.java,
         DataSourceConfiguration::class.java,
         RepositoryConfiguration::class.java,
-        CheckerService::class.java,
+        RunnerConfiguration::class.java
     )
 
     repeat(runnersCount) {

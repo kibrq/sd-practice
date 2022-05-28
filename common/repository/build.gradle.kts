@@ -21,9 +21,9 @@ dependencies {
     implementation("org.jooq:jooq:$jooqVersion")
     implementation("org.testng:testng:7.1.0")
 
-    testImplementation("com.h2database:h2:$h2Version")
     testImplementation("org.springframework.boot:spring-boot-starter-test:$springBootVersion")
     testImplementation("org.jetbrains.kotlin:kotlin-test:$kotlinVersion")
+    testImplementation(project(":common:test-utils"))
 }
 
 jooq {
