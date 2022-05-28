@@ -81,13 +81,7 @@ class SubmissionRepository(
     fun upload(prototype: SubmissionPrototype): Int? {
         return withinTry {
             dsl.insertInto(Tables.SUBMISSIONS)
-                .columns(
-                    Tables.SUBMISSIONS.ID,
-                    Tables.SUBMISSIONS.TASK_ID,
-                    Tables.SUBMISSIONS.DATE,
-                    Tables.SUBMISSIONS.RESULT_ID,
-                    Tables.SUBMISSIONS.REPOSITORY_URL
-                )
+                .columns(Tables.SUBMISSIONS.fields().asList())
                 .values(
                     Sequences.SUBMISSION_ID_SEQ.nextval().cast(Int::class.java),
                     DSL.value(prototype.taskId),

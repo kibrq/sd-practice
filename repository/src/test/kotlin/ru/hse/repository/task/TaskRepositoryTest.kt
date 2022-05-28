@@ -25,6 +25,8 @@ class TaskRepositoryTest(
     @AfterTest
     @BeforeTest
     fun clearDatabase() {
+        dsl.delete(Tables.SUBMISSIONS)
+            .execute()
         dsl.delete(Tables.TASKS)
             .execute()
         dsl.delete(Tables.CHECKERS)

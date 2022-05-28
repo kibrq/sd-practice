@@ -31,11 +31,12 @@ class SubmissionRepositoryTest(
     @AfterTest
     @BeforeTest
     fun clearDatabase() {
+        dsl.delete(Tables.SUBMISSIONS)
+            .execute()
         dsl.delete(Tables.TASKS)
             .execute()
         dsl.delete(Tables.CHECKERS)
             .execute()
-        dsl.delete(Tables.SUBMISSIONS)
     }
 
     private fun addRandomChecker(): String {
