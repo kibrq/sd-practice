@@ -10,4 +10,7 @@ RUN bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && \
 
 WORKDIR app/
 
-ENTRYPOINT bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && ./gradlew build'
+ENTRYPOINT bash -c 'rm -rf build && \
+                    source "$HOME/.sdkman/bin/sdkman-init.sh" && \
+                    ./gradlew build && \
+                    touch build/ready'

@@ -6,12 +6,6 @@ networks:
     database_network:
 
 services:
-    build:
-        build:
-            context: .
-            dockerfile: ./docker/build/Dockerfile
-        volumes:
-            - .:/app
 
     database:
         build:
@@ -39,6 +33,16 @@ services:
             - '15672:15672'
         networks:
             - queue_network
+
+    build:
+        build:
+            context: .
+            dockerfile: ./docker/build/Dockerfile
+        volumes:
+            - .:/app
+        depends_on:
+            - rabbitmq
+            - database
 
     api:
         build:
