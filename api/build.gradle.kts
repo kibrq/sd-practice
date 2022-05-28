@@ -24,6 +24,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("com.rabbitmq:amqp-client:$rabbitMqVersion")
     implementation("org.springframework.boot:spring-boot-starter-web:$springBootVersion")
+    implementation("org.springframework.boot:spring-boot-starter-security:$springBootVersion")
     implementation("org.springdoc:springdoc-openapi-kotlin:$openApiVersion")
     implementation("org.springdoc:springdoc-openapi-ui:$openApiVersion")
 

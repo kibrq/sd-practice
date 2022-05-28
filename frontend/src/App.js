@@ -1,20 +1,20 @@
 import React from "react";
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+import {BrowserRouter, Route, Routes} from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/Home.js";
-import Error from "./components/Error.js";
-import Ping from "./components/Ping.js";
+import NotFound from "./components/NotFound.js";
+import Health from "./components/Health.js";
 
 export default class App extends React.Component {
     render() {
         return (
             <BrowserRouter>
                 <div className="App">
-                    <Switch>
-                        <Route path="/" component={Home} exact/>
-                        <Route path="/ping" component={Ping}/>
-                        <Route component={Error}/>
-                    </Switch>
+                    <Routes>
+                        <Route path="/" element={<Home/>} exact/>
+                        <Route path="/health" element={<Health/>}/>
+                        <Route path="*" element={<NotFound/>}/>
+                    </Routes>
                 </div>
             </BrowserRouter>
         );

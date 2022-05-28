@@ -3,10 +3,10 @@ import "../css/Background.scss";
 import Sidebar from "./Sidebar.js";
 import styles from "../css/Home.module.scss";
 
-export default class Error extends React.Component {
+export default class NotFound extends React.Component {
     render() {
         return (
-            <div className="Error">
+            <div className="NotFound">
                 <Sidebar/>
                 <div id="bg"/>
                 <h1 className={styles.centered}>
