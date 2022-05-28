@@ -8,5 +8,6 @@ import org.springframework.boot.runApplication
 class HwprojApi
 
 fun main(args: Array<String>) {
+    System.setProperty("org.jooq.no-logo", "true")
     runApplication<HwprojApi>(*args)
 }

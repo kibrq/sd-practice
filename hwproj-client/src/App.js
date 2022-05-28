@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./components/Home.js";
 import NotFound from "./components/NotFound.js";
 import Health from "./components/Health.js";
+import Teacher from "./components/Teacher";
 
 export default class App extends React.Component {
     render() {
@@ -13,6 +14,7 @@ export default class App extends React.Component {
                     <Routes>
                         <Route path="/" element={<Home/>} exact/>
                         <Route path="/health" element={<Health/>}/>
+                        <Route path="/teacher" element={<Teacher/>}/>
                         <Route path="*" element={<NotFound/>}/>
                     </Routes>
                 </div>

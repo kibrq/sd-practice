@@ -3,9 +3,9 @@ package ru.hse.hwproj.service
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.MessageProperties
 import org.springframework.stereotype.Service
+import ru.hse.repository.checker.Checker
 import ru.hse.repository.checker.CheckerPrototype
 import ru.hse.repository.checker.CheckerRepository
-import java.util.*
 
 @Service
 class CheckerRequestsService(
@@ -31,14 +31,13 @@ class CheckerRequestsService(
         connection.close()
     }
 
+    fun getChecker(checkerId: String): Checker? = checkerRepository.getById(checkerId)
+
+    fun getAllCheckers(): List<Checker> = checkerRepository.getAll()
+
     fun sendCreateCheckerRequest(dockerfile: String): String? {
-        val id = UUID.randomUUID().toString()
-        val prototype = CheckerPrototype(id, dockerfile)
-        return if (checkerRepository.upload(prototype)) {
-            id
-        } else {
-            null
-        }
+        val prototype = CheckerPrototype(dockerfile)
+        return checkerRepository.upload(prototype)
     }
 
     fun sendSubmissionCheckRequest(submissionId: Int) {
