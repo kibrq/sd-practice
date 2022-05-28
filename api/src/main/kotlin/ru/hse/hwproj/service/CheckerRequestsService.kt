@@ -13,8 +13,10 @@ class CheckerRequestsService(
 ) : AutoCloseable {
     private val connectionFactory =
         ConnectionFactory().apply {
-            host = "localhost"
+            host = "rabbitmq-container"
             port = 5672
+            username = "maxim"
+            password = "maxim"
         }
 
     private val connection = connectionFactory.newConnection()

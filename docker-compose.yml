@@ -6,6 +6,13 @@ networks:
     database_network:
 
 services:
+    build:
+        build:
+            context: .
+            dockerfile: ./docker/build/Dockerfile
+        volumes:
+            - .:/app
+
     database:
         build:
             context: .
@@ -49,17 +56,18 @@ services:
         depends_on:
             - database
             - rabbitmq
-            - runner
+            - build
 
     runner:
         build:
             context: .
             dockerfile: ./docker/runner/Dockerfile
         volumes:
-            - .:/runner
+            - .:/app
         networks:
             - queue_network
             - database_network
         depends_on:
             - database
             - rabbitmq
+            - build
