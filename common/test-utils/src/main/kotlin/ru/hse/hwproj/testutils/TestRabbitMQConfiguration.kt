@@ -14,12 +14,13 @@ import org.springframework.core.env.Environment
 
 object LazyEmbeddedRabbitMq {
     val rabbitMq by lazy {
-        EmbeddedRabbitMq(EmbeddedRabbitMqConfig.Builder()
-            .version(PredefinedVersion.LATEST)
-            .downloadFrom(OfficialArtifactRepository.GITHUB)
-            .defaultRabbitMqCtlTimeoutInMillis(10000)
-            .rabbitMqServerInitializationTimeoutInMillis(30000)
-            .build()
+        EmbeddedRabbitMq(
+            EmbeddedRabbitMqConfig.Builder()
+                .version(PredefinedVersion.LATEST)
+                .downloadFrom(OfficialArtifactRepository.GITHUB)
+                .defaultRabbitMqCtlTimeoutInMillis(10000)
+                .rabbitMqServerInitializationTimeoutInMillis(30000)
+                .build()
         )
     }
 }

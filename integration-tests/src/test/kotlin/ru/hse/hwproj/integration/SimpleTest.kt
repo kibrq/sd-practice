@@ -2,7 +2,6 @@ package ru.hse.hwproj.integration
 
 import com.rabbitmq.client.ConnectionFactory
 import org.mockito.ArgumentMatchers
-import org.mockito.internal.invocation.MatchersBinder
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
@@ -28,7 +27,6 @@ import java.time.LocalDateTime
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
-
 @SpringBootTest(
     classes = [
         TestRabbitMQConfiguration::class,
@@ -53,14 +51,14 @@ class SimpleTest(
         val checkerIdentifier = "dockerfile"
         val repositoryUrl = URL("https://github.com/scanhex/zxc")
 
-        val runner = mock<Runner>() {
+        val runner = mock<Runner> {
             on { run(ArgumentMatchers.anyString(), any()) } doAnswer { call ->
                 assertEquals(
                     call.arguments.getOrElse(0) { "" },
                     checkerIdentifier
                 )
                 assertEquals(
-                    call.arguments.getOrElse(1) { "" as Any }.toString(),
+                    call.arguments.getOrElse(1) { "" }.toString(),
                     repositoryUrl.toString()
                 )
                 Pair(0, "good")

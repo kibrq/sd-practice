@@ -13,7 +13,6 @@ class CheckerRequestsService(
     @Autowired private val checkerRepository: CheckerRepository,
     @Autowired private val connectionFactory: ConnectionFactory,
 ) : AutoCloseable {
-
     private val connection = connectionFactory.newConnection()
     private val channel = connection.createChannel()
 

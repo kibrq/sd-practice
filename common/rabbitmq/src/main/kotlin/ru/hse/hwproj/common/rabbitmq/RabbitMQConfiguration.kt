@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 
-
 @Configuration
 @PropertySource("classpath:rabbitmq-\${spring.profiles.active}.properties")
 open class RabbitMQConfiguration(
@@ -17,7 +16,9 @@ open class RabbitMQConfiguration(
     open fun rabbitConnection(): ConnectionFactory {
         return ConnectionFactory().apply {
             host = environment.getProperty("rabbitmq.host")
-            port = environment.getProperty("rabbitmq.port")!!.toInt()
+            environment.getProperty("rabbitmq.port")?.toIntOrNull()?.let {
+                port = it
+            }
             username = environment.getProperty("rabbitmq.username")
             password = environment.getProperty("rabbitmq.password")
         }
