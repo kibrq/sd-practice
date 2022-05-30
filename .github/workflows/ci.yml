@@ -6,7 +6,7 @@ jobs:
   gradle:
     strategy:
       matrix:
-        os: [ ubuntu-latest, macos-latest, windows-latest ]
+        os: [ ubuntu-latest, macos-latest ]
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -14,6 +14,9 @@ jobs:
         with:
           distribution: temurin
           java-version: 11
+      - uses: gleam-lang/setup-erlang@v1.1.3
+        with:
+          otp-version: "25"
 
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v2
