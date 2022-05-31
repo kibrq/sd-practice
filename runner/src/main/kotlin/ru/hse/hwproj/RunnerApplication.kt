@@ -11,14 +11,16 @@ import ru.hse.hwproj.runner.ImageCreationService
 const val DEFAULT_NUMBER_OF_RUNNERS = 4
 
 fun main(args: Array<String>) {
+    System.setProperty("org.jooq.no-logo", "true")
+    System.setProperty("org.jooq.no-tips", "true")
     val runnersCount = args.getOrNull(0)?.toIntOrNull() ?: DEFAULT_NUMBER_OF_RUNNERS
 
     val context = AnnotationConfigApplicationContext(
+        RunnerConfiguration::class.java,
         RabbitMQConfiguration::class.java,
         JooqConfiguration::class.java,
         DataSourceConfiguration::class.java,
-        RepositoryConfiguration::class.java,
-        RunnerConfiguration::class.java
+        RepositoryConfiguration::class.java
     )
 
     val imageCreationService = context.getBean(ImageCreationService::class.java)

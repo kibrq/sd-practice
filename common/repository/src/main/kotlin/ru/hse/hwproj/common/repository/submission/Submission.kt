@@ -6,10 +6,11 @@ import org.springframework.stereotype.Component
 import ru.hse.hwproj.common.repository.Sequences
 import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.checker.CheckerVerdict
+import ru.hse.hwproj.common.repository.tables.pojos.SubmissionFeedbacks
+import ru.hse.hwproj.common.repository.tables.pojos.Submissions
 import ru.hse.hwproj.common.repository.utils.withinTry
 import java.net.URL
 import java.time.LocalDateTime
-
 
 class Submission(
     val id: Int,
@@ -92,11 +93,33 @@ class SubmissionRepositoryImpl(
     }
 
     override fun getByIds(ids: List<Int>): List<Submission> {
+        println("RUSLAN UEBOK")
         return dsl.select()
             .from(Tables.SUBMISSIONS)
+            .leftJoin(Tables.SUBMISSION_FEEDBACKS)
+            .on(Tables.SUBMISSIONS.RESULT_ID.eq(Tables.SUBMISSION_FEEDBACKS.ID))
             .where(Tables.SUBMISSIONS.ID.`in`(ids))
-            .fetch()
-            .into(Submission::class.java)
+            .fetch { r ->
+                println("I LOVE KAL")
+                val kal = r.into(Tables.SUBMISSIONS).into(Submissions::class.java)
+                val kal2 = kal.resultId?.let {
+                    val matb_kirilla = r.into(Tables.SUBMISSION_FEEDBACKS).into(SubmissionFeedbacks::class.java)
+                    SubmissionFeedback(
+                        matb_kirilla.id,
+                        CheckerVerdict.valueOf(matb_kirilla.verdict),
+                        matb_kirilla.comments
+                    )
+                }
+                println(kal)
+                println(kal2)
+                Submission(
+                    kal.id,
+                    kal.taskId,
+                    kal.date,
+                    kal2,
+                    URL(kal.repositoryUrl)
+                )
+            }
     }
 
     override fun getAll(): List<Submission> {
