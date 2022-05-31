@@ -20,8 +20,8 @@ enum class CheckerVerdict(val value: Boolean) {
 }
 
 data class Checker(
-    val dockerfile: String,
-    val imageIdentifier: String
+    val imageIdentifier: String,
+    val dockerfile: String
 )
 
 data class CheckerPrototype(val dockerfile: String)

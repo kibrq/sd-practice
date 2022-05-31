@@ -52,7 +52,7 @@ class SimpleTest(
         val repositoryUrl = URL("https://github.com/scanhex/zxc")
 
         val runner = mock<Runner> {
-            on { run(ArgumentMatchers.anyString(), any()) } doAnswer { call ->
+            on { runSubmission(ArgumentMatchers.anyString(), any()) } doAnswer { call ->
                 assertEquals(
                     call.arguments.getOrElse(0) { "" },
                     checkerIdentifier
@@ -69,10 +69,11 @@ class SimpleTest(
         checkerRequestsService = CheckerRequestsService(checkerRepository, connectionFactory)
         checkerService = CheckerService(
             submissionRepository,
+            checkerRepository,
             taskRepository,
             submissionFeedbackRepository,
-            connectionFactory,
-            runner
+            runner,
+            connectionFactory
         )
 
         val identifier = checkerRepository.upload(CheckerPrototype("dockerfile")) ?: return
