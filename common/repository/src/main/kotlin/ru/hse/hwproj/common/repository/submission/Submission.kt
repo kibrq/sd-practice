@@ -60,7 +60,7 @@ class SubmissionFeedback(
     companion object {
         fun ofPojos(submissionFeedbacks: SubmissionFeedbacks): SubmissionFeedback? = submissionFeedbacks.id?.let {
             SubmissionFeedback(
-                id = submissionFeedbacks.id,
+                id = it,
                 verdict = CheckerVerdict.valueOf(submissionFeedbacks.verdict.uppercase()),
                 comments = submissionFeedbacks.comments
             )

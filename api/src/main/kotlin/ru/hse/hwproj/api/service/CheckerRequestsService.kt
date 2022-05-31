@@ -14,14 +14,17 @@ class CheckerRequestsService(
     @Autowired private val connectionFactory: ConnectionFactory,
 ) : AutoCloseable {
     private val connection = connectionFactory.newConnection()
-    private val channel = connection.createChannel()
+    private val submissionsChannel = connection.createChannel()
+    private val checkersChannel = connection.createChannel()
 
     init {
-        channel.queueDeclare("submissions_queue", false, false, false, null)
+        submissionsChannel.queueDeclare("submissions_queue", false, false, false, null)
+        checkersChannel.queueDeclare("checkers_queue", false, false, false, null)
     }
 
     override fun close() {
-        channel.close()
+        checkersChannel.close()
+        submissionsChannel.close()
         connection.close()
     }
 
@@ -31,11 +34,14 @@ class CheckerRequestsService(
 
     fun sendCreateCheckerRequest(dockerfile: String): String? {
         val prototype = CheckerPrototype(dockerfile)
-        return checkerRepository.upload(prototype)
+        val checkerId = checkerRepository.upload(prototype) ?: return null
+        val message = checkerId.toByteArray()
+        checkersChannel.basicPublish("", "checkers_queue", MessageProperties.TEXT_PLAIN, message)
+        return checkerId
     }
 
     fun sendSubmissionCheckRequest(submissionId: Int) {
         val message = submissionId.toString().toByteArray()
-        channel.basicPublish("", "submissions_queue", MessageProperties.TEXT_PLAIN, message)
+        submissionsChannel.basicPublish("", "submissions_queue", MessageProperties.TEXT_PLAIN, message)
     }
 }

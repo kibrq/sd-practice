@@ -4,7 +4,6 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
 import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
-import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.checker.CheckerVerdict
 import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackPrototype
 import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackRepository
@@ -48,12 +47,11 @@ class CheckerService(
         val submission = submissionRepository.getById(submissionId) ?: return
         val task = taskRepository.getById(submission.taskId) ?: return
         val (code, resultMessage) = runner.run(task.checkerIdentifier, submission.repositoryUrl)
-        val submissionFeedbackId = submissionFeedbackRepository.upload(
-            SubmissionFeedbackPrototype(
-                CheckerVerdict.valueOf(code == 0),
-                resultMessage
-            )
-        ) ?: return
+        val feedback = SubmissionFeedbackPrototype(
+            CheckerVerdict.valueOf(code == 0),
+            resultMessage
+        )
+        val submissionFeedbackId = submissionFeedbackRepository.upload(feedback) ?: return
         submissionRepository.updateResultId(submissionId, submissionFeedbackId)
     }
 }

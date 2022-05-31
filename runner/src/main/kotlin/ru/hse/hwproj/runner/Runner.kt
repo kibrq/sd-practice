@@ -32,7 +32,7 @@ class Runner {
         file.createNewFile()
         file.writeBytes(checkerContent.toByteArray())
         val process = ProcessBuilder().apply {
-            val cdForImage = " cd $checkerIdentifier"
+            val cdForImage = "cd $checkerIdentifier"
             val dockerBuild = "docker build -t $checkerIdentifier"
             val mainCommand = "$cdForImage && $dockerBuild"
 

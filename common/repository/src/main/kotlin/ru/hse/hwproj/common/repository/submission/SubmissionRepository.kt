@@ -1,6 +1,5 @@
 package ru.hse.hwproj.common.repository.submission
 
-import org.jooq.Field
 import org.jooq.TableField
 import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.tables.records.SubmissionsRecord
