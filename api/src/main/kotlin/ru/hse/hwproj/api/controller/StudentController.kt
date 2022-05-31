@@ -1,5 +1,6 @@
 package ru.hse.hwproj.api.controller
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.hse.hwproj.api.service.SubmissionService
 import ru.hse.hwproj.api.service.TaskService
@@ -16,13 +17,13 @@ class StudentController(
     private val taskService: TaskService
 ) {
     @PostMapping("/submissions/upload")
-    fun uploadSubmission(@RequestBody prototype: SubmissionPrototype): Int? {
+    fun uploadSubmission(@RequestBody prototype: SubmissionPrototype): ResponseEntity<Int> {
         return submissionService.uploadSubmission(prototype)
     }
 
     @GetMapping("/submissions")
-    fun viewSubmission(@RequestParam submissionId: Int): Submission? {
-        return submissionService.getSubmission(submissionId)
+    fun viewSubmission(@RequestParam id: Int): ResponseEntity<Submission> {
+        return submissionService.getSubmission(id)
     }
 
     @GetMapping("/submissions/all")
@@ -31,8 +32,8 @@ class StudentController(
     }
 
     @GetMapping("/tasks")
-    fun viewTask(@RequestParam taskId: Int): Task? {
-        return taskService.getTask(taskId)
+    fun viewTask(@RequestParam id: Int): ResponseEntity<Task> {
+        return taskService.getTask(id)
     }
 
     @GetMapping("/tasks/all")

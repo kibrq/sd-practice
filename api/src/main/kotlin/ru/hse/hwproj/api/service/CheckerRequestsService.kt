@@ -3,7 +3,11 @@ package ru.hse.hwproj.api.service
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.MessageProperties
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import ru.hse.hwproj.api.utils.orElseStatus
+import ru.hse.hwproj.api.utils.runOrElseStatus
 import ru.hse.hwproj.common.repository.checker.Checker
 import ru.hse.hwproj.common.repository.checker.CheckerPrototype
 import ru.hse.hwproj.common.repository.checker.CheckerRepository
@@ -28,20 +32,22 @@ class CheckerRequestsService(
         connection.close()
     }
 
-    fun getChecker(checkerId: String): Checker? = checkerRepository.getById(checkerId)
+    fun getChecker(id: String): ResponseEntity<Checker> {
+        return checkerRepository.getById(id).orElseStatus(HttpStatus.NOT_FOUND)
+    }
 
     fun getAllCheckers(): List<Checker> = checkerRepository.getAll()
 
-    fun sendCreateCheckerRequest(dockerfile: String): String? {
+    fun sendCreateCheckerRequest(dockerfile: String): ResponseEntity<String> {
         val prototype = CheckerPrototype(dockerfile)
-        val checkerId = checkerRepository.upload(prototype) ?: return null
-        val message = checkerId.toByteArray()
-        checkersChannel.basicPublish("", "checkers_queue", MessageProperties.TEXT_PLAIN, message)
-        return checkerId
+        return checkerRepository.upload(prototype).runOrElseStatus(HttpStatus.BAD_REQUEST) {
+            val message = it.toByteArray()
+            checkersChannel.basicPublish("", "checkers_queue", MessageProperties.TEXT_PLAIN, message)
+        }
     }
 
-    fun sendSubmissionCheckRequest(submissionId: Int) {
-        val message = submissionId.toString().toByteArray()
+    fun sendSubmissionCheckRequest(id: Int) {
+        val message = id.toString().toByteArray()
         submissionsChannel.basicPublish("", "submissions_queue", MessageProperties.TEXT_PLAIN, message)
     }
 }

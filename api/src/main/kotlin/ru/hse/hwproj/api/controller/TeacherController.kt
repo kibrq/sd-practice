@@ -1,5 +1,6 @@
 package ru.hse.hwproj.api.controller
 
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 import ru.hse.hwproj.api.service.CheckerRequestsService
 import ru.hse.hwproj.api.service.SubmissionService
@@ -19,8 +20,8 @@ class TeacherController(
     private val taskService: TaskService
 ) {
     @GetMapping("/tasks")
-    fun viewTask(@RequestParam taskId: Int): Task? {
-        return taskService.getTask(taskId)
+    fun viewTask(@RequestParam id: Int): ResponseEntity<Task> {
+        return taskService.getTask(id)
     }
 
     @GetMapping("/tasks/all")
@@ -29,13 +30,13 @@ class TeacherController(
     }
 
     @PostMapping("/tasks/upload")
-    fun uploadTask(@RequestBody prototype: TaskPrototype): Int? {
+    fun uploadTask(@RequestBody prototype: TaskPrototype): ResponseEntity<Int> {
         return taskService.uploadTask(prototype)
     }
 
     @GetMapping("/checkers")
-    fun viewChecker(@RequestParam checkerId: String): Checker? {
-        return checkerRequestsService.getChecker(checkerId)
+    fun viewChecker(@RequestParam id: String): ResponseEntity<Checker> {
+        return checkerRequestsService.getChecker(id)
     }
 
     @GetMapping("/checkers/all")
@@ -44,13 +45,13 @@ class TeacherController(
     }
 
     @PostMapping("/checkers/upload")
-    fun uploadChecker(@RequestBody dockerfile: String): String? {
+    fun uploadChecker(@RequestBody dockerfile: String): ResponseEntity<String> {
         return checkerRequestsService.sendCreateCheckerRequest(dockerfile)
     }
 
     @GetMapping("/submissions")
-    fun viewSubmission(@RequestParam submissionId: Int): Submission? {
-        return submissionService.getSubmission(submissionId)
+    fun viewSubmission(@RequestParam id: Int): ResponseEntity<Submission> {
+        return submissionService.getSubmission(id)
     }
 
     @GetMapping("/submissions/all")
