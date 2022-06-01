@@ -15,11 +15,11 @@ class TaskService(
     private val taskRepository: TaskRepository
 ) {
     fun uploadTask(prototype: TaskPrototype): ResponseEntity<Int> {
-        return taskRepository.upload(prototype).orElseStatus(HttpStatus.NOT_FOUND)
+        return taskRepository.upload(prototype).orElseStatus(HttpStatus.BAD_REQUEST)
     }
 
     fun getTask(id: Int): ResponseEntity<Task> {
-        return taskRepository.getById(id).orElseStatus(HttpStatus.BAD_REQUEST)
+        return taskRepository.getById(id).orElseStatus(HttpStatus.NOT_FOUND)
     }
 
     fun getAllTasks(): List<Task> = taskRepository.getAll()

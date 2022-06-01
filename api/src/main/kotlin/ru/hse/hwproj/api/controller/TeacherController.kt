@@ -6,6 +6,7 @@ import ru.hse.hwproj.api.service.CheckerRequestsService
 import ru.hse.hwproj.api.service.SubmissionService
 import ru.hse.hwproj.api.service.TaskService
 import ru.hse.hwproj.common.repository.checker.Checker
+import ru.hse.hwproj.common.repository.checker.CheckerPrototype
 import ru.hse.hwproj.common.repository.submission.Submission
 import ru.hse.hwproj.common.repository.submission.SubmissionView
 import ru.hse.hwproj.common.repository.task.Task
@@ -45,8 +46,8 @@ class TeacherController(
     }
 
     @PostMapping("/checkers/upload")
-    fun uploadChecker(@RequestBody dockerfile: String): ResponseEntity<String> {
-        return checkerRequestsService.sendCreateCheckerRequest(dockerfile)
+    fun uploadChecker(@RequestBody prototype: CheckerPrototype): ResponseEntity<Int> {
+        return checkerRequestsService.sendCreateCheckerRequest(prototype)
     }
 
     @GetMapping("/submissions")

@@ -1,7 +1,7 @@
 package ru.hse.hwproj.common.repository.checker
 
 interface CheckerRepository {
-    fun upload(prototype: CheckerPrototype): String?
+    fun upload(prototype: CheckerPrototype): Int?
 
     fun getByIds(ids: List<String>): List<Checker>
 

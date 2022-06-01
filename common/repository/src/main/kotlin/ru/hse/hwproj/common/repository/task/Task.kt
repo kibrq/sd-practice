@@ -13,7 +13,7 @@ data class Task(
     val publishedDate: LocalDateTime,
     val description: String,
     val deadlineDate: LocalDateTime,
-    val checkerIdentifier: String
+    val checkerIdentifier: Int
 ) {
     fun view() = TaskView(
         id = id,
@@ -26,7 +26,7 @@ data class TaskPrototype(
     val name: String,
     val description: String,
     val deadlineDate: LocalDateTime,
-    val checkerIdentifier: String
+    val checkerIdentifier: Int
 )
 
 data class TaskView(

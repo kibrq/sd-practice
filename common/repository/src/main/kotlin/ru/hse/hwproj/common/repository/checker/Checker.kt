@@ -2,10 +2,10 @@ package ru.hse.hwproj.common.repository.checker
 
 import org.jooq.impl.DefaultDSLContext
 import org.springframework.stereotype.Component
+import ru.hse.hwproj.common.repository.Sequences
 import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.utils.withinTry
 import java.util.*
-
 
 enum class CheckerVerdict(val value: Boolean) {
     YES(true),
@@ -19,8 +19,8 @@ enum class CheckerVerdict(val value: Boolean) {
     }
 }
 
-data class Checker(
-    val imageIdentifier: String,
+class Checker(
+    val id: Int,
     val dockerfile: String
 )
 
@@ -28,28 +28,29 @@ data class CheckerPrototype(val dockerfile: String)
 
 @Component
 class CheckerRepositoryImpl(private val dsl: DefaultDSLContext) : CheckerRepository {
-
-    override fun upload(prototype: CheckerPrototype): String? {
-        val imageIdentifier = UUID.randomUUID().toString()
+    override fun upload(prototype: CheckerPrototype): Int? {
         return withinTry {
             dsl.insertInto(Tables.CHECKERS)
                 .columns(Tables.CHECKERS.fields().asList())
-                .values(imageIdentifier, prototype.dockerfile)
+                .values(
+                    Sequences.CHECKER_ID_SEQ.nextval(),
+                    prototype.dockerfile
+                )
                 .returningResult(Tables.CHECKERS.ID)
-                .fetchOne().let { it != null }
-            imageIdentifier
+                .fetchOne()
+                ?.value1()
         }
     }
 
     override fun getAll(): List<Checker> {
-        return dsl.select(Tables.CHECKERS.ID, Tables.CHECKERS.DOCKERFILE)
+        return dsl.select()
             .from(Tables.CHECKERS)
             .fetch()
             .into(Checker::class.java)
     }
 
     override fun getByIds(ids: List<String>): List<Checker> {
-        return dsl.select(Tables.CHECKERS.ID, Tables.CHECKERS.DOCKERFILE)
+        return dsl.select()
             .from(Tables.CHECKERS)
             .where(Tables.CHECKERS.ID.`in`(ids))
             .fetch()

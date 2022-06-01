@@ -8,13 +8,14 @@ import java.net.URL
 @Component
 @Scope("prototype")
 class Runner {
-    fun runSubmission(checkerIdentifier: String, repositoryUrl: URL): Pair<Int, String> {
+    fun runSubmission(submissionId: Int, checkerIdentifier: Int, repositoryUrl: URL): Pair<Int, String> {
         println("Running submission $repositoryUrl with $checkerIdentifier...")
-        val imageDir = File("checkers/$checkerIdentifier")
+        val dir = File("checkers").resolve(checkerIdentifier.toString()).resolve(submissionId.toString())
+        dir.mkdirs()
         val process = ProcessBuilder().apply {
-            directory(imageDir)
+            directory(dir)
             val repoName = repositoryUrl.toString().substringAfterLast('/')
-            val repoPath = imageDir.resolve(repoName).absolutePath
+            val repoPath = dir.resolve(repoName).absolutePath
             val gitClone = "git clone $repositoryUrl"
             val dockerRun = "docker run -v $repoPath:/solution $checkerIdentifier"
             val mainCommand = "$gitClone && $dockerRun"
@@ -27,7 +28,7 @@ class Runner {
 
     fun buildChecker(checkerIdentifier: String, checkerContent: String): Pair<Int, String> {
         println("Building checker $checkerIdentifier...")
-        val imageDir = File("checkers/$checkerIdentifier")
+        val imageDir = File("checkers").resolve(checkerIdentifier.toString())
         imageDir.mkdirs()
         imageDir.resolve("Dockerfile").writeText(checkerContent)
         val process = ProcessBuilder().apply {

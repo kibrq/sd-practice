@@ -38,10 +38,9 @@ class CheckerRequestsService(
 
     fun getAllCheckers(): List<Checker> = checkerRepository.getAll()
 
-    fun sendCreateCheckerRequest(dockerfile: String): ResponseEntity<String> {
-        val prototype = CheckerPrototype(dockerfile)
+    fun sendCreateCheckerRequest(prototype: CheckerPrototype): ResponseEntity<Int> {
         return checkerRepository.upload(prototype).runOrElseStatus(HttpStatus.BAD_REQUEST) {
-            val message = it.toByteArray()
+            val message = it.toString().toByteArray()
             checkersChannel.basicPublish("", "checkers_queue", MessageProperties.TEXT_PLAIN, message)
         }
     }
