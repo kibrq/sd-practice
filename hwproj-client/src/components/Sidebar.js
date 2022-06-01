@@ -8,6 +8,8 @@ export default class Sidebar extends React.Component {
         return (
             <Menu width={"280px"} disableAutoFocus>
                 <NavLink className="menu-item" to="/">Home</NavLink>
+                <NavLink className="menu-item" to="/teacher">Teacher</NavLink>
+                <NavLink className="menu-item" to="/student">Student</NavLink>
                 <NavLink className="menu-item" to="/health">Health</NavLink>
             </Menu>
         );
