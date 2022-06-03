@@ -11,23 +11,13 @@ docker-compose up
 * rabbitmq — runs rabbitmq server on localhost:5672
 * api — runs server api on localhost:8080
 * runner — runners who check submissions; connected to the api via rabbitmq
+* client — hwproj web interface
 
 ### API docs
 
 http://localhost:8080/swagger-ui.html
 
 ## Client
-
-### To install dependencies use
-
-```bash
-npm install --prefix hwproj-client
-```
-
-### To run client use
-```bash
-npm start --prefix hwproj-client
-```
 
 ### The client will be up running on
 

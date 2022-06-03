@@ -75,3 +75,16 @@ services:
             - database
             - rabbitmq
             - build
+
+    client:
+        build:
+            context: .
+            dockerfile: ./docker/client/Dockerfile
+        ports:
+            - '3000:3000'
+        expose:
+            - '3000'
+        volumes:
+            - ./hwproj-client:/app
+        depends_on:
+            - api

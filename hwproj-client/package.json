@@ -13,7 +13,8 @@
         "react-router": "^6.3.0",
         "react-router-dom": "^6.3.0",
         "react-scripts": "^5.0.1",
-        "sass": "^1.52.1"
+        "sass": "^1.52.1",
+        "serve": "^13.0.2"
     },
     "scripts": {
         "start": "react-scripts start",
