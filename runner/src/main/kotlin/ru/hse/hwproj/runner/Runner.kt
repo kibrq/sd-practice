@@ -13,15 +13,16 @@ private const val SUBMISSION = "submission"
 @Scope("prototype")
 class Runner {
     fun runSubmission(submissionId: Int, checkerId: Int, repositoryUrl: URL): Pair<Int, String> {
-        println("Running submission $repositoryUrl with $checkerId...")
-        val dir = File(CHECKERS).resolve("$CHECKER$checkerId").resolve("$SUBMISSION$submissionId")
+        val checkerName = "$CHECKER$checkerId"
+        println("Running submission $repositoryUrl with $checkerName...")
+        val dir = File(CHECKERS).resolve(checkerName).resolve("$SUBMISSION$submissionId")
         dir.mkdirs()
         val process = ProcessBuilder().apply {
             directory(dir)
             val repoName = repositoryUrl.toString().substringAfterLast('/')
             val repoPath = dir.resolve(repoName).absolutePath
             val gitClone = "git clone $repositoryUrl"
-            val dockerRun = "docker run --rm -v $repoPath:/solution $checkerId"
+            val dockerRun = "docker run --rm -v $repoPath:/solution $checkerName"
             val mainCommand = "$gitClone && $dockerRun"
             println(mainCommand)
 
@@ -31,13 +32,14 @@ class Runner {
     }
 
     fun buildChecker(checkerId: String, checkerContent: String): Pair<Int, String> {
-        println("Building checker $checkerId...")
-        val imageDir = File(CHECKERS).resolve("$CHECKER$checkerId")
+        val checkerName = "$CHECKER$checkerId"
+        println("Building $checkerName...")
+        val imageDir = File(CHECKERS).resolve(checkerName)
         imageDir.mkdirs()
         imageDir.resolve("Dockerfile").writeText(checkerContent)
         val process = ProcessBuilder().apply {
             directory(imageDir)
-            val dockerBuild = "docker build -t $checkerId ."
+            val dockerBuild = "docker build -t $checkerName ."
 
             setCommand(dockerBuild)
         }.start()

@@ -67,6 +67,7 @@ services:
             dockerfile: ./docker/runner/Dockerfile
         volumes:
             - .:/app
+            - /var/run/docker.sock:/var/run/docker.sock
         networks:
             - queue_network
             - database_network
