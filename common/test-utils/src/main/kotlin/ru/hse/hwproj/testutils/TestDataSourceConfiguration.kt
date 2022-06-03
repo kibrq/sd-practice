@@ -16,11 +16,14 @@ open class TestDataSourceConfiguration(
 ) {
     @Bean
     open fun dataSource(): DataSource {
-        return JdbcDataSource().apply {
+        val datasource = JdbcDataSource().apply {
             setURL(environment.getProperty("db.url"))
             user = environment.getProperty("db.user")
             password = environment.getProperty("db.password")
         }
+        // clear database before tests
+        datasource.connection.prepareStatement("DROP ALL OBJECTS").execute()
+        return datasource
     }
 
     @Bean

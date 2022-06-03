@@ -28,7 +28,7 @@ class Runner {
 
     fun buildChecker(checkerIdentifier: String, checkerContent: String): Pair<Int, String> {
         println("Building checker $checkerIdentifier...")
-        val imageDir = File("checkers").resolve(checkerIdentifier.toString())
+        val imageDir = File("checkers").resolve(checkerIdentifier)
         imageDir.mkdirs()
         imageDir.resolve("Dockerfile").writeText(checkerContent)
         val process = ProcessBuilder().apply {

@@ -33,6 +33,7 @@ class SubmissionRepositoryTest(
     @Autowired private val repository: SubmissionRepository,
     @Autowired private val submissionFeedbackRepository: SubmissionFeedbackRepository,
 ) {
+    private val random = Random()
     private val myUrl = URL("https://github.com/scanhex/zxc")
 
     @AfterTest
@@ -46,8 +47,8 @@ class SubmissionRepositoryTest(
             .execute()
     }
 
-    private fun addRandomChecker(): String {
-        val checkerId = UUID.randomUUID().toString()
+    private fun addRandomChecker(): Int {
+        val checkerId = random.nextInt(1000)
         dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())
             .values(

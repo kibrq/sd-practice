@@ -23,6 +23,8 @@ class TaskRepositoryTest(
     @Autowired private val dsl: DefaultDSLContext,
     @Autowired private val repository: TaskRepository,
 ) {
+    private val random = Random()
+
     @AfterTest
     @BeforeTest
     fun clearDatabase() {
@@ -34,8 +36,8 @@ class TaskRepositoryTest(
             .execute()
     }
 
-    private fun addRandomChecker(): String {
-        val checkerId = UUID.randomUUID().toString()
+    private fun addRandomChecker(): Int {
+        val checkerId = random.nextInt(1000)
         dsl.insertInto(Tables.CHECKERS)
             .columns(Tables.CHECKERS.fields().asList())
             .values(
@@ -54,7 +56,7 @@ class TaskRepositoryTest(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 0, 0),
-            checkerIdentifier = "not exists"
+            checkerIdentifier = 1000 // does not exist
         )
         assertNull(repository.upload(prototype))
     }

@@ -24,8 +24,10 @@ import ru.hse.hwproj.testutils.TestDataSourceConfiguration
 import ru.hse.hwproj.testutils.TestRabbitMQConfiguration
 import java.net.URL
 import java.time.LocalDateTime
+import java.util.concurrent.locks.ReentrantLock
+import kotlin.concurrent.withLock
 import kotlin.test.Test
-import kotlin.test.assertEquals
+import kotlin.test.fail
 
 @SpringBootTest(
     classes = [
@@ -40,34 +42,51 @@ class SimpleTest(
     @Autowired private val submissionRepository: SubmissionRepository,
     @Autowired private val taskRepository: TaskRepository,
     @Autowired private val submissionFeedbackRepository: SubmissionFeedbackRepository,
-    @Autowired private val connectionFactory: ConnectionFactory,
+    @Autowired private val connectionFactory: ConnectionFactory
 ) : EmbeddedRabbitMQTest() {
-
-    lateinit var checkerRequestsService: CheckerRequestsService
-    lateinit var checkerService: CheckerService
-
     @Test
     fun test() {
-        val checkerIdentifier = "dockerfile"
         val repositoryUrl = URL("https://github.com/scanhex/zxc")
 
+        val prototype = CheckerPrototype("dockerfile")
+        val checkerId = checkerRepository.upload(prototype) ?: throw IllegalStateException("Can't upload checker")
+
+        val taskPrototype = TaskPrototype("task", "description", LocalDateTime.now(), checkerId)
+        val taskId = taskRepository.upload(taskPrototype) ?: throw IllegalStateException("Can't upload task")
+
+        val submissionId = submissionRepository.upload(SubmissionPrototype(taskId, repositoryUrl)) ?: return
+
+        // Exceptions in `runSubmission` are handled(logged) by rabbitmq, and we can't test them directly.
+        val lock = ReentrantLock()
+        val done = lock.newCondition()
+        var failReason: String? = null
+
         val runner = mock<Runner> {
-            on { runSubmission(ArgumentMatchers.anyString(), any()) } doAnswer { call ->
-                assertEquals(
-                    call.arguments.getOrElse(0) { "" },
-                    checkerIdentifier
-                )
-                assertEquals(
-                    call.arguments.getOrElse(1) { "" }.toString(),
-                    repositoryUrl.toString()
-                )
+            on {
+                runSubmission(ArgumentMatchers.anyInt(), ArgumentMatchers.anyInt(), any())
+            } doAnswer { call ->
+                val (argSubmissionId, argCheckerId, argRepositoryUrl) = call.arguments
+
+                for ((name, expected, got) in listOf(
+                    Triple("submission id", submissionId, argSubmissionId),
+                    Triple("checker id", checkerId, argCheckerId),
+                    Triple("repository url", repositoryUrl.toString(), argRepositoryUrl.toString())
+                )) {
+                    if (expected != got) {
+                        failReason = "Wrong $name: expected $expected, got $got"
+                    }
+                }
+
+                lock.withLock {
+                    done.signalAll()
+                }
+
                 Pair(0, "good")
             }
         }
 
-
-        checkerRequestsService = CheckerRequestsService(checkerRepository, connectionFactory)
-        checkerService = CheckerService(
+        val checkerRequestsService = CheckerRequestsService(checkerRepository, connectionFactory)
+        val checkerService = CheckerService(
             submissionRepository,
             checkerRepository,
             taskRepository,
@@ -76,13 +95,15 @@ class SimpleTest(
             connectionFactory
         )
 
-        val identifier = checkerRepository.upload(CheckerPrototype("dockerfile")) ?: return
-        val taskId =
-            taskRepository.upload(TaskPrototype("task", "description", LocalDateTime.now(), identifier)) ?: return
-        val submissionId =
-            submissionRepository.upload(SubmissionPrototype(taskId, URL("https://github.com/scanhex/zxc"))) ?: return
-
         checkerRequestsService.sendSubmissionCheckRequest(submissionId)
         checkerService.receiveTasks()
+
+        lock.withLock {
+            done.await()
+        }
+
+        failReason?.let {
+            fail(it)
+        }
     }
 }
