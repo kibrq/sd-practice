@@ -12,6 +12,9 @@ private const val SUBMISSION = "submission"
 @Component
 @Scope("prototype")
 class Runner {
+    private val workingDirPrefix = System.getenv("WORKING_DIR_PREFIX")
+    private val mountDirectory = System.getenv("MOUNT_DIR")
+
     fun runSubmission(submissionId: Int, checkerId: Int, repositoryUrl: URL): Pair<Int, String> {
         val checkerName = "$CHECKER$checkerId"
         println("Running submission $repositoryUrl with $checkerName...")
@@ -21,8 +24,10 @@ class Runner {
             directory(dir)
             val repoName = repositoryUrl.toString().substringAfterLast('/')
             val repoPath = dir.resolve(repoName).absolutePath
+            val hostRepoPath = workingDirPrefix + repoPath.substringAfter(mountDirectory)
+
             val gitClone = "git clone $repositoryUrl"
-            val dockerRun = "docker run --rm -v $repoPath:/solution $checkerName"
+            val dockerRun = "docker run --rm -v $hostRepoPath:/solution $checkerName"
             val mainCommand = "$gitClone && $dockerRun"
             println(mainCommand)
 
@@ -40,6 +45,7 @@ class Runner {
         val process = ProcessBuilder().apply {
             directory(imageDir)
             val dockerBuild = "docker build -t $checkerName ."
+            println(dockerBuild)
 
             setCommand(dockerBuild)
         }.start()

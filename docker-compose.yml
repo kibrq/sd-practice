@@ -68,6 +68,9 @@ services:
         volumes:
             - .:/app
             - /var/run/docker.sock:/var/run/docker.sock
+        environment:
+            WORKING_DIR_PREFIX: $PWD
+            MOUNT_DIR: app
         networks:
             - queue_network
             - database_network

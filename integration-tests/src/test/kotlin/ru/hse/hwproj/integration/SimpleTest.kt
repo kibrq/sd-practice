@@ -1,6 +1,7 @@
 package ru.hse.hwproj.integration
 
 import com.rabbitmq.client.ConnectionFactory
+import org.junit.jupiter.api.AfterEach
 import org.mockito.ArgumentMatchers
 import org.mockito.kotlin.any
 import org.mockito.kotlin.doAnswer
@@ -22,6 +23,7 @@ import ru.hse.hwproj.runner.Runner
 import ru.hse.hwproj.testutils.EmbeddedRabbitMQTest
 import ru.hse.hwproj.testutils.TestDataSourceConfiguration
 import ru.hse.hwproj.testutils.TestRabbitMQConfiguration
+import java.io.File
 import java.net.URL
 import java.time.LocalDateTime
 import java.util.concurrent.locks.ReentrantLock
@@ -44,6 +46,9 @@ class SimpleTest(
     @Autowired private val submissionFeedbackRepository: SubmissionFeedbackRepository,
     @Autowired private val connectionFactory: ConnectionFactory
 ) : EmbeddedRabbitMQTest() {
+    @AfterEach
+    fun cleanUpCheckersDirectory() = File("checkers").deleteRecursively().let { }
+
     @Test
     fun test() {
         val repositoryUrl = URL("https://github.com/scanhex/zxc")
