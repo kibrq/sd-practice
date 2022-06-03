@@ -1,25 +1,28 @@
-## Server
+# Hwproj
 
-### To build and run everything use
+## To build and run everything use
 
 ```bash
 docker-compose up
 ```
 
 ### Services running in docker:
+
 * database — runs postgres on localhost:5432
 * rabbitmq — runs rabbitmq server on localhost:5672
 * api — runs server api on localhost:8080
 * runner — runners who check submissions; connected to the api via rabbitmq
 * client — hwproj web interface
 
-### API docs
+### Server
+
+#### Api docs will be available at
 
 http://localhost:8080/swagger-ui.html
 
-## Client
+### Client
 
-### The client will be up running on
+#### The client will be up running at
 
 http://localhost:3000/
 
