@@ -56,7 +56,7 @@ class TaskRepositoryTest(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 0, 0),
-            checkerIdentifier = 1000 // does not exist
+            checkerId = 1000 // does not exist
         )
         assertNull(repository.upload(prototype))
     }
@@ -68,7 +68,7 @@ class TaskRepositoryTest(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = checkerId
+            checkerId = checkerId
         )
         assertNotNull(repository.upload(prototype))
     }
@@ -80,7 +80,7 @@ class TaskRepositoryTest(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = checkerId
+            checkerId = checkerId
         )
         assertNotNull(repository.upload(prototype))
 
@@ -89,7 +89,7 @@ class TaskRepositoryTest(
             it.name == prototype.name &&
                 it.description == prototype.description &&
                 it.deadlineDate == prototype.deadlineDate &&
-                it.checkerIdentifier == prototype.checkerIdentifier
+                it.checkerId == prototype.checkerId
         })
     }
 
@@ -100,7 +100,7 @@ class TaskRepositoryTest(
             name = "task",
             description = "hard task",
             deadlineDate = LocalDateTime.of(2022, 12, 12, 10, 10),
-            checkerIdentifier = checkerId
+            checkerId = checkerId
         )
         assertNotNull(repository.upload(prototype))
 
@@ -109,7 +109,7 @@ class TaskRepositoryTest(
             it.name == prototype.name &&
                 it.description == prototype.description &&
                 it.deadlineDate == prototype.deadlineDate &&
-                it.checkerIdentifier == prototype.checkerIdentifier
+                it.checkerId == prototype.checkerId
         })
         val expectedTask = tasks.stream().findFirst().get()
         val task = repository.getById(expectedTask.id)

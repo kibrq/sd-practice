@@ -15,7 +15,7 @@ export default class TaskUpload extends React.Component {
         name: "",
         description: "",
         deadlineDate: "",
-        checkerIdentifier: ""
+        checkerId: ""
     };
 
     constructor(props) {
@@ -44,7 +44,7 @@ export default class TaskUpload extends React.Component {
             name: this.state.name,
             description: this.state.description,
             deadlineDate: this.state.deadlineDate,
-            checkerIdentifier: parseInt(this.state.checkerIdentifier)
+            checkerId: parseInt(this.state.checkerId)
         }).then(() => {
             alert("Done");
             window.open("/teacher", "_self");
@@ -89,8 +89,8 @@ export default class TaskUpload extends React.Component {
                         type="number"
                         min="1"
                         placeholder="Enter checker id"
-                        value={this.state.checkerIdentifier}
-                        onChange={this.handleChange("checkerIdentifier")}
+                        value={this.state.checkerId}
+                        onChange={this.handleChange("checkerId")}
                     />
                     <input
                         className={formStyles.btn}

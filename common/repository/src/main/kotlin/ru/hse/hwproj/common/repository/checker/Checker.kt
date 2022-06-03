@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component
 import ru.hse.hwproj.common.repository.Sequences
 import ru.hse.hwproj.common.repository.Tables
 import ru.hse.hwproj.common.repository.utils.withinTry
-import java.util.*
 
 enum class CheckerVerdict(val value: Boolean) {
     YES(true),

@@ -48,7 +48,7 @@ export default class Task extends React.Component {
                 <br/>
                 Due date: {new Date(this.state.task.deadlineDate).toLocaleString()}
                 <br/>
-                {this.props.forTeacher ? "Checker id: " + this.state.task.checkerIdentifier : ""}
+                {this.props.forTeacher ? "Checker id: " + this.state.task.checkerId : ""}
             </div>
         );
     }

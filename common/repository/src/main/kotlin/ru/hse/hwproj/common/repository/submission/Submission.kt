@@ -78,7 +78,11 @@ class SubmissionFeedbackRepositoryImpl(private val dsl: DefaultDSLContext) : Sub
     override fun upload(prototype: SubmissionFeedbackPrototype): Int? {
         return dsl.insertInto(Tables.SUBMISSION_FEEDBACKS)
             .columns(Tables.SUBMISSION_FEEDBACKS.fields().asList())
-            .values(Sequences.SUBMISSION_FEEDBACK_ID_SEQ.nextval(), prototype.verdict.toString().lowercase(), prototype.comments)
+            .values(
+                Sequences.SUBMISSION_FEEDBACK_ID_SEQ.nextval(),
+                prototype.verdict.toString().lowercase(),
+                prototype.comments
+            )
             .returningResult(Tables.SUBMISSION_FEEDBACKS.ID)
             .fetchOne()
             ?.value1()

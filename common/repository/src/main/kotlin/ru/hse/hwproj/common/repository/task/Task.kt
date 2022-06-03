@@ -13,7 +13,7 @@ data class Task(
     val publishedDate: LocalDateTime,
     val description: String,
     val deadlineDate: LocalDateTime,
-    val checkerIdentifier: Int
+    val checkerId: Int
 ) {
     fun view() = TaskView(
         id = id,
@@ -26,7 +26,7 @@ data class TaskPrototype(
     val name: String,
     val description: String,
     val deadlineDate: LocalDateTime,
-    val checkerIdentifier: Int
+    val checkerId: Int
 )
 
 data class TaskView(
@@ -49,7 +49,7 @@ class TaskRepositoryImpl(
                     LocalDateTime.now(),
                     prototype.description,
                     prototype.deadlineDate,
-                    prototype.checkerIdentifier
+                    prototype.checkerId
                 )
                 .returningResult(Tables.TASKS.ID)
                 .fetchOne()

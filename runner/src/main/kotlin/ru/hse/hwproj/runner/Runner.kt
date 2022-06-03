@@ -5,19 +5,23 @@ import org.springframework.stereotype.Component
 import java.io.File
 import java.net.URL
 
+private const val CHECKER = "checker"
+private const val CHECKERS = "checkers"
+private const val SUBMISSION = "submission"
+
 @Component
 @Scope("prototype")
 class Runner {
-    fun runSubmission(submissionId: Int, checkerIdentifier: Int, repositoryUrl: URL): Pair<Int, String> {
-        println("Running submission $repositoryUrl with $checkerIdentifier...")
-        val dir = File("checkers").resolve(checkerIdentifier.toString()).resolve(submissionId.toString())
+    fun runSubmission(submissionId: Int, checkerId: Int, repositoryUrl: URL): Pair<Int, String> {
+        println("Running submission $repositoryUrl with $checkerId...")
+        val dir = File(CHECKERS).resolve("$CHECKER$checkerId").resolve("$SUBMISSION$submissionId")
         dir.mkdirs()
         val process = ProcessBuilder().apply {
             directory(dir)
             val repoName = repositoryUrl.toString().substringAfterLast('/')
             val repoPath = dir.resolve(repoName).absolutePath
             val gitClone = "git clone $repositoryUrl"
-            val dockerRun = "docker run -v $repoPath:/solution $checkerIdentifier"
+            val dockerRun = "docker run --rm -v $repoPath:/solution $checkerId"
             val mainCommand = "$gitClone && $dockerRun"
             println(mainCommand)
 
@@ -26,14 +30,14 @@ class Runner {
         return process.getResult()
     }
 
-    fun buildChecker(checkerIdentifier: String, checkerContent: String): Pair<Int, String> {
-        println("Building checker $checkerIdentifier...")
-        val imageDir = File("checkers").resolve(checkerIdentifier)
+    fun buildChecker(checkerId: String, checkerContent: String): Pair<Int, String> {
+        println("Building checker $checkerId...")
+        val imageDir = File(CHECKERS).resolve("$CHECKER$checkerId")
         imageDir.mkdirs()
         imageDir.resolve("Dockerfile").writeText(checkerContent)
         val process = ProcessBuilder().apply {
             directory(imageDir)
-            val dockerBuild = "docker build -t $checkerIdentifier ."
+            val dockerBuild = "docker build -t $checkerId ."
 
             setCommand(dockerBuild)
         }.start()

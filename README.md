@@ -18,6 +18,12 @@ http://localhost:8080/swagger-ui.html
 
 ## Client
 
+### To install dependencies use
+
+```bash
+npm install --prefix hwproj-client
+```
+
 ### To run client use
 ```bash
 npm start --prefix hwproj-client

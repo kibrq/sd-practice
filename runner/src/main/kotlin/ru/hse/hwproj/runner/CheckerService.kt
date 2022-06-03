@@ -48,7 +48,7 @@ class CheckerService(
         val submissionId = String(message.body).toIntOrNull() ?: return
         val submission = submissionRepository.getById(submissionId) ?: return
         val task = taskRepository.getById(submission.taskId) ?: return
-        val (code, resultMessage) = runner.runSubmission(submissionId, task.id, submission.repositoryUrl)
+        val (code, resultMessage) = runner.runSubmission(submissionId, task.checkerId, submission.repositoryUrl)
         println(code)
         println(resultMessage)
         val feedback = SubmissionFeedbackPrototype(
