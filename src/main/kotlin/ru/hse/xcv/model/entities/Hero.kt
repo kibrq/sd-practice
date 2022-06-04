@@ -10,6 +10,9 @@ import ru.hse.xcv.model.spells.book.HeroSpellBook
 import ru.hse.xcv.model.stats.Experience
 import ru.hse.xcv.model.stats.Stats
 
+/*
+ * Represents player's hero.
+ */
 class Hero(position: Position) : Entity(position) {
     private var maxEquippedItems: Int = 3
     val spellBook: HeroSpellBook = HeroSpellBook()
@@ -49,6 +52,9 @@ class Hero(position: Position) : Entity(position) {
 
     private fun canBeUnequipped(item: Item) = !isDead && item in equippedItems
 
+    /*
+     * Add experience to hero and update stats.
+     */
     fun addExperience(exp: Int) {
         val levels = experience.applyExperience(exp)
         if (levels > 0) {
@@ -56,6 +62,9 @@ class Hero(position: Position) : Entity(position) {
         }
     }
 
+    /*
+     * Try to equip `item`.
+     */
     fun equipItem(item: Item): Boolean {
         return if (canBeEquipped(item)) {
             equippedItems.add(item)
@@ -64,6 +73,9 @@ class Hero(position: Position) : Entity(position) {
         } else false
     }
 
+    /*
+     * Try to unequip `item`.
+     */
     fun unequipItem(item: Item): Boolean {
         return if (canBeUnequipped(item)) {
             equippedItems.remove(item)

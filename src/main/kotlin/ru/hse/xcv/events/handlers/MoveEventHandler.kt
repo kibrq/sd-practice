@@ -6,9 +6,15 @@ import ru.hse.xcv.util.addAll
 import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.world.World
 
+/*
+ * Handles MoveEvent.
+ */
 class MoveEventHandler(
     override val world: World
 ) : GameEventHandler<MoveEvent> {
+    /*
+     * Tries to move `event.obj` by `event.offset`.
+     */
     override fun handle(event: MoveEvent) {
         val (obj, offset, needMoveWorld) = event
         val possibleMoves = mutableListOf(

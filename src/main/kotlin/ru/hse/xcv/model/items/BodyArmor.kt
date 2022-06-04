@@ -2,6 +2,9 @@ package ru.hse.xcv.model.items
 
 import ru.hse.xcv.model.stats.Stats
 
+/*
+ * An item that increases hero's armor and max HP.
+ */
 class BodyArmor : Item {
     override val name: String = "Body armor"
     override val description: String = "Body armor"

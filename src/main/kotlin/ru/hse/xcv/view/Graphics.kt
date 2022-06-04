@@ -13,6 +13,9 @@ import kotlin.reflect.KClass
 
 typealias WorldTile = Block<Tile>
 
+/*
+ * Creates a Block with given char and color.
+ */
 fun worldTileOfSymbolAndColor(char: Char, color: TileColor) =
     Block.newBuilder<Tile>()
         .withContent(
@@ -25,11 +28,17 @@ fun worldTileOfSymbolAndColor(char: Char, color: TileColor) =
         .build()
 
 
+/*
+ * A graphic representation of a static and dynamic layer.
+ */
 interface Graphics {
     fun staticLayerTransform(tile: FieldTile): WorldTile
     fun dynamicLayerTransform(obj: OnMapObject): WorldTile
 
     companion object {
+        /*
+         * Get default Graphics.
+         */
         fun default() = FromMapGraphics(
             mapOf(
                 FieldTile.FLOOR to worldTileOfSymbolAndColor(Symbols.INTERPUNCT, ANSITileColor.YELLOW),
@@ -54,6 +63,9 @@ interface Graphics {
     }
 }
 
+/*
+ * Default Graphics.
+ */
 class FromMapGraphics(
     private val staticLayerTransformMap: Map<FieldTile, WorldTile>,
     private val dynamicLayerTransformMap: Map<KClass<out OnMapObject>, WorldTile>

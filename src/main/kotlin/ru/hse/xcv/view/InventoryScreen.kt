@@ -12,7 +12,9 @@ import ru.hse.xcv.input.InventoryInputManager
 import ru.hse.xcv.model.items.Item
 import kotlin.math.min
 
-
+/*
+ * Inventory state of the game.
+ */
 class InventoryState(
     override val component: Component,
     override val input: InventoryInputManager
@@ -26,6 +28,9 @@ data class InventoryItemList(
     val scrollbar: ScrollBar
 )
 
+/*
+ * Create a zircon Component from an item which is equipped/unequipped when status is true/false.
+ */
 fun itemToComponent(item: Item, status: Boolean, eventBus: EventBus): Component {
     val itemPanel = Components.panel()
         .withPreferredSize(30, 4)
@@ -55,6 +60,9 @@ fun itemToComponent(item: Item, status: Boolean, eventBus: EventBus): Component 
     return itemPanel
 }
 
+/*
+ * Create inventory screen.
+ */
 fun createInventoryScreen(appConfig: AppConfig, eventBus: EventBus): Pair<InventoryState, InventoryItemList> {
     val (width, height) = appConfig.size
 

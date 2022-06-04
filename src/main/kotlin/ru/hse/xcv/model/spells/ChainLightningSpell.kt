@@ -2,6 +2,9 @@ package ru.hse.xcv.model.spells
 
 import org.hexworks.zircon.api.data.Size
 
+/*
+ * Confuses the nearest weak enemy(all mobs except dragons are considered weak).
+ */
 class ChainLightningSpell : Spell {
     override val name = "Chain lightning"
     override val description = "Confuses nearest enemy"

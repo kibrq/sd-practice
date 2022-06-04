@@ -2,6 +2,9 @@ package ru.hse.xcv.model.items
 
 import ru.hse.xcv.model.stats.Stats
 
+/*
+ * An item that increases hero's power.
+ */
 class Sword : Item {
     override val name: String = "Sword"
     override val description: String = "Sword"

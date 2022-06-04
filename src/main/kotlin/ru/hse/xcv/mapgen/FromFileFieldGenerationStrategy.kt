@@ -10,6 +10,9 @@ import java.io.File
 import java.nio.file.Files
 import java.nio.file.Path
 
+/*
+ * FieldGenerationStrategy to generate a FieldModel from a file.
+ */
 class FromFileFieldGenerationStrategy(
     private val fileName: String
 ) : FieldGenerationStrategy {
@@ -17,12 +20,18 @@ class FromFileFieldGenerationStrategy(
         require(Files.isRegularFile(Path.of(fileName)))
     }
 
+    /*
+     * Generates FieldModel from `fileName`.
+     */
     override fun generate(): FieldModel {
         val sourceFile = File(fileName)
         val json = sourceFile.readText()
         return fieldFromJsonRepresentation(Json.decodeFromString(json))
     }
 
+    /*
+     * Saves specified `field` into `fileName`.
+     */
     fun saveField(field: FieldModel) {
         val sourceFile = File(fileName)
         val json = Json.encodeToString(fieldToJsonRepresentation(field))

@@ -7,12 +7,18 @@ import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.normalize
 import ru.hse.xcv.world.World
 
+/*
+ * AggressiveMobStrategy is a strategy of a coward mob.
+ */
 class CowardMobStrategy(
     override val mob: Mob,
     override val world: World
 ) : MobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    /*
+     * Runs away from the hero if it is in mob's field of view.
+     */
     override fun takeAction(): Event? {
         val hero = mob.findHero(world) ?: return null
         val offset = (mob.position - hero.position).normalize()

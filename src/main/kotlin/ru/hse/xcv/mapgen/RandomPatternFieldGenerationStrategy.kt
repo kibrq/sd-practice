@@ -11,7 +11,7 @@ import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.entities.PickableItem
 import ru.hse.xcv.util.readRect
 
-fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
+private fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
     val (x, y, width, height) = rect
 
     if (width < threshold.width || height < threshold.height) {
@@ -26,6 +26,9 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
 
+/*
+ * Randomly generator for a FieldModel.
+ */
 class RandomPatternFieldGenerationStrategy(
     private val size: Size,
     private val smoothTimes: Int = 5,
@@ -101,6 +104,9 @@ class RandomPatternFieldGenerationStrategy(
         }
     }
 
+    /*
+     * Randomly generates FieldModel.
+     */
     override fun generate(): FieldModel {
         val tiles = generateSmoothedTiles()
         val dynamicLayer = generateDynamicLayer(tiles)

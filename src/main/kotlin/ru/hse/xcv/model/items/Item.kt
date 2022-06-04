@@ -2,6 +2,9 @@ package ru.hse.xcv.model.items
 
 import ru.hse.xcv.model.stats.Stats
 
+/*
+ * An item that can be equipped on a hero.
+ */
 interface Item {
     val name: String
     val description: String
@@ -16,6 +19,9 @@ interface Item {
             { Shield() }
         )
 
+        /*
+         * Returns a random item.
+         */
         fun getRandomItem() = allItems.random().invoke()
     }
 }
