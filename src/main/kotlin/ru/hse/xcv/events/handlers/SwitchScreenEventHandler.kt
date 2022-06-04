@@ -12,8 +12,7 @@ class SwitchScreenEventHandler(
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun handle(event: SwitchScreenEvent) {
-        val (newType) = event
-        val state = states.firstOrNull { it.type == newType } ?: return
+        val state = states.firstOrNull { it.type == event.newState } ?: return
         window.screen.detachAllComponents()
         window.screen.addComponent(state.component)
         window.input = state.input

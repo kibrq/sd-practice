@@ -42,6 +42,13 @@ class Hero(position: Position) : Entity(position) {
         spellBook.addSpell(SpeedBoostSpell())
     }
 
+    private fun canBeEquipped(item: Item) = !isDead
+        && item in inventory
+        && equippedItems.size < maxEquippedItems
+        && item.type !in equippedItems.map { it.type }
+
+    private fun canBeUnequipped(item: Item) = !isDead && item in equippedItems
+
     fun addExperience(exp: Int) {
         val levels = experience.applyExperience(exp)
         if (levels > 0) {
@@ -50,7 +57,7 @@ class Hero(position: Position) : Entity(position) {
     }
 
     fun equipItem(item: Item): Boolean {
-        return if (item in inventory && equippedItems.size < maxEquippedItems) {
+        return if (canBeEquipped(item)) {
             equippedItems.add(item)
             stats += item.bonusStats
             true
@@ -58,7 +65,7 @@ class Hero(position: Position) : Entity(position) {
     }
 
     fun unequipItem(item: Item): Boolean {
-        return if (equippedItems.contains(item)) {
+        return if (canBeUnequipped(item)) {
             equippedItems.remove(item)
             stats -= item.bonusStats
             true

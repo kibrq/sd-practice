@@ -6,6 +6,7 @@ interface Item {
     val name: String
     val description: String
     val bonusStats: Stats
+    val type: ItemType
 
     companion object {
         private val allItems = listOf(
