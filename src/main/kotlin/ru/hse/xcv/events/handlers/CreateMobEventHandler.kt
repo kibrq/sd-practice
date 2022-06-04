@@ -6,6 +6,9 @@ import ru.hse.xcv.model.entities.Entity
 import ru.hse.xcv.world.World
 import java.util.concurrent.TimeUnit
 
+/*
+ * Handles CreateMobEvent.
+ */
 class CreateMobEventHandler(
     override val world: World
 ) : GameEventHandler<CreateMobEvent> {
@@ -13,6 +16,9 @@ class CreateMobEventHandler(
 
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    /*
+     * Creates `event.mob` is cool down has ended.
+     */
     override fun handle(event: CreateMobEvent) {
         val (mob, refer, coolDown) = event
         val currentTime = System.currentTimeMillis()

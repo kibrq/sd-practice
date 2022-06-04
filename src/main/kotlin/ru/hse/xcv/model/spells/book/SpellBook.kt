@@ -2,6 +2,9 @@ package ru.hse.xcv.model.spells.book
 
 import ru.hse.xcv.model.spells.Spell
 
+/*
+ * Encapsulates  list of spells.
+ */
 abstract class SpellBook {
     protected abstract val spells: MutableList<Spell>
 

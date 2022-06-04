@@ -27,7 +27,7 @@ val SPELL_L = KeyCode.KEY_L
 val SPELL_CAST = KeyCode.SPACE
 
 /*
- * Very complicated logic for smooth movement.
+ * GameInputManager handles user's pressed keys in game view.
  */
 class GameInputManager(override val eventBus: EventBus) : InputManager {
     private val logger = LoggerFactory.getLogger(javaClass)
@@ -96,6 +96,9 @@ class GameInputManager(override val eventBus: EventBus) : InputManager {
     val readySpell: String?
         get() = readySpellsQueue.removeFirstOrNull()
 
+    /*
+     * Handles `code` pressed.
+     */
     override fun keyPressed(code: KeyCode) {
         when (code) {
             in MOVE_KEYS -> movementKeyPressed(code)
@@ -106,6 +109,9 @@ class GameInputManager(override val eventBus: EventBus) : InputManager {
         }
     }
 
+    /*
+     * Handles `code` released.
+     */
     override fun keyReleased(code: KeyCode) {
         if (code !in MOVE_KEYS) return
 

@@ -26,6 +26,9 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
 
+/*
+ * Randomly generator for a FieldModel.
+ */
 class RandomPatternFieldGenerationStrategy(
     private val size: Size,
     private val smoothTimes: Int,
@@ -101,6 +104,9 @@ class RandomPatternFieldGenerationStrategy(
         }
     }
 
+    /*
+     * Randomly generates FieldModel.
+     */
     override fun generate(): FieldModel {
         val tiles = generateSmoothedTiles()
         val dynamicLayer = generateDynamicLayer(tiles)

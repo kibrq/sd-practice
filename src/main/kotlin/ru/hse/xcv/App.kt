@@ -26,6 +26,9 @@ private val WINDOW_SIZE = Size.create(screenWidth / 40, screenHeight / 40) // do
 private val TILESET = CP437TilesetResources.sirHenry32x32()
 private val FIELD_SIZE = Size.create(100, 100)
 
+/*
+ * Start xcv.
+ */
 fun startGame(
     view: FieldView,
     panelControllers: PanelControllers,

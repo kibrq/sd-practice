@@ -4,6 +4,9 @@ import ru.hse.xcv.controllers.MobController
 import ru.hse.xcv.controllers.strategies.CowardMobStrategy
 import ru.hse.xcv.controllers.strategies.MobStrategy
 
+/*
+ * A MobState with little health.
+ */
 class PanicMobState(override val strategy: MobStrategy) : MobState {
     private val cowardStrategy = CowardMobStrategy(strategy.mob, strategy.world)
 

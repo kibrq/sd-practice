@@ -14,6 +14,9 @@ data class MainScreen(
     var input: InputManager
 )
 
+/*
+ * Creates main screen.
+ */
 fun createMainScreen(config: AppConfig, bus: EventBus): MainScreen {
     val mainScreen = MainScreen(
         Screen.create(SwingApplications.startTileGrid(config)),

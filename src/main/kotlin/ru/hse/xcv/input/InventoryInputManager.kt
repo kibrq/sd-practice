@@ -10,11 +10,17 @@ import ru.hse.xcv.view.State
 val EQUIP = KeyCode.SPACE
 val ESCAPE = KeyCode.ESCAPE
 
+/*
+ * InventoryInputManager handles user's pressed keys in inventory view.
+ */
 class InventoryInputManager(
     override val eventBus: EventBus
 ) : InputManager {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    /*
+     * Handles `code` pressed.
+     */
     override fun keyPressed(code: KeyCode) {
         logger.debug("Inventory manager key pressed")
         when (code) {
@@ -26,5 +32,8 @@ class InventoryInputManager(
         }
     }
 
+    /*
+     * I don't care.
+     */
     override fun keyReleased(code: KeyCode) = Unit
 }

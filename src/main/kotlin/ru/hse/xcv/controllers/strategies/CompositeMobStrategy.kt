@@ -3,6 +3,9 @@ package ru.hse.xcv.controllers.strategies
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.world.World
 
+/*
+ * Encapsulates multiple mob strategies.
+ */
 class CompositeMobStrategy(
     override val mob: Mob,
     override val world: World,
@@ -11,6 +14,9 @@ class CompositeMobStrategy(
     override fun takeAction() = strategies.flatMap { strategy -> strategy.takeAction() }
 }
 
+/*
+ * Builder for CompositeMobStrategy.
+ */
 class CompositeMobStrategyBuilder(
     private val builders: List<MobStrategyBuilder>
 ) : MobStrategyBuilder {

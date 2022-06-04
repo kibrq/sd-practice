@@ -4,11 +4,17 @@ import org.hexworks.cobalt.logging.api.LoggerFactory
 import ru.hse.xcv.events.ScrollInventoryEvent
 import ru.hse.xcv.view.InventoryItemList
 
+/*
+ * Handles ScrollInventoryEvent.
+ */
 class ScrollInventoryEventHandler(
     override val inventoryItemList: InventoryItemList
 ) : InventoryEventHandler<ScrollInventoryEvent> {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    /*
+     * Scrolls inventory by `event.dPos` sign.
+     */
     override fun handle(event: ScrollInventoryEvent) {
         logger.debug("Handling scroll")
 

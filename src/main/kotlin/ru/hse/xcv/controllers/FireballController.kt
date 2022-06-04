@@ -10,6 +10,9 @@ import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.util.normalize
 import ru.hse.xcv.world.World
 
+/*
+ * Decides an action for a fireball.
+ */
 class FireballController(
     private val fireball: FireballSpell.Fireball,
     private val world: World,
@@ -17,6 +20,9 @@ class FireballController(
 ) : ActionController {
     private var myMob: Mob? = null
 
+    /*
+     * Moves to the nearest mob or damages it if adjacent.
+     */
     override fun action(): Boolean {
         myMob = myMob ?: world.nearestVisibleObjectInRectangle(fireball.position, fireball.fieldOfView, Mob::class)
         val offset = myMob?.let {

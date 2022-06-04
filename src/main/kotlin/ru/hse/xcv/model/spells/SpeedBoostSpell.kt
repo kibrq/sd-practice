@@ -1,5 +1,8 @@
 package ru.hse.xcv.model.spells
 
+/*
+ * Doubles the hero speed for 2 seconds.
+ */
 class SpeedBoostSpell : Spell {
     override val name = "Speed boost spell"
     override val description = "Speeds up hero"

@@ -1,6 +1,5 @@
 package ru.hse.xcv.view
 
-
 import org.hexworks.zircon.api.ComponentDecorations.box
 import org.hexworks.zircon.api.Components
 import org.hexworks.zircon.api.GameComponents
@@ -21,6 +20,9 @@ import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.model.spells.Spell
 import kotlin.math.min
 
+/*
+ * Main state of the game.
+ */
 class GameState(
     override val component: Component,
     override val input: GameInputManager
@@ -30,6 +32,9 @@ class GameState(
 
 typealias FieldView = GameArea<Tile, WorldTile>
 
+/*
+ * Custom game area.
+ */
 class CustomGameArea(
     visibleSize: Size,
     actualSize: Size
@@ -51,32 +56,54 @@ data class PanelControllers(
     val spellsPanelController: SpellsPanelController
 )
 
+/*
+ * Controls GUI's health panel.
+ */
+
 class HealthPanelController(
     private val panel: ProgressBar
 ) {
+    /*
+     * Set health bar on GUI panel to `hp`.
+     */
     fun setHealth(hp: Int, maxHP: Int) {
         panel.progress = 100 * (hp.toDouble() / maxHP)
     }
 }
 
+/*
+ * Controls GUI's level panel.
+ */
 class LevelPanelController(
     private val panel: Label
 ) {
+    /*
+     * Set level to `level` in GUI.
+     */
     fun setLevel(level: Int) {
         panel.text = level.toString()
     }
 }
 
+/*
+ * Controls GUI's spell panel.
+ */
 class SpellsPanelController(
     private val panel: Panel
 ) {
     private var spellsNumber = 0
 
+    /*
+     * Clear all spells in GUI.
+     */
     fun clearSpells() {
         panel.detachAllComponents()
         spellsNumber = 0
     }
 
+    /*
+     * Add a spell in GUI.
+     */
     fun addSpell(spell: Spell) {
         val spellPanel = Components.panel()
             .withPreferredSize(panel.width, 2)
@@ -112,6 +139,9 @@ class SpellsPanelController(
 
 const val GAME_SCREEN_SPLIT_RATIO = 0.7
 
+/*
+ * Creates main game screen.
+ */
 fun createGameScreen(config: AppConfig, eventBus: EventBus): GameScreen {
     val (width, height) = config.size
     val gameAreaVisibleSize = Size.create((width * GAME_SCREEN_SPLIT_RATIO).toInt(), height)
