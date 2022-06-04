@@ -7,12 +7,18 @@ import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.normalize
 import ru.hse.xcv.world.World
 
+/*
+ * CowardMobStrategy is a strategy of a coward mob.
+ */
 class CowardMobStrategy(
     override val mob: Mob,
     override val world: World
 ) : SingleEventMobStrategy {
     private val logger = LoggerFactory.getLogger(javaClass)
 
+    /*
+     * Runs away from the hero if it is in mob's field of view.
+     */
     override fun takeSingleAction(): Event? {
         val hero = mob.findHero(world) ?: return null
         val offset = (mob.position - hero.position).normalize()
@@ -20,6 +26,9 @@ class CowardMobStrategy(
     }
 }
 
+/*
+ * Builder for CowardMobStrategy.
+ */
 class CowardMobStrategyBuilder : MobStrategyBuilder {
     override fun build(mob: Mob, world: World) = CowardMobStrategy(mob, world)
 }

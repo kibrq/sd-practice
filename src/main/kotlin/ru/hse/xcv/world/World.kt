@@ -25,6 +25,9 @@ import kotlin.concurrent.write
 import kotlin.reflect.KClass
 import kotlin.reflect.safeCast
 
+/*
+ * Represent the whole game state.
+ */
 class World(
     val model: FieldModel,
     val view: FieldView,
@@ -59,18 +62,33 @@ class World(
     val hero: Hero
         get() = getAllObjectsOfType(Hero::class).keys.first()
 
+    /*
+     * Run block in `millis`.
+     */
     fun delayed(millis: Long, block: () -> Unit) = scope.launch {
         delay(millis)
         block()
     }
 
+    /*
+     * Returns field's dynamic layer.
+     */
     fun getDynamicLayer(position: Position): OnMapObject? = model.dynamicLayer[position]
 
+    /*
+     * Returns field's static layer.
+     */
     fun getStaticLayer(position: Position): FieldTile? = model.staticLayer[position]
 
+    /*
+     * Returns true if given position is empty in both dynamic and static layers.
+     */
     fun isEmpty(position: Position) =
         model.staticLayer[position] == FieldTile.FLOOR && model.dynamicLayer[position] == null
 
+    /*
+     * Move `obj` to `newPosition`.
+     */
     fun moveObject(obj: DynamicObject, newPosition: Position): Boolean {
         val currentPosition = obj.position
 
@@ -102,6 +120,9 @@ class World(
         return true
     }
 
+    /*
+     * Create `obj` on `position` and its controller.
+     */
     fun createObject(obj: OnMapObject, position: Position): Boolean {
         val onCurrent = lock.read {
             model.byPosition(position)
@@ -131,6 +152,9 @@ class World(
         return true
     }
 
+    /*
+     * Delete `obj` and its controller.
+     */
     fun deleteObject(obj: OnMapObject) {
         val onCurrent = lock.read {
             model.byPosition(obj.position)
@@ -148,6 +172,9 @@ class World(
         }
     }
 
+    /*
+     * Start all the controllers.
+     */
     fun start() = getAllObjectsOfType(Entity::class).entries.forEach { (entity, controller) ->
         scope.launch {
             do {
@@ -159,6 +186,9 @@ class World(
         }
     }
 
+    /*
+     * Returns nearest object of type `clazz` in `size` from `center`.
+     */
     fun <T : OnMapObject> nearestVisibleObjectInRectangle(center: Position, size: Size, clazz: KClass<T>): T? =
         readNeighbourhood(center, size).second.values
             .mapNotNull { clazz.safeCast(it) }

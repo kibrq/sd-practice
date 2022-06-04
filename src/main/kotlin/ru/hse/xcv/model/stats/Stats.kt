@@ -1,5 +1,8 @@
 package ru.hse.xcv.model.stats
 
+/*
+ * Encapsulates entity's statsL power, armor, maxHP and current HP.
+ */
 data class Stats(
     var power: Int = 0,
     var armor: Int = 0,
@@ -14,9 +17,15 @@ data class Stats(
         require(maxHealth >= currentHealth)
     }
 
+    /*
+     * Is HP == 0.
+     */
     val isDead
         get() = currentHealth == 0
 
+    /*
+     * Change HP by `amount`.
+     */
     fun changeHP(amount: Int) {
         currentHealth = minOf(maxHealth, maxOf(0, currentHealth + amount))
     }

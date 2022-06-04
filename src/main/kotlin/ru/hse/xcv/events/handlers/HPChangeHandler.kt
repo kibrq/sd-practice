@@ -7,12 +7,17 @@ import ru.hse.xcv.view.HealthPanelController
 import ru.hse.xcv.view.LevelPanelController
 import ru.hse.xcv.world.World
 
+/*
+ * Handles HPChangeEvent.
+ */
 class HPChangeHandler(
     override val world: World,
     private val healthPanelController: HealthPanelController,
     private val levelPanelController: LevelPanelController
-) :
-    GameEventHandler<HPChangeEvent> {
+) : GameEventHandler<HPChangeEvent> {
+    /*
+     * Changes `event.entity`s hp by `event.amount` and deletes it if dead.
+     */
     override fun handle(event: HPChangeEvent) {
         val entity = event.entity
         entity.changeHP(event.amount)

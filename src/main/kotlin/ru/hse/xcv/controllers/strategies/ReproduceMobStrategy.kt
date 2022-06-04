@@ -8,6 +8,9 @@ import ru.hse.xcv.model.entities.ReproducibleMob
 import ru.hse.xcv.world.World
 import kotlin.random.Random
 
+/*
+ * ReproducibleMobStrategy is a strategy of mob who can reproduce.
+ */
 class ReproducibleMobStrategy(
     override val mob: Mob,
     override val world: World,
@@ -15,6 +18,9 @@ class ReproducibleMobStrategy(
     private val logger = LoggerFactory.getLogger(javaClass)
     private val reproducibleMob = mob as? ReproducibleMob
 
+    /*
+     * Reproduces in an adjacent tile.
+     */
     override fun takeSingleAction() = reproducibleMob?.let {
         val (x, y) = it.position
         val newPosition = Position.create(x + Random.nextInt(-1, 1 + 1), y + Random.nextInt(-1, 1 + 1))
@@ -29,6 +35,9 @@ class ReproducibleMobStrategy(
     }
 }
 
+/*
+ * Builder for ReproducibleMobStrategy.
+ */
 class ReproducibleMobStrategyBuilder : MobStrategyBuilder {
     override fun build(mob: Mob, world: World): MobStrategy = ReproducibleMobStrategy(mob, world)
 }

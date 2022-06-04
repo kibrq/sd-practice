@@ -11,6 +11,9 @@ import ru.hse.xcv.util.sum
 import ru.hse.xcv.world.World
 import kotlin.math.abs
 
+/*
+ * Decides an action for the hero.
+ */
 class PlayerController(
     private val world: World,
     private val input: GameInputManager,
@@ -69,6 +72,9 @@ class PlayerController(
         eventBus.fire(event)
     }
 
+    /*
+     * Handles player input with moving, wtf mode and casting spells.
+     */
     override fun action(): Boolean {
         handleWtfMode()
         handleMovement()

@@ -3,6 +3,9 @@ package ru.hse.xcv.mapgen
 import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.FieldModel
 
+/*
+ * A random builder for a FieldModel.
+ */
 class RandomFieldGenerationBuilder : FieldGenerationBuilder() {
     private var size: Size = Size.create(100, 100)
     private var smoothTimes = 5
@@ -46,6 +49,9 @@ class RandomFieldGenerationBuilder : FieldGenerationBuilder() {
         return this
     }
 
+    /*
+     * Randomly builds FieldModel.
+     */
     override fun build(): FieldModel {
         return RandomPatternFieldGenerationStrategy(size, smoothTimes, hardness, floorPercentage).generate()
     }

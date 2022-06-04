@@ -3,6 +3,9 @@ package ru.hse.xcv.model.entities
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.stats.Stats
 
+/*
+ * A mediocre reproducible mob.
+ */
 class PoisonousMold(
     override var position: Position,
     override val reproduceCoolDown: Int = 15

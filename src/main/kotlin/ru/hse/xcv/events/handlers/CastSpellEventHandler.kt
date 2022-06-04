@@ -13,6 +13,9 @@ import ru.hse.xcv.world.World
 import java.util.concurrent.TimeUnit
 import kotlin.reflect.KClass
 
+/*
+ * Handles CastSpellEvent.
+ */
 class CastSpellEventHandler(
     override val world: World,
     private val eventBus: EventBus
@@ -66,6 +69,9 @@ class CastSpellEventHandler(
         }
     }
 
+    /*
+     * Casts `event.spell` if it is not on coolDown.
+     */
     override fun handle(event: CastSpellEvent) {
         val currentTime = System.currentTimeMillis()
         coolDowns[event.spell::class]?.let {
