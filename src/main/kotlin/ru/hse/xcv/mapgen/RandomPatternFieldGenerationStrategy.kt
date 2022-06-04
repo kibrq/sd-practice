@@ -18,10 +18,11 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
         return listOf(rect)
     }
 
-    val (first, second) = if (width < height)
+    val (first, second) = if (width < height) {
         rect.splitVertical(height / 2)
-    else
+    } else {
         rect.splitHorizontal(width / 2)
+    }
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
 
@@ -32,26 +33,33 @@ class RandomPatternFieldGenerationStrategy(
     private val floorPercentage: Double = 0.55
 ) : FieldGenerationStrategy {
 
-    override fun generate(): FieldModel {
+    private fun generateSmoothedTiles(): Map<Position, FieldTile> {
         var tiles = size.fetchPositions().associateWith {
             if (Math.random() < floorPercentage) FieldTile.FLOOR else FieldTile.WALL
         }
 
+        val size3x3 = Size.create(3, 3)
         repeat(smoothTimes) {
             tiles = size.fetchPositions().associateWith { pos ->
                 val neighborhood = tiles.readRect(
-                    Rect.create(pos - Position.offset1x1(), Size.create(3, 3))
+                    Rect.create(pos - Position.offset1x1(), size3x3)
                 )
-                val floors = neighborhood.filter { it.value == FieldTile.FLOOR }.count()
-                val rocks = neighborhood.filter { it.value == FieldTile.WALL }.count()
+                val floors = neighborhood.count { it.value == FieldTile.FLOOR }
+                val rocks = neighborhood.count { it.value == FieldTile.WALL }
                 if (floors >= rocks) FieldTile.FLOOR else FieldTile.WALL
             }
         }
 
+        return tiles
+    }
+
+    private fun generateDynamicLayer(tiles: Map<Position, FieldTile>): MutableMap<Position, OnMapObject> {
         val dynamicLayer = mutableMapOf<Position, OnMapObject>()
 
         val mobThreshold = Size.create(20, 20)
-        recursiveSplit(Rect.create(Position.zero(), size), mobThreshold).forEach { rect ->
+        val mapRect = Rect.create(Position.zero(), size)
+
+        recursiveSplit(mapRect, mobThreshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             val mobCount = (hardness * floors.count()) / mobThreshold.height / mobThreshold.width + 1
             floors.keys.shuffled().take(mobCount).forEach {
@@ -59,6 +67,10 @@ class RandomPatternFieldGenerationStrategy(
             }
         }
 
+        return dynamicLayer
+    }
+
+    private fun placeItems(tiles: Map<Position, FieldTile>, dynamicLayer: MutableMap<Position, OnMapObject>) {
         val itemThreshold = Size.create(20, 20)
         recursiveSplit(Rect.create(Position.zero(), size), itemThreshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
@@ -66,18 +78,34 @@ class RandomPatternFieldGenerationStrategy(
                 dynamicLayer[it] = PickableItem.getRandomPickableItem(it)
             }
         }
+    }
 
-        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
-            .keys
-            .filter { pos ->
-                val corner = pos - Position.create(10, 10)
-                val size = Size.create(20, 20)
-                val rect = Rect.create(corner, size)
-                tiles.readRect(rect).none { dynamicLayer.containsKey(it.key) }
-            }.randomOrNull()?.let {
-                dynamicLayer[it] = Hero(it)
+    private fun placeHero(tiles: Map<Position, FieldTile>, dynamicLayer: MutableMap<Position, OnMapObject>) {
+        for (noMobsSize in 16 downTo 0) {
+            val position = tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
+                .keys
+                .filter { pos ->
+                    // check no mobs nearby
+                    val corner = pos - Position.create(noMobsSize / 2, noMobsSize / 2)
+                    val size = Size.create(noMobsSize, noMobsSize)
+                    val rect = Rect.create(corner, size)
+                    tiles.readRect(rect).none {
+                        dynamicLayer.containsKey(it.key)
+                    }
+                }.randomOrNull()
+
+            if (position != null) {
+                dynamicLayer[position] = Hero(position)
+                break
             }
+        }
+    }
 
+    override fun generate(): FieldModel {
+        val tiles = generateSmoothedTiles()
+        val dynamicLayer = generateDynamicLayer(tiles)
+        placeItems(tiles, dynamicLayer)
+        placeHero(tiles, dynamicLayer)
         return FieldModel(tiles, dynamicLayer, Rect.create(Position.zero(), size))
     }
 }
