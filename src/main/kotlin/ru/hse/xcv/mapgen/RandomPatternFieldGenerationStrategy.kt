@@ -10,7 +10,6 @@ import ru.hse.xcv.model.entities.Hero
 import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.util.readRect
 
-
 fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
     val (x, y, width, height) = rect
 
@@ -18,10 +17,11 @@ fun recursiveSplit(rect: Rect, threshold: Size): List<Rect> {
         return listOf(rect)
     }
 
-    val (first, second) = if (width < height)
+    val (first, second) = if (width < height) {
         rect.splitVertical(height / 2)
-    else
+    } else {
         rect.splitHorizontal(width / 2)
+    }
     return recursiveSplit(first, threshold) + recursiveSplit(second, threshold)
 }
 
@@ -33,37 +33,57 @@ class RandomPatternFieldGenerationStrategy(
     private val floorPercentage: Double = 0.55
 ) : FieldGenerationStrategy {
 
-    override fun generate(): FieldModel {
+    private fun generateSmoothedTiles(): Map<Position, FieldTile> {
         var tiles = size.fetchPositions().associateWith {
             if (Math.random() < floorPercentage) FieldTile.FLOOR else FieldTile.WALL
         }
 
+        val size3x3 = Size.create(3, 3)
         repeat(smoothTimes) {
             tiles = size.fetchPositions().associateWith { pos ->
                 val neighborhood = tiles.readRect(
-                    Rect.create(pos - Position.offset1x1(), Size.create(3, 3))
+                    Rect.create(pos - Position.offset1x1(), size3x3)
                 )
-                val floors = neighborhood.filter { it.value == FieldTile.FLOOR }.count()
-                val rocks = neighborhood.filter { it.value == FieldTile.WALL }.count()
+                val floors = neighborhood.count { it.value == FieldTile.FLOOR }
+                val rocks = neighborhood.count { it.value == FieldTile.WALL }
                 if (floors >= rocks) FieldTile.FLOOR else FieldTile.WALL
             }
         }
 
+        return tiles
+    }
+
+    private fun generateDynamicLayer(tiles: Map<Position, FieldTile>): MutableMap<Position, DynamicObject> {
         val dynamicLayer = mutableMapOf<Position, DynamicObject>()
 
         val threshold = Size.create(20, 20)
-        recursiveSplit(Rect.create(Position.zero(), size), threshold).forEach { rect ->
+        val mapRect = Rect.create(Position.zero(), size)
+
+        recursiveSplit(mapRect, threshold).forEach { rect ->
             val floors = tiles.readRect(rect).filter { it.value == FieldTile.FLOOR }
             val mobCount = (hardness * floors.count()) / threshold.height / threshold.width + 1
-//            val mobCount = 0
             floors.asSequence().shuffled().take(mobCount).forEach {
                 dynamicLayer[it.key] = Mob.getRandomMob(it.key)
             }
         }
 
+        return dynamicLayer
+    }
+
+    override fun generate(): FieldModel {
+        val tiles = generateSmoothedTiles()
+        val dynamicLayer = generateDynamicLayer(tiles)
+
+        // create hero
         tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
             .keys
-            .randomOrNull()?.let {
+            .filter { pos ->
+                // check no mobs nearby
+                val corner = pos - Position.create(10, 10)
+                val size = Size.create(20, 20)
+                val rect = Rect.create(corner, size)
+                tiles.readRect(rect).none { dynamicLayer.containsKey(it.key) }
+            }.randomOrNull()?.let {
                 dynamicLayer[it] = Hero(it)
             }
 
