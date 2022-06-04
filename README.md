@@ -1,13 +1,15 @@
 # XCV
 
-Use WASD to move. Press `I` to open inventory. Press a combination of HJKL keys and then SPACE to cast a spell:
-* `J` - Fireball spell
-* `HJKL` - Chain lightning
-* `HH` - Heal spell
-* `L` - Speed boost spell
-* `ZXC` - Enter WTF mode: 2x speed, no cooldowns, single-key spells
+Use WASD to move. Press `I` to open inventory. Use W/S to scroll and mouse to equip/unequip items.
+One can not equip two or more items of the same type or more than 5 items total.
 
-In WTF mode speed is increased and all cooldowns are set to zero.
+Press a combination of HJKL keys and then SPACE to cast a spell:
+
+* `J` - Fireball spell: releases a fireball with auto-guidance which targets the closest enemy.
+* `HJKL` - Chain lightning: confuses the nearest weak enemy(all mobs except dragons are considered weak).
+* `HH` - Heal spell: heals the hero with `level * 10` hp.
+* `L` - Speed boost spell: doubles the hero speed for 2 seconds.
+* `ZXC` - Enter/exit WTF mode: 2x speed, no cooldowns, single-key spells.
 
 ### Run game
 
