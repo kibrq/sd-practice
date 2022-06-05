@@ -70,22 +70,26 @@ class RandomPatternFieldGenerationStrategy(
         return dynamicLayer
     }
 
+    private fun createHero(tiles: Map<Position, FieldTile>, dynamicLayer: MutableMap<Position, DynamicObject>) {
+        val noMobsNearby = { pos: Position ->
+            val corner = pos - Position.create(10, 10)
+            val size = Size.create(20, 20)
+            val rect = Rect.create(corner, size)
+            tiles.readRect(rect).none { dynamicLayer.containsKey(it.key) }
+        }
+
+        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
+            .keys
+            .filter(noMobsNearby)
+            .randomOrNull()?.let {
+                dynamicLayer[it] = Hero(it)
+            }
+    }
+
     override fun generate(): FieldModel {
         val tiles = generateSmoothedTiles()
         val dynamicLayer = generateDynamicLayer(tiles)
-
-        // create hero
-        tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
-            .keys
-            .filter { pos ->
-                // check no mobs nearby
-                val corner = pos - Position.create(10, 10)
-                val size = Size.create(20, 20)
-                val rect = Rect.create(corner, size)
-                tiles.readRect(rect).none { dynamicLayer.containsKey(it.key) }
-            }.randomOrNull()?.let {
-                dynamicLayer[it] = Hero(it)
-            }
+        createHero(tiles, dynamicLayer)
 
         return FieldModel(tiles, dynamicLayer, Rect.create(Position.zero(), size))
     }
