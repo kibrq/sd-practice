@@ -11,6 +11,7 @@ import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.mapgen.FieldGenerationBuilder
 import ru.hse.xcv.mapgen.RandomFieldGenerationBuilder
 import ru.hse.xcv.model.entities.mobs.cyberpunk.CyberpunkMobFactory
+import ru.hse.xcv.model.entities.mobs.dungeon.DungeonMobFactory
 import ru.hse.xcv.util.makeCentered
 import ru.hse.xcv.view.*
 import ru.hse.xcv.world.World
@@ -76,9 +77,10 @@ fun main() {
         listOf(gameState, inventoryState)
     )
 
-    // Dungeon or Cyberpunk mobs?
-    val mobFactory = CyberpunkMobFactory()
-//    val mobFactory = DungeonMobFactory()
+    val mobFactory = listOf(
+        { CyberpunkMobFactory() },
+        { DungeonMobFactory() }
+    ).random().invoke()
 
     startGame(
         gameView,
