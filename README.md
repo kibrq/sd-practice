@@ -16,13 +16,13 @@ docker-compose up
 
 ### Server
 
-#### Api docs will be available at
+Api docs will be available at
 
 http://localhost:8080/swagger-ui.html
 
 ### Client
 
-#### The client will be up running at
+The client will be up running at
 
 http://localhost:3000/
 
