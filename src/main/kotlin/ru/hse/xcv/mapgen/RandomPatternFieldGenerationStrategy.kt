@@ -84,18 +84,20 @@ class RandomPatternFieldGenerationStrategy(
     }
 
     private fun placeHero(tiles: Map<Position, FieldTile>, dynamicLayer: MutableMap<Position, OnMapObject>) {
-        for (noMobsSize in 16 downTo 0) {
+        val noMobsNearby = { pos: Position ->
+            val corner = pos - Position.create(10, 10)
+            val size = Size.create(20, 20)
+            val rect = Rect.create(corner, size)
+            tiles.readRect(rect).none {
+                dynamicLayer.containsKey(it.key)
+            }
+        }
+
+        for (noMobsSize in 14 downTo 0) {
             val position = tiles.filter { it.value == FieldTile.FLOOR && !dynamicLayer.containsKey(it.key) }
                 .keys
-                .filter { pos ->
-                    // check no mobs nearby
-                    val corner = pos - Position.create(noMobsSize / 2, noMobsSize / 2)
-                    val size = Size.create(noMobsSize, noMobsSize)
-                    val rect = Rect.create(corner, size)
-                    tiles.readRect(rect).none {
-                        dynamicLayer.containsKey(it.key)
-                    }
-                }.randomOrNull()
+                .filter(noMobsNearby)
+                .randomOrNull()
 
             if (position != null) {
                 dynamicLayer[position] = Hero(position)
