@@ -1,12 +1,13 @@
-package ru.hse.xcv.model.entities
+package ru.hse.xcv.model.entities.mobs.dungeon
 
 import org.hexworks.zircon.api.data.Position
+import ru.hse.xcv.model.entities.mobs.Maxim
 import ru.hse.xcv.model.stats.Stats
 
 /*
  * A mediocre aggressive mob.
  */
-class Maxim(position: Position) : Mob(position) {
+class DungeonMaxim(position: Position) : Maxim(position) {
     override var moveSpeed = 20
     override val experienceGain = 40
     override val stats = Stats(

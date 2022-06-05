@@ -5,7 +5,7 @@ import kotlin.test.assertEquals
 
 internal class ExperienceTest {
     @Test
-    fun `test add experience`() {
+    fun `Test add experience`() {
         val exp = Experience()
         exp.applyExperience(50)
         assertEquals(50, exp.experience)

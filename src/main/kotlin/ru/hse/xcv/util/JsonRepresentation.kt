@@ -7,7 +7,10 @@ import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.FieldModel
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.OnMapObject
-import ru.hse.xcv.model.entities.*
+import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.PickableItem
+import ru.hse.xcv.model.entities.mobs.AbstractMobFactory
+import kotlin.reflect.KType
 
 @Serializable
 data class JsonRepresentationPosition(val x: Int, val y: Int)
@@ -49,18 +52,37 @@ private fun rectToJsonRepresentation(r: Rect): JsonRepresentationRect {
     )
 }
 
-private fun onMapObjectToJsonRepresentation(o: OnMapObject): JsonRepresentationOnMapObject {
+private fun onMapObjectToJsonRepresentation(
+    o: OnMapObject,
+    mobTransform: Map<KType, String>
+): JsonRepresentationOnMapObject {
+    var repr: String? = null
+    mobTransform.forEach { (clazz, representation) ->
+        if (clazz.javaClass.isInstance(o)) {
+            repr = representation
+        }
+    }
     return JsonRepresentationOnMapObject(
         positionToJsonRepresentation(o.position),
-        o.javaClass.typeName.substringAfterLast(".")
+        repr ?: o.javaClass.typeName.substringAfterLast(".")
     )
 }
 
-fun fieldToJsonRepresentation(f: FieldModel): JsonRepresentationField {
+fun fieldToJsonRepresentation(
+    f: FieldModel,
+    mobFactory: AbstractMobFactory
+): JsonRepresentationField {
+    val mobTransform = mapOf(
+        mobFactory::createDragon.returnType to "Dragon",
+        mobFactory::createMaxim.returnType to "Maxim",
+        mobFactory::createMicrochel.returnType to "Microchel",
+        mobFactory::createPoisonousMold.returnType to "PoisonousMold",
+        mobFactory::createZombie.returnType to "Zombie"
+    )
     return JsonRepresentationField(
         f.staticLayer.toList().map { (k, v) -> positionToJsonRepresentation(k) to v },
         f.dynamicLayer.toList().map { (k, v) ->
-            positionToJsonRepresentation(k) to onMapObjectToJsonRepresentation(v)
+            positionToJsonRepresentation(k) to onMapObjectToJsonRepresentation(v, mobTransform)
         },
         rectToJsonRepresentation(f.rect)
     )
@@ -78,23 +100,31 @@ private fun rectFromJsonRepresentation(r: JsonRepresentationRect): Rect {
     return Rect.create(positionFromJsonRepresentation(r.position), sizeFromJsonRepresentation(r.size))
 }
 
-private fun onMapObjectFromJsonRepresentation(o: JsonRepresentationOnMapObject): OnMapObject {
+private fun onMapObjectFromJsonRepresentation(
+    o: JsonRepresentationOnMapObject,
+    mobFactory: AbstractMobFactory
+): OnMapObject {
+    val position = positionFromJsonRepresentation(o.position)
     return when (o.type) {
-        "Hero" -> Hero(positionFromJsonRepresentation(o.position))
-        "Dragon" -> Dragon(positionFromJsonRepresentation(o.position))
-        "Maxim" -> Maxim(positionFromJsonRepresentation(o.position))
-        "Zombie" -> Zombie(positionFromJsonRepresentation(o.position))
-        "Microchel" -> Microchel(positionFromJsonRepresentation(o.position))
-        "PickableItem" -> PickableItem.getRandomPickableItem(positionFromJsonRepresentation(o.position))
+        "Hero" -> Hero(position)
+        "Dragon" -> mobFactory.createDragon(position)
+        "Maxim" -> mobFactory.createMaxim(position)
+        "Microchel" -> mobFactory.createMicrochel(position)
+        "PoisonousMold" -> mobFactory.createPoisonousMold(position)
+        "Zombie" -> mobFactory.createZombie(position)
+        "PickableItem" -> PickableItem.getRandomPickableItem(position)
         else -> throw IllegalStateException()
     }
 }
 
-fun fieldFromJsonRepresentation(f: JsonRepresentationField): FieldModel {
+fun fieldFromJsonRepresentation(
+    f: JsonRepresentationField,
+    mobFactory: AbstractMobFactory
+): FieldModel {
     return FieldModel(
         f.staticLayer.associate { positionFromJsonRepresentation(it.first) to it.second },
         mutableMapOf(*f.dynamicLayer.map {
-            positionFromJsonRepresentation(it.first) to onMapObjectFromJsonRepresentation(it.second)
+            positionFromJsonRepresentation(it.first) to onMapObjectFromJsonRepresentation(it.second, mobFactory)
         }.toTypedArray()),
         rectFromJsonRepresentation(f.rect)
     )

@@ -15,19 +15,4 @@ abstract class Mob(position: Position) : Entity(position) {
      * Finds a hero if he is in mob's field of view.
      */
     fun findHero(world: World): Hero? = world.nearestVisibleObjectInRectangle(position, fieldOfView, Hero::class)
-
-    companion object {
-        private val allMobs = listOf<(Position) -> Mob>(
-            { Dragon(it) },
-            { Maxim(it) },
-            { Zombie(it) },
-            { Microchel(it) },
-            { PoisonousMold(it) }
-        )
-
-        /*
-         * Returns a random mob.
-         */
-        fun getRandomMob(position: Position) = allMobs.random().invoke(position)
-    }
 }

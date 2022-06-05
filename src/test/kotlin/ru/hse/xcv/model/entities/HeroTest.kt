@@ -5,9 +5,11 @@ import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
 
 internal class HeroTest {
+    private fun getHero() = Hero(Position.defaultPosition())
+
     @Test
-    fun `test add experience`() {
-        val hero = Hero(Position.defaultPosition())
+    fun `Test add experience`() {
+        val hero = getHero()
         hero.addExperience(50)
         assertEquals(3, hero.stats.power)
         assertEquals(3 * 5, hero.damage)
@@ -24,8 +26,8 @@ internal class HeroTest {
     }
 
     @Test
-    fun `test deal damage`() {
-        val hero = Hero(Position.defaultPosition())
+    fun `Test deal damage`() {
+        val hero = getHero()
         assertEquals(false, hero.isDead)
         hero.changeHP(-hero.stats.currentHealth)
         assertEquals(true, hero.isDead)

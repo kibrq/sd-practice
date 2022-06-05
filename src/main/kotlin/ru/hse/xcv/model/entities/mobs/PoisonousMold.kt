@@ -1,4 +1,4 @@
-package ru.hse.xcv.model.entities
+package ru.hse.xcv.model.entities.mobs
 
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.model.stats.Stats
@@ -6,7 +6,7 @@ import ru.hse.xcv.model.stats.Stats
 /*
  * A mediocre reproducible mob.
  */
-class PoisonousMold(
+abstract class PoisonousMold(
     override var position: Position,
     override val reproduceCoolDown: Int = 15
 ) : ReproducibleMob(position) {
@@ -17,6 +17,4 @@ class PoisonousMold(
         armor = 5,
         maxHealth = 10
     )
-
-    override fun clone(position: Position, coolDown: Int) = PoisonousMold(position, coolDown)
 }

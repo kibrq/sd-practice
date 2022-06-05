@@ -2,11 +2,12 @@ package ru.hse.xcv.mapgen
 
 import org.hexworks.zircon.api.data.Size
 import ru.hse.xcv.model.FieldModel
+import ru.hse.xcv.model.entities.mobs.AbstractMobFactory
 
 /*
  * A random builder for a FieldModel.
  */
-class RandomFieldGenerationBuilder : FieldGenerationBuilder() {
+class RandomFieldGenerationBuilder(private val mobFactory: AbstractMobFactory) : FieldGenerationBuilder() {
     private var size: Size = Size.create(100, 100)
     private var smoothTimes = 5
     private var hardness = 1
@@ -53,6 +54,6 @@ class RandomFieldGenerationBuilder : FieldGenerationBuilder() {
      * Randomly builds FieldModel.
      */
     override fun build(): FieldModel {
-        return RandomPatternFieldGenerationStrategy(size, smoothTimes, hardness, floorPercentage).generate()
+        return RandomPatternFieldGenerationStrategy(mobFactory, size, smoothTimes, hardness, floorPercentage).generate()
     }
 }

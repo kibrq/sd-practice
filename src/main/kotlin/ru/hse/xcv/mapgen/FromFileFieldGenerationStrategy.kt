@@ -4,6 +4,7 @@ import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import ru.hse.xcv.model.FieldModel
+import ru.hse.xcv.model.entities.mobs.AbstractMobFactory
 import ru.hse.xcv.util.fieldFromJsonRepresentation
 import ru.hse.xcv.util.fieldToJsonRepresentation
 import java.io.File
@@ -14,7 +15,8 @@ import java.nio.file.Path
  * FieldGenerationStrategy to generate a FieldModel from a file.
  */
 class FromFileFieldGenerationStrategy(
-    private val fileName: String
+    private val fileName: String,
+    private val mobFactory: AbstractMobFactory
 ) : FieldGenerationStrategy {
     init {
         require(Files.isRegularFile(Path.of(fileName)))
@@ -26,7 +28,7 @@ class FromFileFieldGenerationStrategy(
     override fun generate(): FieldModel {
         val sourceFile = File(fileName)
         val json = sourceFile.readText()
-        return fieldFromJsonRepresentation(Json.decodeFromString(json))
+        return fieldFromJsonRepresentation(Json.decodeFromString(json), mobFactory)
     }
 
     /*
@@ -34,7 +36,7 @@ class FromFileFieldGenerationStrategy(
      */
     fun saveField(field: FieldModel) {
         val sourceFile = File(fileName)
-        val json = Json.encodeToString(fieldToJsonRepresentation(field))
+        val json = Json.encodeToString(fieldToJsonRepresentation(field, mobFactory))
         sourceFile.writeText(json)
     }
 }
