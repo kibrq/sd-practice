@@ -7,7 +7,10 @@ import org.hexworks.zircon.api.data.Tile
 import org.hexworks.zircon.api.graphics.Symbols
 import ru.hse.xcv.model.FieldTile
 import ru.hse.xcv.model.OnMapObject
-import ru.hse.xcv.model.entities.*
+import ru.hse.xcv.model.entities.Hero
+import ru.hse.xcv.model.entities.PickableItem
+import ru.hse.xcv.model.entities.mobs.cyberpunk.*
+import ru.hse.xcv.model.entities.mobs.dungeon.*
 import ru.hse.xcv.model.spells.FireballSpell
 import kotlin.reflect.KClass
 
@@ -45,10 +48,6 @@ interface Graphics {
             ),
             mapOf(
                 Hero::class to worldTileOfSymbolAndColor(Symbols.FACE_WHITE, ANSITileColor.GREEN),
-                Dragon::class to worldTileOfSymbolAndColor(Symbols.SECTION_SIGN, ANSITileColor.RED),
-                Maxim::class to worldTileOfSymbolAndColor(Symbols.FEMALE, ANSITileColor.YELLOW),
-                Zombie::class to worldTileOfSymbolAndColor(Symbols.YEN, ANSITileColor.RED),
-                Microchel::class to worldTileOfSymbolAndColor(Symbols.CENT, ANSITileColor.BRIGHT_CYAN),
                 PickableItem::class to worldTileOfSymbolAndColor(
                     Symbols.INVERTED_QUESTION_MARK,
                     ANSITileColor.BRIGHT_WHITE
@@ -57,9 +56,23 @@ interface Graphics {
                     Symbols.SOLAR_SYMBOL,
                     ANSITileColor.BRIGHT_RED
                 ),
-                PoisonousMold::class to worldTileOfSymbolAndColor(
+            ) + mapOf(
+                DungeonDragon::class to worldTileOfSymbolAndColor(Symbols.SECTION_SIGN, ANSITileColor.BRIGHT_RED),
+                DungeonMaxim::class to worldTileOfSymbolAndColor(Symbols.FEMALE, ANSITileColor.BRIGHT_YELLOW),
+                DungeonZombie::class to worldTileOfSymbolAndColor(Symbols.YEN, ANSITileColor.BRIGHT_RED),
+                DungeonMicrochel::class to worldTileOfSymbolAndColor(Symbols.CENT, ANSITileColor.CYAN),
+                DungeonMold::class to worldTileOfSymbolAndColor(
                     Symbols.BLOCK_MIDDLE,
-                    ANSITileColor.RED
+                    ANSITileColor.BRIGHT_RED
+                )
+            ) + mapOf(
+                CyberpunkDragon::class to worldTileOfSymbolAndColor(Symbols.PILCROW, ANSITileColor.BRIGHT_RED),
+                CyberpunkMaxim::class to worldTileOfSymbolAndColor(Symbols.MALE, ANSITileColor.BRIGHT_YELLOW),
+                CyberpunkZombie::class to worldTileOfSymbolAndColor(Symbols.POUND, ANSITileColor.BRIGHT_RED),
+                CyberpunkMicrochel::class to worldTileOfSymbolAndColor(Symbols.F_WITH_HOOK, ANSITileColor.CYAN),
+                CyberpunkMold::class to worldTileOfSymbolAndColor(
+                    Symbols.BLOCK_DENSE,
+                    ANSITileColor.BRIGHT_RED
                 )
             )
         )

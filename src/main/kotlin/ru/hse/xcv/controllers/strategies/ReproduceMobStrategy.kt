@@ -4,7 +4,7 @@ import org.hexworks.cobalt.logging.api.LoggerFactory
 import org.hexworks.zircon.api.data.Position
 import ru.hse.xcv.events.CreateMobEvent
 import ru.hse.xcv.model.entities.Mob
-import ru.hse.xcv.model.entities.ReproducibleMob
+import ru.hse.xcv.model.entities.mobs.ReproducibleMob
 import ru.hse.xcv.world.World
 import kotlin.random.Random
 

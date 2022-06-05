@@ -6,6 +6,11 @@ import ru.hse.xcv.events.EventBus
 import ru.hse.xcv.input.GameInputManager
 import ru.hse.xcv.model.DynamicObject
 import ru.hse.xcv.model.entities.*
+import ru.hse.xcv.model.entities.mobs.Dragon
+import ru.hse.xcv.model.entities.mobs.Maxim
+import ru.hse.xcv.model.entities.mobs.Microchel
+import ru.hse.xcv.model.entities.mobs.PoisonousMold
+import ru.hse.xcv.model.entities.mobs.Zombie
 import ru.hse.xcv.model.spells.FireballSpell
 import ru.hse.xcv.world.World
 
