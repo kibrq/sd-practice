@@ -1,7 +1,6 @@
 package ru.hse.xcv.model.entities
 
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.model.entities.mobs.*
 import ru.hse.xcv.world.World
 
 /*

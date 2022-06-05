@@ -9,7 +9,7 @@ import ru.hse.xcv.model.entities.mobs.AbstractMobFactory
 class FromFileFieldGenerationBuilder(
     private val fileName: String,
     private val mobFactory: AbstractMobFactory
-) : FieldGenerationBuilder(mobFactory) {
+) : FieldGenerationBuilder() {
     /*
      * Builds FieldModel from `fileName`.
      */

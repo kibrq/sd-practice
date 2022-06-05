@@ -1,7 +1,6 @@
 package ru.hse.xcv.model.entities.mobs.cyberpunk
 
 import org.hexworks.zircon.api.data.Position
-import ru.hse.xcv.model.entities.Mob
 import ru.hse.xcv.model.entities.mobs.Dragon
 import ru.hse.xcv.model.stats.Stats
 

@@ -7,7 +7,7 @@ import ru.hse.xcv.model.entities.mobs.AbstractMobFactory
 /*
  * A random builder for a FieldModel.
  */
-class RandomFieldGenerationBuilder(private val mobFactory: AbstractMobFactory) : FieldGenerationBuilder(mobFactory) {
+class RandomFieldGenerationBuilder(private val mobFactory: AbstractMobFactory) : FieldGenerationBuilder() {
     private var size: Size = Size.create(100, 100)
     private var smoothTimes = 5
     private var hardness = 1
