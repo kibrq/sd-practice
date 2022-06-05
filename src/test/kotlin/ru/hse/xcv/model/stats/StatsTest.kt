@@ -6,7 +6,7 @@ import kotlin.test.assertFailsWith
 
 internal class StatsTest {
     @Test
-    fun `test stats creation with illegal args`() {
+    fun `Test stats creation with illegal args`() {
         assertFailsWith(IllegalArgumentException::class) {
             Stats(
                 armor = -1,
@@ -26,7 +26,7 @@ internal class StatsTest {
     }
 
     @Test
-    fun `test plus stats`() {
+    fun `Test plus stats`() {
         val stats1 = Stats(
             armor = 1,
             power = 1,
@@ -45,7 +45,7 @@ internal class StatsTest {
     }
 
     @Test
-    fun `test minus stats`() {
+    fun `Test minus stats`() {
         val stats1 = Stats(
             armor = 3,
             power = 1,
@@ -66,7 +66,7 @@ internal class StatsTest {
     }
 
     @Test
-    fun `test change HP`() {
+    fun `Test change HP`() {
         val stats = Stats(
             armor = 3,
             power = 1,
@@ -82,7 +82,7 @@ internal class StatsTest {
     }
 
     @Test
-    fun `test times`() {
+    fun `Test times`() {
         var stats = Stats(
             armor = 3,
             power = 1,

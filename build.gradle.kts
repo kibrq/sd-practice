@@ -21,6 +21,8 @@ dependencies {
     implementation("org.hexworks.zircon:zircon.core-jvm:2021.1.0-RELEASE")
     implementation("org.hexworks.zircon:zircon.jvm.swing:2021.1.0-RELEASE")
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
+    testImplementation("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("org.mockito:mockito-inline:4.6.1")
 }
 
 tasks.test {

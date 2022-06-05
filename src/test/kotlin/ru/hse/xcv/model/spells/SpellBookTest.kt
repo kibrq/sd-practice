@@ -8,7 +8,7 @@ import kotlin.test.assertNull
 
 internal class SpellBookTest {
     @Test
-    fun `test search`() {
+    fun `Test search`() {
         val book = HeroSpellBook()
         val healSpell = HealSpell()
         val fireballSpell = FireballSpell()
@@ -19,7 +19,7 @@ internal class SpellBookTest {
     }
 
     @Test
-    fun `test prefix search`() {
+    fun `Test prefix search`() {
         val book = HeroSpellBook()
         val healSpell = HealSpell()
         val chainLightningSpell = ChainLightningSpell()
