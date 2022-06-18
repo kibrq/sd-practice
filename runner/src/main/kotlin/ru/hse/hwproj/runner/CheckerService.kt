@@ -2,7 +2,6 @@ package ru.hse.hwproj.runner
 
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
-import org.springframework.context.annotation.Scope
 import org.springframework.stereotype.Component
 import ru.hse.hwproj.common.repository.checker.CheckerRepository
 import ru.hse.hwproj.common.repository.checker.CheckerVerdict
@@ -10,10 +9,8 @@ import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackPrototype
 import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackRepository
 import ru.hse.hwproj.common.repository.submission.SubmissionRepository
 import ru.hse.hwproj.common.repository.task.TaskRepository
-import java.util.concurrent.atomic.AtomicInteger
 
 @Component
-@Scope("prototype")
 class CheckerService(
     private val submissionRepository: SubmissionRepository,
     private val checkerRepository: CheckerRepository,
@@ -22,7 +19,6 @@ class CheckerService(
     private val runner: Runner,
     connectionFactory: ConnectionFactory
 ) : AutoCloseable {
-    val id = currentServiceCount.incrementAndGet()
     private val connection = connectionFactory.newConnection()
     private val submissionsChannel = connection.createChannel()
     private val checkersChannel = connection.createChannel()
@@ -66,9 +62,5 @@ class CheckerService(
         val (code, resultMessage) = runner.buildChecker(checkerId, checker.dockerfile)
         println(code)
         println(resultMessage)
-    }
-
-    companion object {
-        val currentServiceCount = AtomicInteger(0)
     }
 }

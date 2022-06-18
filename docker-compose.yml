@@ -74,6 +74,9 @@ services:
         networks:
             - queue_network
             - database_network
+        deploy:
+            mode: replicated
+            replicas: 4
         depends_on:
             - database
             - rabbitmq

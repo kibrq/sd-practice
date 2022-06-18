@@ -26,6 +26,10 @@ The client will be up running at
 
 http://localhost:3000/
 
+### Manual testing
+
+Sample Dockerfile for manual testing can be found in `integration-tests/src/test/resources/Dockerfile`.
+
 ## Contributors
 
 Kirill Brilliantov [kibrq](https://github.com/kibrq)
