@@ -8,11 +8,17 @@ import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 import javax.sql.DataSource
 
+/*
+ * Database connection configuration.
+ */
 @Configuration
 @PropertySource("classpath:/database-\${spring.profiles.active}.properties")
 open class DataSourceConfiguration(
-    private val environment: Environment,
+    private val environment: Environment
 ) {
+    /*
+     * Creates a Postgres DataSource with `environment` configuration.
+     */
     @Bean
     open fun dataSource(): DataSource {
         val url = "${environment.getProperty("db.protocol")}://" +
@@ -25,6 +31,9 @@ open class DataSourceConfiguration(
         }
     }
 
+    /*
+     * Returns an SQLDialect as Postgres.
+     */
     @Bean
     open fun dialect(): SQLDialect = SQLDialect.POSTGRES
 }

@@ -7,11 +7,17 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 
+/*
+ * RabbitMQ connection configuration.
+ */
 @Configuration
 @PropertySource("classpath:rabbitmq-\${spring.profiles.active}.properties")
 open class RabbitMQConfiguration(
     @Autowired private val environment: Environment
 ) {
+    /*
+     * Creates a RabbitMQ ConnectionFactory.
+     */
     @Bean
     open fun rabbitConnection(): ConnectionFactory {
         return ConnectionFactory().apply {

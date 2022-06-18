@@ -4,6 +4,9 @@ import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.MessageProperties
 import org.springframework.stereotype.Service
 
+/*
+ * Publishes the messages to a runner via RabbitMQ.
+ */
 @Service
 class RabbitmqPublisher(
     connectionFactory: ConnectionFactory

@@ -12,7 +12,7 @@ import javax.sql.DataSource
 @TestConfiguration
 @PropertySource("classpath:database-test.properties")
 open class TestDataSourceConfiguration(
-    @Autowired private val environment: Environment,
+    @Autowired private val environment: Environment
 ) {
     @Bean
     open fun dataSource(): DataSource {

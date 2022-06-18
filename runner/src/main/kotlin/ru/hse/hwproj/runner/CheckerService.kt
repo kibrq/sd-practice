@@ -2,7 +2,7 @@ package ru.hse.hwproj.runner
 
 import com.rabbitmq.client.ConnectionFactory
 import com.rabbitmq.client.Delivery
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import ru.hse.hwproj.common.repository.checker.CheckerRepository
 import ru.hse.hwproj.common.repository.checker.CheckerVerdict
 import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackPrototype
@@ -10,7 +10,10 @@ import ru.hse.hwproj.common.repository.submission.SubmissionFeedbackRepository
 import ru.hse.hwproj.common.repository.submission.SubmissionRepository
 import ru.hse.hwproj.common.repository.task.TaskRepository
 
-@Component
+/*
+ * Service for building checker docker images and checking submissions.
+ */
+@Service
 class CheckerService(
     private val submissionRepository: SubmissionRepository,
     private val checkerRepository: CheckerRepository,
@@ -34,7 +37,10 @@ class CheckerService(
         connection.close()
     }
 
-    fun receiveTasks() {
+    /*
+     * Start receiving tasks for building checker docker images and checking submissions.
+     */
+    fun startReceivingTasks() {
         submissionsChannel.basicConsume("submissions_queue", true, ::receiveSubmission) { _ -> }
         checkersChannel.basicConsume("checkers_queue", true, ::receiveNewChecker) { _ -> }
     }

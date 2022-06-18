@@ -21,5 +21,5 @@ fun main() {
 
     val checkerService = context.getBean(CheckerService::class.java)
     println("Created checker")
-    checkerService.receiveTasks()
+    checkerService.startReceivingTasks()
 }

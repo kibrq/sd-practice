@@ -35,6 +35,9 @@ data class TaskView(
     val deadlineDateString: String, // "EEE MMM dd HH:mm:ss zzz yyyy"
 )
 
+/*
+ * TaskRepository that stores tasks in a database via specified DSL context.
+ */
 @Component
 class TaskRepositoryImpl(
     private val dsl: DefaultDSLContext

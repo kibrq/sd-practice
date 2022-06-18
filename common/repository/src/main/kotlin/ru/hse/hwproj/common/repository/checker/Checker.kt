@@ -25,6 +25,9 @@ class Checker(
 
 data class CheckerPrototype(val dockerfile: String)
 
+/*
+ * CheckerRepository that stores checkers in a database via specified DSL context.
+ */
 @Component
 class CheckerRepositoryImpl(private val dsl: DefaultDSLContext) : CheckerRepository {
     override fun upload(prototype: CheckerPrototype): Int? {

@@ -9,12 +9,18 @@ private const val CHECKER = "checker"
 private const val CHECKERS = "checkers"
 private const val SUBMISSION = "submission"
 
+/*
+ * Builds checker docker images and checks submissions with them.
+ */
 @Component
 @Scope("prototype")
 class Runner {
     private val workingDirPrefix = System.getenv("WORKING_DIR_PREFIX")
     private val mountDirectory = System.getenv("MOUNT_DIR")
 
+    /*
+     * Run submission `submissionId` with a checker `checkerId` docker image and solution url `repositoryUrl`.
+     */
     fun runSubmission(submissionId: Int, checkerId: Int, repositoryUrl: URL): Pair<Int, String> {
         val checkerName = "$CHECKER$checkerId"
         println("Running submission $repositoryUrl with $checkerName...")
@@ -36,12 +42,15 @@ class Runner {
         return process.getResult()
     }
 
-    fun buildChecker(checkerId: String, checkerContent: String): Pair<Int, String> {
+    /*
+     * Builds checker `checkerId` image with `dockerfile`.
+     */
+    fun buildChecker(checkerId: String, dockerfile: String): Pair<Int, String> {
         val checkerName = "$CHECKER$checkerId"
         println("Building $checkerName...")
         val imageDir = File(CHECKERS).resolve(checkerName)
         imageDir.mkdirs()
-        imageDir.resolve("Dockerfile").writeText(checkerContent)
+        imageDir.resolve("Dockerfile").writeText(dockerfile)
         val process = ProcessBuilder().apply {
             directory(imageDir)
             val dockerBuild = "docker build -t $checkerName ."

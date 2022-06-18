@@ -8,6 +8,6 @@ import org.springframework.context.annotation.Configuration
 @ComponentScans(
     ComponentScan("ru.hse.hwproj.common.repository.checker"),
     ComponentScan("ru.hse.hwproj.common.repository.submission"),
-    ComponentScan("ru.hse.hwproj.common.repository.task"),
+    ComponentScan("ru.hse.hwproj.common.repository.task")
 )
 open class RepositoryConfiguration

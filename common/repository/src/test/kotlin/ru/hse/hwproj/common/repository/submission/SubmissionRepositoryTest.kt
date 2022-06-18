@@ -31,7 +31,7 @@ import kotlin.test.assertNull
 class SubmissionRepositoryTest(
     @Autowired private val dsl: DefaultDSLContext,
     @Autowired private val repository: SubmissionRepository,
-    @Autowired private val submissionFeedbackRepository: SubmissionFeedbackRepository,
+    @Autowired private val submissionFeedbackRepository: SubmissionFeedbackRepository
 ) {
     private val random = Random()
     private val myUrl = URL("https://github.com/scanhex/zxc")
@@ -93,7 +93,7 @@ class SubmissionRepositoryTest(
         val taskId = addTask() ?: return
         val prototype = SubmissionPrototype(
             taskId = taskId,
-            repositoryUrl = myUrl,
+            repositoryUrl = myUrl
         )
         assertNotNull(repository.upload(prototype))
     }

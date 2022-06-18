@@ -55,7 +55,7 @@ data class SubmissionView(
 class SubmissionFeedback(
     val id: Int,
     val verdict: CheckerVerdict,
-    val comments: String,
+    val comments: String
 ) {
     companion object {
         fun ofPojos(submissionFeedbacks: SubmissionFeedbacks): SubmissionFeedback? = submissionFeedbacks.id?.let {
@@ -70,9 +70,12 @@ class SubmissionFeedback(
 
 data class SubmissionFeedbackPrototype(
     val verdict: CheckerVerdict,
-    val comments: String,
+    val comments: String
 )
 
+/*
+ * SubmissionFeedbackRepository that stores submission feedbacks in a database via specified DSL context.
+ */
 @Component
 class SubmissionFeedbackRepositoryImpl(private val dsl: DefaultDSLContext) : SubmissionFeedbackRepository {
     override fun upload(prototype: SubmissionFeedbackPrototype): Int? {
@@ -97,10 +100,12 @@ class SubmissionFeedbackRepositoryImpl(private val dsl: DefaultDSLContext) : Sub
     }
 }
 
-
+/*
+ * SubmissionRepository that stores submissions in a database via specified DSL context.
+ */
 @Component
 class SubmissionRepositoryImpl(
-    private val dsl: DefaultDSLContext,
+    private val dsl: DefaultDSLContext
 ) : SubmissionRepository {
     override fun upload(prototype: SubmissionPrototype): Int? {
         return withinTry {

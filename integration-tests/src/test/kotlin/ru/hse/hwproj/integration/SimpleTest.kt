@@ -8,6 +8,7 @@ import org.mockito.kotlin.doAnswer
 import org.mockito.kotlin.mock
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import ru.hse.hwproj.api.ipc.RabbitmqPublisher
 import ru.hse.hwproj.api.service.CheckerRequestsService
 import ru.hse.hwproj.common.repository.JooqConfiguration
 import ru.hse.hwproj.common.repository.RepositoryConfiguration
@@ -90,7 +91,8 @@ class SimpleTest(
             }
         }
 
-        val checkerRequestsService = CheckerRequestsService(checkerRepository, connectionFactory)
+        val publisher = RabbitmqPublisher(connectionFactory)
+        val checkerRequestsService = CheckerRequestsService(checkerRepository, publisher)
         val checkerService = CheckerService(
             submissionRepository,
             checkerRepository,
@@ -101,7 +103,7 @@ class SimpleTest(
         )
 
         checkerRequestsService.sendSubmissionCheckRequest(submissionId)
-        checkerService.receiveTasks()
+        checkerService.startReceivingTasks()
 
         lock.withLock {
             done.await()

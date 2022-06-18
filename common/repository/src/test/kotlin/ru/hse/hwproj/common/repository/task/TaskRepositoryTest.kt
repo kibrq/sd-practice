@@ -21,7 +21,7 @@ import kotlin.test.*
 )
 class TaskRepositoryTest(
     @Autowired private val dsl: DefaultDSLContext,
-    @Autowired private val repository: TaskRepository,
+    @Autowired private val repository: TaskRepository
 ) {
     private val random = Random()
 
