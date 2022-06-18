@@ -3,7 +3,7 @@ import nu.studer.gradle.jooq.JooqEdition
 val h2Version: String by project
 val jooqVersion: String by project
 val sqlRoot: String by project
-val sep = System.lineSeparator()
+val sep = File.separatorChar
 val initSqlPath = "${project.rootDir}$sep$sqlRoot${sep}init.sql"
 
 plugins {
