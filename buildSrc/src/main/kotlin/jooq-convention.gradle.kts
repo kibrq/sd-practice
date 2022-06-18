@@ -3,6 +3,8 @@ import nu.studer.gradle.jooq.JooqEdition
 val h2Version: String by project
 val jooqVersion: String by project
 val sqlRoot: String by project
+val sep = System.lineSeparator()
+val initSqlPath = "${project.rootDir}$sep$sqlRoot${sep}init.sql"
 
 plugins {
     id("nu.studer.jooq")
@@ -27,7 +29,7 @@ jooq {
                 logging = org.jooq.meta.jaxb.Logging.WARN
                 jdbc.apply {
                     driver = "org.h2.Driver"
-                    url = "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${project.rootDir}/$sqlRoot/init.sql'"
+                    url = "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '$initSqlPath'"
                     user = "sa"
                     password = ""
                 }
