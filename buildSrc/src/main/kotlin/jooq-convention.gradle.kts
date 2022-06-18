@@ -17,6 +17,16 @@ dependencies {
     jooqGenerator("com.h2database:h2:$h2Version")
 }
 
+val p = mutableListOf<String>()
+var cur: File? = project.rootDir
+while (true) {
+    cur?.let {
+        p.add(it.name)
+        cur = it.parentFile
+    } ?: break
+}
+val wtf = p.reversed().joinToString("/")
+
 jooq {
     version.set(jooqVersion)
     edition.set(JooqEdition.OSS)
@@ -28,7 +38,7 @@ jooq {
                 jdbc.apply {
                     driver = "org.h2.Driver"
                     url =
-                        "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '${project.rootDir.absolutePath}/$sqlRoot/init.sql'"
+                        "jdbc:h2:~/test;AUTO_SERVER=TRUE;INIT=RUNSCRIPT FROM '$wtf/$sqlRoot/init.sql'"
                     user = "sa"
                     password = ""
                 }
