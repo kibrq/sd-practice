@@ -16,7 +16,7 @@ class StudentController(
     private val submissionService: SubmissionService,
     private val taskService: TaskService
 ) {
-    @PostMapping("/submissions/upload")
+    @PostMapping("/submissions")
     fun uploadSubmission(@RequestBody prototype: SubmissionPrototype): ResponseEntity<Int> {
         return submissionService.uploadSubmission(prototype)
     }
@@ -26,7 +26,7 @@ class StudentController(
         return submissionService.getSubmission(id)
     }
 
-    @GetMapping("/submissions/all")
+    @GetMapping("/submissions/list")
     fun viewAllSubmissions(): List<SubmissionView> {
         return submissionService.getAllSubmissions().map { it.view() }
     }
@@ -36,7 +36,7 @@ class StudentController(
         return taskService.getTask(id)
     }
 
-    @GetMapping("/tasks/all")
+    @GetMapping("/tasks/list")
     fun viewAllTasks(): List<TaskView> {
         return taskService.getAllTasks().map { it.view() }
     }

@@ -11,11 +11,11 @@ import formStyles from "../css/Form.module.scss";
 const axios = require("axios").default;
 const STUDENT_TASKS = "student/tasks/";
 const STUDENT_SUBMISSIONS = "student/submissions/";
-const ALL = "all";
+const LIST = "list";
 const STUDENT_TASKS_URL = process.env.REACT_APP_SERVER_API_URL + STUDENT_TASKS;
-const STUDENT_TASKS_ALL_URL = STUDENT_TASKS_URL + ALL;
+const STUDENT_TASKS_ALL_URL = STUDENT_TASKS_URL + LIST;
 export const STUDENT_SUBMISSIONS_URL = process.env.REACT_APP_SERVER_API_URL + STUDENT_SUBMISSIONS;
-const STUDENT_SUBMISSIONS_ALL_URL = STUDENT_SUBMISSIONS_URL + ALL;
+const STUDENT_SUBMISSIONS_ALL_URL = STUDENT_SUBMISSIONS_URL + LIST;
 
 export default class Student extends React.Component {
     constructor(props) {

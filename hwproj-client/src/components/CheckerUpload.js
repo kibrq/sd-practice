@@ -7,8 +7,6 @@ import {NavLink} from "react-router-dom";
 import {TEACHER_CHECKERS_URL} from "./Teacher";
 
 const axios = require("axios").default;
-const UPLOAD = "/upload";
-const TEACHER_UPLOAD_CHECKER = TEACHER_CHECKERS_URL + UPLOAD;
 
 export default class CheckerUpload extends React.Component {
     defaultFormState = {
@@ -37,7 +35,7 @@ export default class CheckerUpload extends React.Component {
             }
         }
 
-        axios.post(TEACHER_UPLOAD_CHECKER, {
+        axios.post(TEACHER_CHECKERS_URL, {
             dockerfile: this.state.dockerfile
         }).then(() => {
             alert("Done");

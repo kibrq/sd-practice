@@ -11,11 +11,11 @@ import Checker from "./Checker";
 const axios = require("axios").default;
 const TEACHER_TASKS = "teacher/tasks";
 const TEACHER_CHECKERS = "teacher/checkers";
-const ALL = "/all";
+const LIST = "/list";
 export const TEACHER_TASKS_URL = process.env.REACT_APP_SERVER_API_URL + TEACHER_TASKS;
-const TEACHER_TASKS_ALL_URL = TEACHER_TASKS_URL + ALL;
+const TEACHER_TASKS_ALL_URL = TEACHER_TASKS_URL + LIST;
 export const TEACHER_CHECKERS_URL = process.env.REACT_APP_SERVER_API_URL + TEACHER_CHECKERS;
-const TEACHER_CHECKERS_ALL_URL = TEACHER_CHECKERS_URL + ALL;
+const TEACHER_CHECKERS_ALL_URL = TEACHER_CHECKERS_URL + LIST;
 
 export default class Teacher extends React.Component {
     constructor(props) {

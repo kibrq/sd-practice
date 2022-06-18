@@ -7,8 +7,6 @@ import {NavLink} from "react-router-dom";
 import {STUDENT_SUBMISSIONS_URL} from "./Student";
 
 const axios = require("axios").default;
-const UPLOAD = "upload";
-const STUDENT_UPLOAD_SUBMISSION = STUDENT_SUBMISSIONS_URL + UPLOAD;
 
 export default class SubmissionUpload extends React.Component {
     defaultFormState = {
@@ -38,7 +36,7 @@ export default class SubmissionUpload extends React.Component {
             }
         }
 
-        axios.post(STUDENT_UPLOAD_SUBMISSION, {
+        axios.post(STUDENT_SUBMISSIONS_URL, {
             taskId: this.state.taskId,
             repositoryUrl: this.state.repositoryUrl
         }).then(() => {

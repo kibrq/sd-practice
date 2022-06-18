@@ -25,12 +25,12 @@ class TeacherController(
         return taskService.getTask(id)
     }
 
-    @GetMapping("/tasks/all")
+    @GetMapping("/tasks/list")
     fun viewAllTasks(): List<TaskView> {
         return taskService.getAllTasks().map { it.view() }
     }
 
-    @PostMapping("/tasks/upload")
+    @PostMapping("/tasks")
     fun uploadTask(@RequestBody prototype: TaskPrototype): ResponseEntity<Int> {
         return taskService.uploadTask(prototype)
     }
@@ -40,12 +40,12 @@ class TeacherController(
         return checkerRequestsService.getChecker(id)
     }
 
-    @GetMapping("/checkers/all")
+    @GetMapping("/checkers/list")
     fun viewAllCheckers(): List<Checker> {
         return checkerRequestsService.getAllCheckers()
     }
 
-    @PostMapping("/checkers/upload")
+    @PostMapping("/checkers")
     fun uploadChecker(@RequestBody prototype: CheckerPrototype): ResponseEntity<Int> {
         return checkerRequestsService.sendCreateCheckerRequest(prototype)
     }
@@ -55,7 +55,7 @@ class TeacherController(
         return submissionService.getSubmission(id)
     }
 
-    @GetMapping("/submissions/all")
+    @GetMapping("/submissions/list")
     fun viewAllSubmissions(): List<SubmissionView> {
         return submissionService.getAllSubmissions().map { it.view() }
     }

@@ -7,8 +7,6 @@ import {NavLink} from "react-router-dom";
 import {TEACHER_TASKS_URL} from "./Teacher";
 
 const axios = require("axios").default;
-const UPLOAD = "/upload";
-const TEACHER_UPLOAD_TASK = TEACHER_TASKS_URL + UPLOAD;
 
 export default class TaskUpload extends React.Component {
     defaultFormState = {
@@ -40,7 +38,7 @@ export default class TaskUpload extends React.Component {
             }
         }
 
-        axios.post(TEACHER_UPLOAD_TASK, {
+        axios.post(TEACHER_TASKS_URL, {
             name: this.state.name,
             description: this.state.description,
             deadlineDate: this.state.deadlineDate,
