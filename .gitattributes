@@ -1,1 +1,2 @@
 docker/scripts/* eol=lf
+gradlew eol=lf
