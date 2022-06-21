@@ -10,4 +10,4 @@ while IFS='=' read -r key value; do
 done <"$file"
 
 # shellcheck disable=SC2154
-bash $wait -t 30 "$rabbitmq_host:$rabbitmq_port"
+bash $wait -t 0 "$rabbitmq_host:$rabbitmq_port"

@@ -2,9 +2,7 @@ FROM amazoncorretto:17
 
 WORKDIR app/
 
-RUN yum install -y dos2unix
-
-ENTRYPOINT bash -c 'find docker/scripts -type f -print0 | xargs -0 dos2unix && \
+ENTRYPOINT bash -c 'sleep 5 && \
                         docker/scripts/monitor-database.sh && \
                         docker/scripts/monitor-rabbitmq.sh && \
                         docker/scripts/monitor-build.sh && \
