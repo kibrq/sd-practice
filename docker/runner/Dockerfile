@@ -1,7 +1,7 @@
 FROM ubuntu:focal
 
 RUN apt update
-RUN apt install -y curl zip unzip
+RUN apt install -y curl zip unzip dos2unix
 
 RUN curl -s "https://get.sdkman.io" | bash
 RUN bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && \
@@ -13,7 +13,8 @@ RUN curl -sSL https://get.docker.com/ | sh
 
 WORKDIR app/
 
-ENTRYPOINT bash -c 'docker/scripts/monitor-database.sh && \
+ENTRYPOINT bash -c 'find docker/scripts -type f -print0 | xargs -0 dos2unix && \
+                        docker/scripts/monitor-database.sh && \
                         docker/scripts/monitor-rabbitmq.sh && \
                         docker/scripts/monitor-build.sh && \
                         source "$HOME/.sdkman/bin/sdkman-init.sh" && \
