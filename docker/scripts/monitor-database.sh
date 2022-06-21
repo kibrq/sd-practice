@@ -9,4 +9,4 @@ while IFS='=' read -r key value; do
 done <"$file"
 
 # shellcheck disable=SC2154
-bash $wait "$db_host:$db_port"
+bash $wait -t 30 "$db_host:$db_port"
