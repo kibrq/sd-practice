@@ -15,8 +15,10 @@ private const val SUBMISSION = "submission"
 @Component
 @Scope("prototype")
 class Runner {
-    private val workingDirPrefix = System.getenv("WORKING_DIR_PREFIX")
-    private val mountDirectory = System.getenv("MOUNT_DIR")
+    private fun String.replaceWinPaths() = replace("\\", "/")
+
+    private val workingDirPrefix = System.getenv("WORKING_DIR_PREFIX").replaceWinPaths()
+    private val mountDirectory = System.getenv("MOUNT_DIR").replaceWinPaths()
 
     /*
      * Run submission `submissionId` with a checker `checkerId` docker image and solution url `repositoryUrl`.
@@ -34,7 +36,7 @@ class Runner {
 
             val gitClone = "git clone $repositoryUrl"
             val dockerRun = "docker run --rm -v $hostRepoPath:/solution $checkerName"
-            val mainCommand = "$gitClone && $dockerRun"
+            val mainCommand = "$gitClone ; $dockerRun"
             println(mainCommand)
 
             setCommand(mainCommand)
