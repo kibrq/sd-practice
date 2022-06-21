@@ -1,8 +1,15 @@
 # Hwproj
 
-## To build and run everything use
+## To build and run everything on Linux and Mac use:
 
 ```bash
+docker-compose up
+```
+
+## On Windows use:
+
+```bash
+echo "PWD=$PWD" > .env
 docker-compose up
 ```
 
