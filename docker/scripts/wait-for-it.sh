@@ -75,8 +75,6 @@ do
         WAITFORIT_hostport=(${1//:/ })
         WAITFORIT_HOST=${WAITFORIT_hostport[0]}
         WAITFORIT_PORT=${WAITFORIT_hostport[1]}
-        echoerr $WAITFORIT_HOST
-        echoerr $WAITFORIT_PORT
         shift 1
         ;;
         --child)
