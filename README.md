@@ -6,10 +6,17 @@
 docker-compose up
 ```
 
-## On Windows use:
+## Windows - cmd:
 
-```bash
-echo "PWD=$PWD" > .env
+```shell
+echo PWD=%cd%>.env
+docker-compose up
+```
+
+## Windows - PowerShell:
+
+```shell
+"PWD=$PWD" | Out-File -FilePath .env -Encoding ASCII
 docker-compose up
 ```
 
