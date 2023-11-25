@@ -1,7 +1,6 @@
 FROM ubuntu:focal
 
-RUN apt update
-RUN apt install -y curl zip unzip
+RUN apt update && apt install -y curl zip unzip
 
 RUN curl -s "https://get.sdkman.io" | bash
 RUN bash -c 'source "$HOME/.sdkman/bin/sdkman-init.sh" && \
