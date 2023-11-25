@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Scope
 import org.springframework.core.env.Environment
 
 object LazyEmbeddedRabbitMq {
-    private val rabbitMqVersion = BaseVersion("3.10.2", "25.0", ArchiveType.TAR_XZ)
+    private val rabbitMqVersion = BaseVersion("3.12.10", "26.0", ArchiveType.TAR_XZ)
 
     val rabbitMq by lazy {
         EmbeddedRabbitMq(
